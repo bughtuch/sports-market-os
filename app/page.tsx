@@ -1,6 +1,7 @@
 import Link from "next/link";
 import MarketTicker from "@/components/MarketTicker";
 import SportsHubCard, { type SportsHubData } from "@/components/SportsHubCard";
+import NavAuth from "@/components/NavAuth";
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 
@@ -217,12 +218,15 @@ export default function HomePage() {
           <Link href="#ecosystem" className="hover:text-white transition-colors">Ecosystem</Link>
           <Link href="#api" className="hover:text-white transition-colors">API</Link>
         </nav>
-        <Link
-          href="/terminal"
-          className="text-xs font-medium text-black bg-white px-4 py-1.5 rounded-sm hover:bg-zinc-200 transition-colors"
-        >
-          Open Terminal
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/terminal"
+            className="text-xs font-medium text-zinc-400 hover:text-white transition-colors hidden sm:block"
+          >
+            Terminal
+          </Link>
+          <NavAuth />
+        </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-20">
