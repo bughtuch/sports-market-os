@@ -3,6 +3,7 @@ import Link from "next/link";
 import MarketTicker from "@/components/MarketTicker";
 import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
+import Footer from "@/components/Footer";
 import ProfileEditSection from "@/components/ProfileEditSection";
 import PlanBadge from "@/components/PlanBadge";
 import { createClient } from "@/lib/supabase/server";
@@ -274,6 +275,7 @@ export default async function AccountPage() {
             </div>
           </section>
 
+          <Footer />
         </main>
       </div>
     </div>

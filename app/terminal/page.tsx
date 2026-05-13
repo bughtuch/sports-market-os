@@ -1,6 +1,7 @@
 import MarketTicker from "@/components/MarketTicker";
 import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
+import Footer from "@/components/Footer";
 import AIPanel from "@/components/AIPanel";
 import Watchlist from "@/components/Watchlist";
 import CreatorFeed from "@/components/CreatorFeed";
@@ -362,12 +363,7 @@ export default function TerminalPage() {
               <LiveSignalFeed />
             </section>
 
-            {/* Compliance note */}
-            <div className="px-4 py-3 border-t border-zinc-900/60">
-              <p className="text-zinc-800 text-[9px] font-mono leading-relaxed">
-                Sports Market OS provides market intelligence and analytics only. It does not accept wagers, custody funds, or execute trades.
-              </p>
-            </div>
+            <Footer />
           </main>
         </div>
 

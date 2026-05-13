@@ -2,6 +2,7 @@ import Link from "next/link";
 import MarketTicker from "@/components/MarketTicker";
 import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
+import Footer from "@/components/Footer";
 import SignalGenerator from "@/components/SignalGenerator";
 import CreatorMetric, { type CreatorMetricProps } from "@/components/CreatorMetric";
 import PartnerCard, { type PartnerData } from "@/components/PartnerCard";
@@ -414,6 +415,7 @@ export default async function CreatorStudioPage() {
           </section>
         </main>
       </div>
+      <Footer />
     </div>
   );
 }
