@@ -16,7 +16,7 @@ const mainNav: NavItem[] = [
   { label: "Pulse", href: "/terminal", live: true },
   {
     label: "Horse Racing",
-    href: "/terminal/horse-racing",
+    href: "/horse-racing",
     accent: "text-amber-400",
     dotColor: "bg-amber-400",
     count: "48",
@@ -24,7 +24,7 @@ const mainNav: NavItem[] = [
   },
   {
     label: "Tennis",
-    href: "/terminal/tennis",
+    href: "/tennis",
     accent: "text-emerald-400",
     dotColor: "bg-emerald-400",
     count: "24",
@@ -32,7 +32,7 @@ const mainNav: NavItem[] = [
   },
   {
     label: "NBA",
-    href: "/terminal/nba",
+    href: "/nba",
     accent: "text-blue-400",
     dotColor: "bg-blue-400",
     count: "16",
@@ -40,7 +40,7 @@ const mainNav: NavItem[] = [
   },
   {
     label: "NFL",
-    href: "/terminal/nfl",
+    href: "/nfl",
     accent: "text-red-400",
     dotColor: "bg-red-400",
     count: "12",
@@ -48,7 +48,7 @@ const mainNav: NavItem[] = [
   },
   {
     label: "UFC",
-    href: "/terminal/ufc",
+    href: "/ufc",
     accent: "text-orange-400",
     dotColor: "bg-orange-400",
     count: "8",
@@ -56,14 +56,14 @@ const mainNav: NavItem[] = [
   },
   {
     label: "Football",
-    href: "/terminal/football",
+    href: "/football",
     dotColor: "bg-zinc-500",
     count: "64",
     live: true,
   },
   {
     label: "Prediction Markets",
-    href: "/terminal/prediction",
+    href: "/prediction-markets",
     accent: "text-purple-400",
     dotColor: "bg-purple-400",
     count: "76",
@@ -72,7 +72,7 @@ const mainNav: NavItem[] = [
 ];
 
 const tradingApps: NavItem[] = [
-  { label: "HRT", href: "#", live: true },
+  { label: "Horse Racing Trader", href: "#", live: true },
   { label: "Tennis Trader UK", href: "#", live: true },
   { label: "Tennis Trader USA", href: "#", live: true },
 ];

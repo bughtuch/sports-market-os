@@ -113,8 +113,8 @@ const sportsHubs: SportsHubData[] = [
 
 const ecosystemApps = [
   {
-    name: "HRT",
-    description: "Horse Racing Terminal. The execution layer for the Betfair exchange. Trade, monitor, and act on Sports Market OS intelligence in real time.",
+    name: "Horse Racing Trader",
+    description: "The execution layer for the Betfair exchange. Trade, monitor, and act on Sports Market OS intelligence in real time.",
     status: "Live",
     statusColor: "text-emerald-400",
   },
