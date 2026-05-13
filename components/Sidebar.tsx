@@ -78,7 +78,7 @@ const tradingApps: NavItem[] = [
 ];
 
 const growth: NavItem[] = [
-  { label: "Creator Studio", href: "#" },
+  { label: "Creator Studio", href: "/creator-studio", dotColor: "bg-purple-400", live: true },
   { label: "Partner Program", href: "#" },
   { label: "API Access", href: "#" },
 ];

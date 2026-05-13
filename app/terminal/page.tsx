@@ -8,6 +8,8 @@ import CreatorFeed from "@/components/CreatorFeed";
 import StatusStrip from "@/components/StatusStrip";
 import PulseCard, { type PulseCardData } from "@/components/PulseCard";
 import MarketDepthWidget from "@/components/MarketDepthWidget";
+import DistributionBar from "@/components/DistributionBar";
+import MostSharedSignals from "@/components/MostSharedSignals";
 
 // ─── Mock pulse data ──────────────────────────────────────────────────────────
 
@@ -279,6 +281,14 @@ export default function TerminalPage() {
             {/* Market Depth */}
             <section className="pt-4 border-b border-zinc-900/80">
               <MarketDepthWidget />
+            </section>
+
+            {/* Distribution Network */}
+            <DistributionBar />
+
+            {/* Most Shared Signals */}
+            <section className="border-b border-zinc-900/80">
+              <MostSharedSignals />
             </section>
 
             {/* Signal Feed */}

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Sparkline from "@/components/Sparkline";
 
 export type SignalTag = "Free" | "Premium" | "Creator" | "API";
@@ -157,12 +158,20 @@ export default function SignalCard({
         <ConfidenceBar value={confidence} />
       </div>
 
-      {/* Watermark */}
+      {/* Watermark + export */}
       <div className="mt-3 pt-2.5 border-t border-zinc-900 flex items-center justify-between">
         <span className="text-[9px] text-zinc-800 font-mono tracking-wider">
           Powered by Sports Market OS
         </span>
-        <span className="w-1 h-1 rounded-full bg-emerald-500/40 pulse-dot" />
+        <div className="flex items-center gap-3">
+          <span className="w-1 h-1 rounded-full bg-emerald-500/40 pulse-dot" />
+          <Link
+            href="/creator-studio"
+            className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px] font-mono text-zinc-600 hover:text-zinc-300 border border-zinc-800 hover:border-zinc-600 px-1.5 py-0.5 rounded-sm"
+          >
+            Share →
+          </Link>
+        </div>
       </div>
     </div>
   );
