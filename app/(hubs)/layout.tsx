@@ -1,5 +1,6 @@
 import MarketTicker from "@/components/MarketTicker";
 import TerminalHeader from "@/components/TerminalHeader";
+import Footer from "@/components/Footer";
 
 export default function HubsLayout({
   children,
@@ -11,6 +12,7 @@ export default function HubsLayout({
       <MarketTicker />
       <TerminalHeader />
       <main className="flex-1">{children}</main>
+      <Footer />
     </div>
   );
 }

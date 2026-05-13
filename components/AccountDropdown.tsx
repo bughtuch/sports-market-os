@@ -89,6 +89,13 @@ export default function AccountDropdown({ user }: { user: User }) {
             >
               API Access
             </Link>
+            <Link
+              href="/contact"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 text-zinc-400 text-xs hover:text-white hover:bg-zinc-900 transition-colors"
+            >
+              Contact
+            </Link>
           </div>
           <div className="border-t border-zinc-900 py-1">
             <button

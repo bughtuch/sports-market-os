@@ -2,6 +2,7 @@ import Link from "next/link";
 import MarketTicker from "@/components/MarketTicker";
 import SportsHubCard, { type SportsHubData } from "@/components/SportsHubCard";
 import NavAuth from "@/components/NavAuth";
+import Footer from "@/components/Footer";
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 
@@ -396,17 +397,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-900 px-6 py-6 mt-20">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-zinc-600 text-xs font-mono">
-            SPORTS MARKET OS — AI INTELLIGENCE TERMINAL
-          </span>
-          <span className="text-zinc-700 text-[10px] font-mono">
-            For market intelligence purposes only. Not financial or gambling advice.
-          </span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

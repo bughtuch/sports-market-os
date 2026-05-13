@@ -6,6 +6,7 @@ import MarketTicker from "@/components/MarketTicker";
 import TerminalHeader from "@/components/TerminalHeader";
 import PlanBadge from "@/components/PlanBadge";
 import { PLANS } from "@/lib/plans/plans";
+import Footer from "@/components/Footer";
 
 // ─── Check icon ───────────────────────────────────────────────────────────────
 
@@ -289,14 +290,26 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* Compliance */}
-        <div className="px-6 py-4">
-          <p className="text-zinc-800 text-[9px] font-mono text-center leading-relaxed max-w-2xl mx-auto">
-            Sports Market OS is a market intelligence and analytics platform. It does not accept
-            wagers, custody funds, or execute trades. All data is for analytical purposes only.
-          </p>
-        </div>
+        {/* Enterprise contact CTA */}
+        <section className="px-6 py-10 border-t border-zinc-900/60">
+          <div className="max-w-xl mx-auto text-center">
+            <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-3">
+              Enterprise &amp; Custom
+            </p>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+              Need a custom plan, white-label infrastructure, or institutional access? We work directly with serious operators.
+            </p>
+            <Link
+              href="/contact"
+              className="inline-block text-xs font-mono text-zinc-400 border border-zinc-700 px-5 py-2 rounded-sm hover:border-zinc-500 hover:text-white transition-colors"
+            >
+              Contact us →
+            </Link>
+          </div>
+        </section>
       </main>
+
+      <Footer />
     </div>
   );
 }

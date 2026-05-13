@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import MarketTicker from "@/components/MarketTicker";
 import TerminalHeader from "@/components/TerminalHeader";
 import PlanBadge from "@/components/PlanBadge";
+import Footer from "@/components/Footer";
+import { API_EMAIL } from "@/lib/constants/contact";
 
 export const metadata: Metadata = {
   title: "API Access — Market Intelligence Data Feed | Sports Market OS",
@@ -401,12 +403,27 @@ X-Version: 1.0`}
           </div>
         </section>
 
-        <div className="px-6 py-4 border-t border-zinc-900/60">
-          <p className="text-zinc-800 text-[9px] font-mono text-center leading-relaxed">
-            Sports Market OS API provides market intelligence data only. No trading execution. No wager facilitation.
-          </p>
-        </div>
+        {/* Enterprise contact CTA */}
+        <section className="px-6 py-10 border-t border-zinc-900/60">
+          <div className="max-w-xl mx-auto text-center">
+            <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-3">
+              Enterprise API
+            </p>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+              Need higher rate limits, custom endpoints, or dedicated onboarding? We work directly with data infrastructure teams.
+            </p>
+            <Link
+              href="/contact"
+              className="inline-block text-xs font-mono text-zinc-400 border border-zinc-700 px-5 py-2 rounded-sm hover:border-zinc-500 hover:text-white transition-colors"
+            >
+              Contact us →
+            </Link>
+            <p className="text-zinc-700 text-[9px] font-mono mt-3">{API_EMAIL}</p>
+          </div>
+        </section>
       </main>
+
+      <Footer />
     </div>
   );
 }

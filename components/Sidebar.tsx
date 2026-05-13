@@ -82,6 +82,7 @@ const growth: NavItem[] = [
   { label: "Partner Program", href: "/partner-program", dotColor: "bg-amber-400" },
   { label: "API Access",      href: "/api-access",      dotColor: "bg-blue-400" },
   { label: "Pricing",         href: "/pricing" },
+  { label: "Contact",         href: "/contact" },
 ];
 
 function NavSection({
