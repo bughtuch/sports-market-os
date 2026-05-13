@@ -68,6 +68,27 @@ export default function AccountDropdown({ user }: { user: User }) {
             >
               Creator Studio
             </Link>
+            <Link
+              href="/pricing"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 text-zinc-400 text-xs hover:text-white hover:bg-zinc-900 transition-colors"
+            >
+              Pricing
+            </Link>
+            <Link
+              href="/partner-program"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 text-zinc-400 text-xs hover:text-white hover:bg-zinc-900 transition-colors"
+            >
+              Partner Program
+            </Link>
+            <Link
+              href="/api-access"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 text-zinc-400 text-xs hover:text-white hover:bg-zinc-900 transition-colors"
+            >
+              API Access
+            </Link>
           </div>
           <div className="border-t border-zinc-900 py-1">
             <button
