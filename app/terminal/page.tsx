@@ -1,8 +1,6 @@
 import MarketTicker from "@/components/MarketTicker";
 import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
-import SignalFeed from "@/components/SignalFeed";
-import type { SignalCardData } from "@/components/SignalCard";
 import AIPanel from "@/components/AIPanel";
 import Watchlist from "@/components/Watchlist";
 import CreatorFeed from "@/components/CreatorFeed";
@@ -11,6 +9,11 @@ import PulseCard, { type PulseCardData } from "@/components/PulseCard";
 import MarketDepthWidget from "@/components/MarketDepthWidget";
 import DistributionBar from "@/components/DistributionBar";
 import MostSharedSignals from "@/components/MostSharedSignals";
+import LiveSignalFeed from "@/components/LiveSignalFeed";
+import ProviderStatusPanel from "@/components/ProviderStatusPanel";
+import NewsCatalystFeed from "@/components/NewsCatalystFeed";
+import OddsMovementFeed from "@/components/OddsMovementFeed";
+import DataModeIndicator from "@/components/DataModeIndicator";
 
 // ─── Mock pulse data ──────────────────────────────────────────────────────────
 
@@ -91,7 +94,8 @@ const pulseCards: PulseCardData[] = [
 
 // ─── Mock feed data ───────────────────────────────────────────────────────────
 
-const feedCards: SignalCardData[] = [
+// Retained as fallback reference — live data served by LiveSignalFeed via /api/live/signals
+const feedCards = [
   {
     sport: "Horse Racing",
     timestamp: "14:32:08",
@@ -236,7 +240,7 @@ export default function TerminalPage() {
           <div className="h-9 shrink-0 border-b border-zinc-800/60 bg-zinc-950 flex items-center justify-between px-4">
             <div className="flex items-center gap-3">
               <span className="text-white text-[11px] font-semibold">Live Market Intelligence</span>
-              <span className="text-zinc-700 text-[9px] font-mono">— {feedCards.length} signals</span>
+              <DataModeIndicator />
             </div>
             <div className="flex items-center gap-3">
               {["All Sports", "Free", "Premium", "API"].map((f, i) => (
@@ -292,16 +296,26 @@ export default function TerminalPage() {
               <MostSharedSignals />
             </section>
 
-            {/* Signal Feed */}
+            {/* Provider Status */}
+            <ProviderStatusPanel />
+
+            {/* News Catalysts */}
+            <NewsCatalystFeed />
+
+            {/* Odds Movement */}
+            <OddsMovementFeed />
+
+            {/* Live Signal Feed */}
             <section className="p-4">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
-                  Signal Feed
-                </span>
-                <div className="flex-1 h-px bg-zinc-900" />
-              </div>
-              <SignalFeed cards={feedCards} />
+              <LiveSignalFeed />
             </section>
+
+            {/* Compliance note */}
+            <div className="px-4 py-3 border-t border-zinc-900/60">
+              <p className="text-zinc-800 text-[9px] font-mono leading-relaxed">
+                Sports Market OS provides market intelligence and analytics only. It does not accept wagers, custody funds, or execute trades.
+              </p>
+            </div>
           </main>
         </div>
 
