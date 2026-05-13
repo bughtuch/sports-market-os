@@ -57,13 +57,56 @@ body {
   animation-play-state: paused;
 }
 
+/* pulse-dot duration driven by CSS custom property — overridden per regime */
 .pulse-dot {
-  animation: pulse-dot 2s ease-in-out infinite;
+  animation: pulse-dot var(--pulse-duration, 2s) ease-in-out infinite;
 }
 
 .fade-up {
   animation: fade-up 0.5s ease-out forwards;
 }
+
+/* ─── Sprint 9 — motion system ──────────────────────────────────────────────── */
+
+@keyframes event-enter {
+  from { opacity: 0; transform: translateX(8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes activity-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes heat-glow {
+  0%, 100% { border-color: rgba(239, 68, 68, 0.15); }
+  50%       { border-color: rgba(239, 68, 68, 0.45); }
+}
+
+.event-enter {
+  animation: event-enter 0.25s ease-out forwards;
+}
+
+.activity-animate {
+  animation: activity-scroll 70s linear infinite;
+  display: flex;
+  white-space: nowrap;
+}
+
+.heat-glow {
+  animation: heat-glow 2s ease-in-out infinite;
+}
+
+/* ─── Regime-driven pulse rates ─────────────────────────────────────────────── */
+/* Set on the TerminalRegimeWrapper div via data-regime attribute.               */
+
+[data-regime="panic"]       { --pulse-duration: 0.5s;  }
+[data-regime="volatile"]    { --pulse-duration: 0.9s;  }
+[data-regime="expansion"]   { --pulse-duration: 1.5s;  }
+[data-regime="rotational"]  { --pulse-duration: 2s;    }
+[data-regime="compression"] { --pulse-duration: 3s;    }
+[data-regime="stable"]      { --pulse-duration: 3.5s;  }
+[data-regime="illiquid"]    { --pulse-duration: 4s;    }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {

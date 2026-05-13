@@ -4,8 +4,13 @@ import Sidebar from "@/components/Sidebar";
 import AIPanel from "@/components/AIPanel";
 import Watchlist from "@/components/Watchlist";
 import CreatorFeed from "@/components/CreatorFeed";
-import StatusStrip from "@/components/StatusStrip";
+import LiveStatusStrip from "@/components/LiveStatusStrip";
 import PulseCard, { type PulseCardData } from "@/components/PulseCard";
+import TerminalRegimeWrapper from "@/components/TerminalRegimeWrapper";
+import AlertRail from "@/components/AlertRail";
+import EventStack from "@/components/EventStack";
+import LiveActivityStrip from "@/components/LiveActivityStrip";
+import MarketHeatPanel from "@/components/MarketHeatPanel";
 import MarketDepthWidget from "@/components/MarketDepthWidget";
 import DistributionBar from "@/components/DistributionBar";
 import MostSharedSignals from "@/components/MostSharedSignals";
@@ -230,7 +235,7 @@ const feedCards = [
 
 export default function TerminalPage() {
   return (
-    <div className="min-h-screen md:h-screen bg-black text-white flex flex-col md:overflow-hidden">
+    <TerminalRegimeWrapper>
       {/* Fixed top bars */}
       <MarketTicker />
       <TerminalHeader />
@@ -270,6 +275,9 @@ export default function TerminalPage() {
             </div>
           </div>
 
+          {/* Live system activity strip */}
+          <LiveActivityStrip />
+
           {/* Scrollable center content */}
           <main className="flex-1 md:overflow-y-auto">
             {/* Global Market Pulse */}
@@ -290,6 +298,9 @@ export default function TerminalPage() {
                 ))}
               </div>
             </section>
+
+            {/* Market Heat */}
+            <MarketHeatPanel />
 
             {/* Market Depth */}
             <section className="pt-4 border-b border-zinc-900/80">
@@ -335,6 +346,9 @@ export default function TerminalPage() {
             {/* AI Engine Status */}
             <AIEngineStatus />
 
+            {/* Intelligence Event Stack */}
+            <EventStack />
+
             {/* ── Market data feeds ─────────────────────────────────────── */}
 
             {/* News Catalysts */}
@@ -359,6 +373,7 @@ export default function TerminalPage() {
 
         {/* Right panel — stacks below on mobile */}
         <div className="flex flex-col md:w-72 shrink-0 border-t md:border-t-0 md:border-l border-zinc-800/60 md:overflow-hidden">
+          <AlertRail />
           <AIPanel />
           <Watchlist />
           <CreatorFeed />
@@ -366,7 +381,7 @@ export default function TerminalPage() {
       </div>
 
       {/* Status strip */}
-      <StatusStrip />
-    </div>
+      <LiveStatusStrip />
+    </TerminalRegimeWrapper>
   );
 }
