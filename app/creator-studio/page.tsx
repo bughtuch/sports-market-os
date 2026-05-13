@@ -7,6 +7,10 @@ import CreatorMetric, { type CreatorMetricProps } from "@/components/CreatorMetr
 import PartnerCard, { type PartnerData } from "@/components/PartnerCard";
 import CreatorFeed from "@/components/CreatorFeed";
 import MostSharedSignals from "@/components/MostSharedSignals";
+import PartnerApplyButton from "@/components/PartnerApplyButton";
+import CreatorIdentityBanner from "@/components/CreatorIdentityBanner";
+import { createClient } from "@/lib/supabase/server";
+import { getProfile } from "@/lib/db/profile";
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 
@@ -174,7 +178,18 @@ function BadgePill({ label }: { label: string }) {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function CreatorStudioPage() {
+export default async function CreatorStudioPage() {
+  // Fetch profile for creator identity — gracefully null if unauthenticated
+  const supabase = await createClient();
+  let creatorHandle: string | null = null;
+  if (supabase) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const profile = await getProfile(supabase, user.id);
+      creatorHandle = profile?.creator_handle ?? null;
+    }
+  }
+
   return (
     <div className="h-screen bg-black text-white flex flex-col overflow-hidden">
       <MarketTicker />
@@ -238,6 +253,11 @@ export default function CreatorStudioPage() {
             </div>
           </section>
 
+          {/* ─── Creator Identity ───────────────────────────────────────── */}
+          <section className="px-6 py-4 border-b border-zinc-900">
+            <CreatorIdentityBanner initialHandle={creatorHandle} />
+          </section>
+
           {/* ─── Quick Actions ──────────────────────────────────────────── */}
           <section className="px-6 py-5 border-b border-zinc-900">
             <SectionHeader label="Quick Actions" sublabel="6 tools" />
@@ -296,9 +316,7 @@ export default function CreatorStudioPage() {
                 </span>
                 <div className="h-px w-16 bg-zinc-900" />
               </div>
-              <button className="text-xs font-medium text-black bg-white px-4 py-1.5 rounded-sm hover:bg-zinc-200 transition-colors">
-                Apply For Partner Access
-              </button>
+              <PartnerApplyButton />
             </div>
 
             <div className="mb-4 max-w-xl">

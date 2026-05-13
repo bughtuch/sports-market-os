@@ -1,7 +1,8 @@
 import MarketTicker from "@/components/MarketTicker";
 import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
-import SignalCard, { type SignalCardData } from "@/components/SignalCard";
+import SignalFeed from "@/components/SignalFeed";
+import type { SignalCardData } from "@/components/SignalCard";
 import AIPanel from "@/components/AIPanel";
 import Watchlist from "@/components/Watchlist";
 import CreatorFeed from "@/components/CreatorFeed";
@@ -299,11 +300,7 @@ export default function TerminalPage() {
                 </span>
                 <div className="flex-1 h-px bg-zinc-900" />
               </div>
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
-                {feedCards.map((card, i) => (
-                  <SignalCard key={i} {...card} />
-                ))}
-              </div>
+              <SignalFeed cards={feedCards} />
             </section>
           </main>
         </div>
