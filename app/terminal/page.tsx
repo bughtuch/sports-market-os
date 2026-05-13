@@ -14,6 +14,14 @@ import ProviderStatusPanel from "@/components/ProviderStatusPanel";
 import NewsCatalystFeed from "@/components/NewsCatalystFeed";
 import OddsMovementFeed from "@/components/OddsMovementFeed";
 import DataModeIndicator from "@/components/DataModeIndicator";
+import AIRegimePanel from "@/components/AIRegimePanel";
+import AINarrativePanel from "@/components/AINarrativePanel";
+import AIBriefPanel from "@/components/AIBriefPanel";
+import AIOpportunityScanner from "@/components/AIOpportunityScanner";
+import AILiquidityPanel from "@/components/AILiquidityPanel";
+import AIVolatilityPanel from "@/components/AIVolatilityPanel";
+import AIBehaviourPanel from "@/components/AIBehaviourPanel";
+import AIEngineStatus from "@/components/AIEngineStatus";
 
 // ─── Mock pulse data ──────────────────────────────────────────────────────────
 
@@ -298,6 +306,36 @@ export default function TerminalPage() {
 
             {/* Provider Status */}
             <ProviderStatusPanel />
+
+            {/* ── AI Intelligence Engine ─────────────────────────────────── */}
+
+            {/* Global Market Regime — always-visible strip */}
+            <AIRegimePanel />
+
+            {/* AI Market Narrator */}
+            <AINarrativePanel />
+
+            {/* AI Intelligence Brief */}
+            <AIBriefPanel />
+
+            {/* Opportunity Scanner */}
+            <AIOpportunityScanner />
+
+            {/* Liquidity + Volatility — side by side on md+ */}
+            <section className="border-b border-zinc-900/80">
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-zinc-800/40">
+                <AILiquidityPanel />
+                <AIVolatilityPanel />
+              </div>
+            </section>
+
+            {/* Behavioural Intelligence */}
+            <AIBehaviourPanel />
+
+            {/* AI Engine Status */}
+            <AIEngineStatus />
+
+            {/* ── Market data feeds ─────────────────────────────────────── */}
 
             {/* News Catalysts */}
             <NewsCatalystFeed />
