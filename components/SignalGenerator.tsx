@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ShareSignalCard, { type ShareCardProps } from "@/components/ShareSignalCard";
+import SignalExportModal, { type ExportSignalData } from "@/components/SignalExportModal";
 
 // ─── Presets ──────────────────────────────────────────────────────────────────
 
@@ -299,6 +300,7 @@ export default function SignalGenerator() {
   const [includeSparkline, setIncludeSparkline] = useState(true);
   const [includeWatermark, setIncludeWatermark] = useState(true);
   const [includeConfidence, setIncludeConfidence] = useState(true);
+  const [exportOpen, setExportOpen] = useState(false);
 
   const preset = presets[sport];
 
@@ -377,16 +379,32 @@ export default function SignalGenerator() {
 
         {/* Export actions */}
         <div className="flex flex-wrap gap-2 pt-2">
-          <ExportButton label="Export PNG" variant="primary" />
-          <ExportButton label="Copy Link" />
-          <ExportButton label="Post to X" />
-          <ExportButton label="Send to Telegram" />
-          <ExportButton label="Queue Broadcast" />
+          <button
+            onClick={() => setExportOpen(true)}
+            className="text-[11px] font-medium text-black bg-white px-4 py-1.5 rounded-sm hover:bg-zinc-200 transition-colors"
+          >
+            Export / Share
+          </button>
         </div>
 
-        <p className="text-zinc-700 text-[9px] font-mono">
-          Export functionality launches in Sprint 4 · Cards are screenshot-ready now
-        </p>
+        {exportOpen && (
+          <SignalExportModal
+            signal={{
+              sport,
+              market: preset.title,
+              signalType,
+              confidence: preset.confidence,
+              movement: preset.movement,
+              direction: preset.direction,
+              insight: preset.insight,
+              exchange: preset.exchange,
+              timestamp: preset.timestamp,
+              accentHex: preset.accentHex,
+              accentClass: preset.accentClass,
+            } satisfies ExportSignalData}
+            onClose={() => setExportOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

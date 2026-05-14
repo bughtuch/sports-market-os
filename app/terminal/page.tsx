@@ -2,6 +2,7 @@ import MarketTicker from "@/components/MarketTicker";
 import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
+import TerminalClientLayer from "@/components/TerminalClientLayer";
 import AIPanel from "@/components/AIPanel";
 import Watchlist from "@/components/Watchlist";
 import CreatorFeed from "@/components/CreatorFeed";
@@ -28,6 +29,7 @@ import AILiquidityPanel from "@/components/AILiquidityPanel";
 import AIVolatilityPanel from "@/components/AIVolatilityPanel";
 import AIBehaviourPanel from "@/components/AIBehaviourPanel";
 import AIEngineStatus from "@/components/AIEngineStatus";
+import SaveWorkspaceButton from "@/components/SaveWorkspaceButton";
 
 // ─── Mock pulse data ──────────────────────────────────────────────────────────
 
@@ -237,21 +239,24 @@ const feedCards = [
 export default function TerminalPage() {
   return (
     <TerminalRegimeWrapper>
+      {/* Client-side layer: welcome overlay + keyboard shortcuts */}
+      <TerminalClientLayer />
+
       {/* Fixed top bars */}
       <MarketTicker />
       <TerminalHeader />
 
       {/* Main layout */}
       <div className="flex flex-1 flex-col md:flex-row md:overflow-hidden">
-        {/* Sidebar — hidden on mobile */}
-        <div className="hidden md:block">
+        {/* Sidebar — hidden on mobile; hidden in screenshot mode via CSS */}
+        <div className="hidden md:block terminal-sidebar">
           <Sidebar />
         </div>
 
         {/* Center column */}
         <div className="flex flex-1 flex-col md:overflow-hidden">
           {/* Feed filter bar */}
-          <div className="h-9 shrink-0 border-b border-zinc-800/60 bg-zinc-950 flex items-center justify-between px-4">
+          <div className="h-9 shrink-0 border-b border-zinc-800/60 bg-zinc-950 flex items-center justify-between px-4 terminal-filter-bar">
             <div className="flex items-center gap-3">
               <span className="text-white text-[11px] font-semibold">Live Market Intelligence</span>
               <DataModeIndicator />
@@ -273,11 +278,16 @@ export default function TerminalPage() {
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot" />
                 <span className="text-emerald-400 text-[9px] font-mono">LIVE</span>
               </div>
+              <span className="hidden lg:block text-zinc-800 text-[9px] font-mono" title="Toggle screenshot mode">
+                Alt+S
+              </span>
             </div>
           </div>
 
           {/* Live system activity strip */}
-          <LiveActivityStrip />
+          <div className="terminal-activity-strip">
+            <LiveActivityStrip />
+          </div>
 
           {/* Scrollable center content */}
           <main className="flex-1 md:overflow-y-auto">
@@ -288,7 +298,8 @@ export default function TerminalPage() {
                   Global Market Pulse
                 </span>
                 <div className="flex-1 h-px bg-zinc-900" />
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
+                  <SaveWorkspaceButton />
                   <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot" />
                   <span className="text-emerald-600 text-[9px] font-mono">LIVE</span>
                 </div>
