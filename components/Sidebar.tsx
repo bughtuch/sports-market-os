@@ -154,6 +154,8 @@ function NavSection({
   );
 }
 
+import OnboardingPrompt from "@/components/OnboardingPrompt";
+
 export default function Sidebar() {
   const pathname = usePathname();
 
@@ -200,6 +202,9 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
+
+      {/* Onboarding CTA */}
+      <OnboardingPrompt />
 
       {/* Footer */}
       <div className="px-4 py-2 border-t border-zinc-800/60 shrink-0">
