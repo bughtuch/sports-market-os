@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import SystemStatusClient from "@/components/SystemStatusClient";
 import { getProviderHealth } from "@/lib/providers/providerHealth";
 import { getSystemReadiness } from "@/lib/providerConfig/providerReadiness";
+import { isEmailConfigured } from "@/lib/email/resendClient";
 
 export const metadata: Metadata = {
   title: "System Status — Provider Health & Data Modes | Sports Market OS",
@@ -18,8 +19,9 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default function SystemStatusPage() {
-  const summary   = getProviderHealth();
-  const readiness = getSystemReadiness();
+  const summary         = getProviderHealth();
+  const readiness       = getSystemReadiness();
+  const emailConfigured = isEmailConfigured();
 
   const scoreColor =
     summary.systemHealthScore >= 80 ? "text-emerald-400" :
@@ -110,7 +112,7 @@ export default function SystemStatusPage() {
 
           {/* Status content */}
           <section className="px-6 py-6">
-            <SystemStatusClient summary={summary} />
+            <SystemStatusClient summary={summary} emailConfigured={emailConfigured} />
           </section>
 
           <Footer />

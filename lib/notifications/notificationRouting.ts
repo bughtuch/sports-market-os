@@ -17,6 +17,7 @@ import type {
 import { CHANNEL_STATUS } from "./notificationTypes";
 import { isQuietHoursActive } from "./notificationPreferences";
 import { enqueueNotification } from "./notificationQueue";
+import { isEmailConfigured } from "../email/resendClient";
 
 // ─── Category → preference gate ───────────────────────────────────────────────
 
@@ -57,7 +58,7 @@ export function determineChannels(
   // In-app is always included when the type is enabled
   channels.push("in-app");
 
-  if (prefs.email_enabled    && CHANNEL_STATUS.email    !== "mock") channels.push("email");
+  if (prefs.email_enabled    && CHANNEL_STATUS.email    !== "mock" && isEmailConfigured()) channels.push("email");
   if (prefs.telegram_enabled && CHANNEL_STATUS.telegram !== "mock") channels.push("telegram");
   if (prefs.push_enabled     && CHANNEL_STATUS.push     !== "mock") channels.push("push");
 

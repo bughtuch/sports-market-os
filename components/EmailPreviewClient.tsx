@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 
 const TEMPLATE_TYPES = [
+  "email-test",
   "daily-brief",
   "alert",
   "welcome",
@@ -19,11 +20,15 @@ interface PreviewResponse {
   html:    string;
 }
 
+type TestState = "idle" | "sending" | "sent" | "rate-limited" | "error";
+
 export default function EmailPreviewClient() {
-  const [selected, setSelected]   = useState<TemplateType>("welcome");
-  const [preview, setPreview]     = useState<PreviewResponse | null>(null);
-  const [loading, setLoading]     = useState(false);
-  const [viewMode, setViewMode]   = useState<"rendered" | "source">("rendered");
+  const [selected, setSelected]     = useState<TemplateType>("email-test");
+  const [preview, setPreview]       = useState<PreviewResponse | null>(null);
+  const [loading, setLoading]       = useState(false);
+  const [viewMode, setViewMode]     = useState<"rendered" | "source">("rendered");
+  const [testState, setTestState]   = useState<TestState>("idle");
+  const [testMsg, setTestMsg]       = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -34,8 +39,69 @@ export default function EmailPreviewClient() {
       .catch(() => setLoading(false));
   }, [selected]);
 
+  async function sendTestEmail() {
+    setTestState("sending");
+    setTestMsg("");
+    try {
+      const res  = await fetch("/api/email/test", { method: "POST" });
+      const body = await res.json() as {
+        sent?: boolean; skipped?: boolean; rateLimited?: boolean;
+        to?: string; error?: string; retryAfterSec?: number; message?: string;
+      };
+
+      if (body.sent) {
+        setTestState("sent");
+        setTestMsg(`Delivered to ${body.to}`);
+      } else if (body.rateLimited) {
+        setTestState("rate-limited");
+        setTestMsg(`Rate limited — retry in ${body.retryAfterSec}s`);
+      } else if (body.skipped) {
+        setTestState("error");
+        setTestMsg("Email not configured (RESEND_API_KEY missing)");
+      } else {
+        setTestState("error");
+        setTestMsg(body.error ?? body.message ?? "Unknown error");
+      }
+    } catch {
+      setTestState("error");
+      setTestMsg("Request failed");
+    }
+  }
+
+  const testStateColor = {
+    idle:         "text-zinc-400",
+    sending:      "text-zinc-400",
+    sent:         "text-emerald-400",
+    "rate-limited": "text-amber-400",
+    error:        "text-red-400",
+  }[testState];
+
   return (
     <div className="font-mono">
+      {/* Test email action strip */}
+      <div className="flex items-center justify-between mb-6 p-3 border border-zinc-800 rounded-sm">
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <span className="text-[10px] font-mono text-zinc-400">
+            Send the selected template to your account email via Resend
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          {testMsg && (
+            <span className={`text-[10px] font-mono ${testStateColor}`}>
+              {testState === "sent" ? "✓ " : testState === "rate-limited" ? "⏱ " : "✗ "}{testMsg}
+            </span>
+          )}
+          <button
+            onClick={sendTestEmail}
+            disabled={testState === "sending"}
+            className="text-[10px] font-mono px-3 py-1.5 border border-zinc-600 text-zinc-300 rounded-sm hover:border-zinc-400 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            {testState === "sending" ? "Sending…" : "Send Test Email"}
+          </button>
+        </div>
+      </div>
+
       {/* Type selector */}
       <div className="flex flex-wrap gap-2 mb-6">
         {TEMPLATE_TYPES.map((t) => (

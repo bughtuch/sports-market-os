@@ -345,3 +345,44 @@ export function renderCreatorExportReadyEmail(
 
   return { subject, html: baseLayout(content, subject) };
 }
+
+export function renderEmailTestEmail(email: string): { subject: string; html: string } {
+  const subject = "Email Delivery Confirmed — Sports Market OS";
+  const appUrl  = getAppUrl();
+  const sentAt  = new Date().toUTCString();
+
+  const content = `
+    <p style="color:#52525b;font-size:9px;font-family:'Courier New',Courier,monospace;margin:0 0 4px;letter-spacing:0.06em;text-transform:uppercase;">Email System · Test Delivery</p>
+    <h1 style="color:#ffffff;font-size:18px;font-family:'Courier New',Courier,monospace;font-weight:700;margin:0 0 6px;line-height:1.3;">Email Delivery Active</h1>
+    <p style="color:#71717a;font-size:11px;font-family:'Courier New',Courier,monospace;margin:0 0 28px;line-height:1.5;">
+      This confirms that Resend email delivery is correctly configured for Sports Market OS.<br />
+      Sent to: <span style="color:#ffffff;">${escHtml(email)}</span>
+    </p>
+
+    <div style="border-left:3px solid #22c55e;padding-left:14px;margin-bottom:24px;">
+      <p style="color:#22c55e;font-size:9px;font-family:'Courier New',Courier,monospace;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px;">Channel Status</p>
+      <p style="color:#a1a1aa;font-size:11px;font-family:'Courier New',Courier,monospace;margin:0 0 4px;">&check; Resend API connected</p>
+      <p style="color:#a1a1aa;font-size:11px;font-family:'Courier New',Courier,monospace;margin:0 0 4px;">&check; EMAIL_FROM configured</p>
+      <p style="color:#a1a1aa;font-size:11px;font-family:'Courier New',Courier,monospace;margin:0;">&check; Delivery pipeline operational</p>
+    </div>
+
+    <div style="margin-bottom:24px;">
+      ${sectionLabel("What happens next")}
+      <p style="color:#71717a;font-size:11px;font-family:'Courier New',Courier,monospace;margin:0 0 6px;line-height:1.7;">
+        Notifications route to email when: delivery is enabled in your notification preferences,
+        the notification type is active, and quiet hours are not blocking delivery.
+      </p>
+    </div>
+
+    <div style="margin-bottom:8px;">
+      <a href="${appUrl}/daily-brief" style="display:inline-block;background-color:#ffffff;color:#000000;font-family:'Courier New',Courier,monospace;font-size:11px;font-weight:700;padding:10px 24px;text-decoration:none;letter-spacing:0.04em;">&rarr; View Daily Brief</a>
+    </div>
+    <a href="${appUrl}/notification-settings" style="display:inline-block;font-family:'Courier New',Courier,monospace;font-size:11px;color:#71717a;padding:10px 0;text-decoration:underline;letter-spacing:0.02em;">Manage notification preferences &rarr;</a>
+
+    <p style="color:#3f3f46;font-size:9px;font-family:'Courier New',Courier,monospace;margin:20px 0 0;">
+      Sent: ${sentAt} &middot; support@sportsmarketos.com
+    </p>
+  `;
+
+  return { subject, html: baseLayout(content, subject) };
+}

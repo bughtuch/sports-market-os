@@ -68,7 +68,13 @@ function ProviderRow({ p }: { p: ProviderHealth }) {
   );
 }
 
-export default function SystemStatusClient({ summary }: { summary: ProviderHealthSummary }) {
+export default function SystemStatusClient({
+  summary,
+  emailConfigured = false,
+}: {
+  summary: ProviderHealthSummary;
+  emailConfigured?: boolean;
+}) {
   const { providers, healthyCount, degradedCount, simulatedCount, plannedCount, avgUptimePct, systemHealthScore, generatedAt } = summary;
 
   const scoreColor =
@@ -229,8 +235,13 @@ export default function SystemStatusClient({ summary }: { summary: ProviderHealt
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
           {[
-            { label: "In-App Delivery",     status: "active",  color: "text-emerald-400", note: "Always available" },
-            { label: "Email (Resend)",       status: "pending", color: "text-zinc-500",    note: "Resend not connected" },
+            { label: "In-App Delivery", status: "active",  color: "text-emerald-400", note: "Always available" },
+            {
+              label:  "Email (Resend)",
+              status: emailConfigured ? "ready"   : "pending",
+              color:  emailConfigured ? "text-emerald-400" : "text-zinc-500",
+              note:   emailConfigured ? "Resend connected"  : "Resend not connected",
+            },
             { label: "Telegram Bot",         status: "pending", color: "text-zinc-500",    note: "Bot not connected" },
             { label: "Web Push",             status: "pending", color: "text-zinc-500",    note: "Permission required" },
             { label: "Creator Broadcast",    status: "mock",    color: "text-amber-400",   note: "Simulated queue" },
@@ -252,9 +263,19 @@ export default function SystemStatusClient({ summary }: { summary: ProviderHealt
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {[
-            { label: "Resend API",    status: "active",  color: "text-emerald-400", note: "Connected" },
-            { label: "Email Queue",   status: "active",  color: "text-emerald-400", note: "Backed by notification_events" },
-            { label: "Preview Page",  status: "active",  color: "text-emerald-400", note: "/email-preview (noindex)" },
+            {
+              label:  "Resend API",
+              status: emailConfigured ? "active"  : "pending",
+              color:  emailConfigured ? "text-emerald-400" : "text-zinc-500",
+              note:   emailConfigured ? "Connected" : "Set RESEND_API_KEY to activate",
+            },
+            {
+              label:  "Email Queue",
+              status: emailConfigured ? "active"  : "pending",
+              color:  emailConfigured ? "text-emerald-400" : "text-zinc-500",
+              note:   "notification_events table",
+            },
+            { label: "Preview Page", status: "active", color: "text-emerald-400", note: "/email-preview (noindex)" },
           ].map(d => (
             <div key={d.label} className="bg-zinc-950 border border-zinc-800/60 rounded-sm px-3 py-2.5">
               <p className="text-zinc-600 text-[8px] font-mono uppercase tracking-wider mb-0.5">{d.label}</p>

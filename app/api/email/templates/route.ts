@@ -12,11 +12,14 @@ import {
   renderOnboardingCompleteEmail,
   renderSystemStatusWarningEmail,
   renderCreatorExportReadyEmail,
+  renderEmailTestEmail,
 } from "@/lib/email/emailRenderer";
 
 export const dynamic = "force-dynamic";
 
 const PREVIEW_DATA = {
+  "email-test": () => renderEmailTestEmail("preview@sportsmarketos.com"),
+
   "daily-brief": () => renderDailyBriefEmail({
     briefType:        "Morning",
     title:            "Morning Intelligence Brief",
