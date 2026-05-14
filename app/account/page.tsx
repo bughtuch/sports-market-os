@@ -12,6 +12,7 @@ import { normalizePlan, getMockUsage, canAccessFeature } from "@/lib/plans/featu
 import { getPlan } from "@/lib/plans/plans";
 import DailyBriefWidget from "@/components/DailyBriefWidget";
 import AccountPreferences from "@/components/AccountPreferences";
+import AccountAlertSummary from "@/components/AccountAlertSummary";
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -305,6 +306,17 @@ export default async function AccountPage() {
               </Link>
             </div>
             <AccountPreferences />
+          </section>
+
+          {/* Alert Settings */}
+          <section className="px-6 py-5 border-b border-zinc-900">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">Alert Settings</p>
+              <Link href="/alerts" className="text-zinc-600 text-[9px] font-mono hover:text-zinc-400 transition-colors">
+                Alert Center →
+              </Link>
+            </div>
+            <AccountAlertSummary />
           </section>
 
           {/* Quick links */}

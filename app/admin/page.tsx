@@ -23,6 +23,7 @@ import AdminDistribution from "@/components/admin/AdminDistribution";
 import AdminSystemStatus from "@/components/admin/AdminSystemStatus";
 import AdminProviderActivation from "@/components/admin/AdminProviderActivation";
 import AdminConsoleNav from "@/components/admin/AdminConsoleNav";
+import AdminAlertMonitoring from "@/components/admin/AdminAlertMonitoring";
 
 export const metadata: Metadata = {
   title: "Admin Console | Sports Market OS",
@@ -115,6 +116,12 @@ export default async function AdminPage() {
           <section id="providers">
             <SectionHeader label="Provider Activation Readiness" />
             <AdminProviderActivation />
+          </section>
+
+          {/* ─── Alert Monitoring ─────────────────────────────────────────── */}
+          <section id="alerts">
+            <SectionHeader label="Alert Rule Monitoring" />
+            <AdminAlertMonitoring />
           </section>
 
           {/* ─── Admin footer ────────────────────────────────────────────── */}
