@@ -81,6 +81,10 @@ export interface OddsSnapshot {
   source: string;
   timestamp: string;
   volatility: number;
+  /** External source URL — present on live/hybrid items */
+  sourceUrl?: string;
+  /** Data mode this snapshot was fetched under */
+  providerMode?: DataMode;
 }
 
 // ─── Exchange Flow ────────────────────────────────────────────────────────────

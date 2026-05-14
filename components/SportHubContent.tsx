@@ -5,6 +5,7 @@ import SportHero from "@/components/SportHero";
 import MarketCard from "@/components/MarketCard";
 import AIInsightCard from "@/components/AIInsightCard";
 import RelatedMarkets from "@/components/RelatedMarkets";
+import SportHubPricingPulse from "@/components/SportHubPricingPulse";
 
 export default function SportHubContent({ hub }: { hub: SportHub }) {
   const markets = getMarketsForSport(hub.sport);
@@ -28,6 +29,20 @@ export default function SportHubContent({ hub }: { hub: SportHub }) {
             text={hub.aiSummary}
             accentColor={hub.accentColor}
           />
+        </div>
+      </section>
+
+      {/* Live Pricing Pulse */}
+      <section className="px-6 py-6 border-b border-zinc-900/80">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
+              Live Pricing Pulse
+            </span>
+            <div className="flex-1 h-px bg-zinc-900" />
+            <span className="text-zinc-700 text-[9px] font-mono">Pricing intelligence · No bets placed</span>
+          </div>
+          <SportHubPricingPulse sport={hub.sport} />
         </div>
       </section>
 

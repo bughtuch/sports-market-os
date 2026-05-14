@@ -4,13 +4,14 @@
  * Active provider is determined by environment variable:
  *   NEXT_PUBLIC_DATA_MODE = "simulation" | "hybrid" | "live"
  *
- * Current sprint: always returns MockProvider (simulation mode).
- * Future: switch on env var to return real provider adapters.
+ * News and odds routes use their own mode logic (see newsProvider / oddsProvider).
+ * Provider status reflects actual modes dynamically.
  */
 
 import type {
   IProvider,
   DataMode,
+  ProviderStatusType,
   MarketSignal,
   NewsItem,
   OddsSnapshot,
@@ -25,6 +26,8 @@ import type {
 } from "./types";
 import { MockProvider } from "./mockProvider";
 import { getNewsWithMode } from "./newsProvider";
+import { getNewsMode } from "./newsApiProvider";
+import { getOddsWithMode, getOddsMode } from "./oddsProvider";
 
 // ─── Active provider selection ────────────────────────────────────────────────
 
@@ -32,7 +35,7 @@ function getActiveProvider(): IProvider {
   const mode = process.env.NEXT_PUBLIC_DATA_MODE as DataMode | undefined;
   // Future: if (mode === "live") return new BetfairProvider();
   // Future: if (mode === "hybrid") return new HybridProvider();
-  void mode; // suppress unused warning until real providers exist
+  void mode;
   return new MockProvider();
 }
 
@@ -65,9 +68,14 @@ export async function routeNews(): Promise<NewsResponse> {
 }
 
 export async function routeOdds(): Promise<OddsResponse> {
-  const provider = getActiveProvider();
-  const snapshots = await provider.getOddsSnapshots();
-  return { snapshots, meta: makeMeta(provider, snapshots.length) };
+  const result = await getOddsWithMode();
+  const meta: ResponseMeta = {
+    mode: result.mode,
+    provider: result.liveSuccess ? "TheOddsAPI" : "MockProvider",
+    timestamp: new Date().toISOString(),
+    count: result.snapshots.length,
+  };
+  return { snapshots: result.snapshots, meta };
 }
 
 export async function routeMarketPulse(): Promise<MarketPulseResponse> {
@@ -79,8 +87,44 @@ export async function routeMarketPulse(): Promise<MarketPulseResponse> {
 export async function routeProviderStatus(): Promise<ProviderStatusResponse> {
   const provider = getActiveProvider();
   const providers = await provider.getProviderStatuses();
+
+  const newsMode = getNewsMode();
+  const oddsMode = getOddsMode();
+
+  function modeToStatus(mode: DataMode): ProviderStatusType {
+    return mode === "simulation" ? "simulated" : "online";
+  }
+
+  const patched: ProviderStatus[] = providers.map((p) => {
+    if (p.id === "ps-002") {
+      return {
+        ...p,
+        status: modeToStatus(newsMode),
+        description:
+          newsMode === "simulation"
+            ? "Simulated wire feed — add SPORTS_NEWS_API_KEY to activate live data."
+            : newsMode === "hybrid"
+            ? "Hybrid — live NewsAPI.org data merged with simulation."
+            : "Live — NewsAPI.org wire feed active.",
+      };
+    }
+    if (p.id === "ps-003") {
+      return {
+        ...p,
+        status: modeToStatus(oddsMode),
+        description:
+          oddsMode === "simulation"
+            ? "Simulated odds movements — add THE_ODDS_API_KEY to activate live data."
+            : oddsMode === "hybrid"
+            ? "Hybrid — live odds from The Odds API merged with simulation."
+            : "Live — The Odds API active.",
+      };
+    }
+    return p;
+  });
+
   return {
-    providers,
+    providers: patched,
     systemMode: provider.mode,
     timestamp: new Date().toISOString(),
   };

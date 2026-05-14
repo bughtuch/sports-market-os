@@ -6,6 +6,7 @@ import { marketArticleLD } from "@/lib/seo/structuredData";
 import AIInsightCard from "@/components/AIInsightCard";
 import NewsCatalystCard from "@/components/NewsCatalystCard";
 import RelatedMarkets from "@/components/RelatedMarkets";
+import MarketPricingIntelligence from "@/components/MarketPricingIntelligence";
 
 export async function generateStaticParams() {
   return getAllMarkets().map((m) => ({ slug: m.slug }));
@@ -155,6 +156,16 @@ export default async function MarketPage({
               </span>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Pricing Intelligence */}
+      <section className="px-6 py-6 border-b border-zinc-900/80">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">
+            Pricing Intelligence
+          </p>
+          <MarketPricingIntelligence sport={market.sport} />
         </div>
       </section>
 

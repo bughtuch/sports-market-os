@@ -10,6 +10,7 @@ import TelegramBroadcastGenerator from "@/components/TelegramBroadcastGenerator"
 import CreatorOutreachQueue from "@/components/CreatorOutreachQueue";
 import WeeklyContentCalendar from "@/components/WeeklyContentCalendar";
 import CatalystContentGenerator from "@/components/CatalystContentGenerator";
+import OddsContentGenerator from "@/components/OddsContentGenerator";
 
 export const metadata: Metadata = {
   title: "Content Command — Creator Pipeline | Sports Market OS",
@@ -117,6 +118,7 @@ export default function ContentCommandPage() {
             <div className="flex flex-wrap gap-2 mt-5">
               {[
                 { href: "#catalysts", label: "Live Catalysts",  color: "text-emerald-400" },
+                { href: "#pricing",   label: "Pricing Movement",color: "text-teal-400" },
                 { href: "#x-posts",   label: "X Posts",         color: "text-zinc-300" },
                 { href: "#shorts",    label: "YouTube Shorts",  color: "text-red-400" },
                 { href: "#telegram",  label: "Telegram",        color: "text-blue-400" },
@@ -142,6 +144,16 @@ export default function ContentCommandPage() {
               accentClass="text-emerald-400"
             />
             <CatalystContentGenerator />
+          </section>
+
+          {/* ─── Pricing Movement Content ────────────────────────────────── */}
+          <section id="pricing" className="px-6 py-6 border-b border-zinc-900 scroll-mt-4">
+            <SectionHeader
+              label="Pricing Movement Content"
+              sublabel="Generate posts from live odds movement"
+              accentClass="text-teal-400"
+            />
+            <OddsContentGenerator />
           </section>
 
           {/* ─── X Post Generator ───────────────────────────────────────── */}
