@@ -83,6 +83,13 @@ export default function AccountDropdown({ user }: { user: User }) {
               Pricing
             </Link>
             <Link
+              href="/partner-dashboard"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 text-zinc-400 text-xs hover:text-white hover:bg-zinc-900 transition-colors"
+            >
+              Partner Dashboard
+            </Link>
+            <Link
               href="/partner-program"
               onClick={() => setOpen(false)}
               className="flex items-center gap-2 px-3 py-2 text-zinc-400 text-xs hover:text-white hover:bg-zinc-900 transition-colors"

@@ -19,6 +19,8 @@ export interface ShareCardProps {
   includeConfidence?: boolean;
   includeAI?: boolean;
   platform?: string;
+  /** Optional partner referral code — appended to watermark URL when present */
+  partnerCode?: string;
 }
 
 const tagStyles = {
@@ -53,7 +55,11 @@ export default function ShareSignalCard({
   includeConfidence = true,
   includeAI = true,
   platform,
+  partnerCode,
 }: ShareCardProps) {
+  const watermarkUrl = partnerCode
+    ? `sportsmarketos.com?ref=${partnerCode}`
+    : "sportsmarketos.com";
   const movColor =
     direction === "up"
       ? "text-emerald-400"
@@ -176,7 +182,7 @@ export default function ShareSignalCard({
           <span className="text-zinc-600 text-[9px] font-mono tracking-wider">
             Powered by Sports Market OS
           </span>
-          <span className="text-zinc-700 text-[9px] font-mono">sportsmarket.os</span>
+          <span className="text-zinc-700 text-[9px] font-mono">{watermarkUrl}</span>
         </div>
       )}
     </div>

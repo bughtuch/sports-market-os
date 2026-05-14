@@ -10,6 +10,7 @@ import CreatorFeed from "@/components/CreatorFeed";
 import MostSharedSignals from "@/components/MostSharedSignals";
 import PartnerApplyButton from "@/components/PartnerApplyButton";
 import CreatorIdentityBanner from "@/components/CreatorIdentityBanner";
+import CreatorPartnerPanel from "@/components/CreatorPartnerPanel";
 import { createClient } from "@/lib/supabase/server";
 import { getProfile } from "@/lib/db/profile";
 
@@ -258,6 +259,13 @@ export default async function CreatorStudioPage() {
           {/* ─── Creator Identity ───────────────────────────────────────── */}
           <section className="px-6 py-4 border-b border-zinc-900">
             <CreatorIdentityBanner initialHandle={creatorHandle} />
+          </section>
+
+          {/* ─── Partner Referral Panel ──────────────────────────────────── */}
+          <section className="px-6 py-4 border-b border-zinc-900">
+            <div className="max-w-sm">
+              <CreatorPartnerPanel />
+            </div>
           </section>
 
           {/* ─── Quick Actions ──────────────────────────────────────────── */}

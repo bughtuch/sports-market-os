@@ -11,6 +11,7 @@ import CreatorOutreachQueue from "@/components/CreatorOutreachQueue";
 import WeeklyContentCalendar from "@/components/WeeklyContentCalendar";
 import CatalystContentGenerator from "@/components/CatalystContentGenerator";
 import OddsContentGenerator from "@/components/OddsContentGenerator";
+import ContentCommandReferralBadge from "@/components/ContentCommandReferralBadge";
 
 export const metadata: Metadata = {
   title: "Content Command — Creator Pipeline | Sports Market OS",
@@ -143,6 +144,7 @@ export default function ContentCommandPage() {
               sublabel="Generate content from live news"
               accentClass="text-emerald-400"
             />
+            <ContentCommandReferralBadge />
             <CatalystContentGenerator />
           </section>
 
