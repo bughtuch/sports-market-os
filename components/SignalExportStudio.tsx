@@ -22,6 +22,8 @@ import {
   exportFilename,
 } from "@/lib/export/exportRenderer";
 import { getStoredReferral } from "@/lib/partners/referralUtils";
+import { queuePost, saveDraft } from "@/lib/distribution/distributionQueue";
+import { xPostTemplate } from "@/lib/distribution/distributionTemplates";
 import type { ExportSignal, ExportOptions, ExportLayoutId, ExportThemeId } from "@/lib/export/exportTypes";
 
 interface Props {
@@ -100,9 +102,11 @@ export default function SignalExportStudio({ initialSignal }: Props) {
     creatorHandle:        "",
     partnerCode:          "",
   });
-  const [downloading, setDownloading] = useState(false);
-  const [copying,     setCopying]     = useState(false);
-  const [copyDone,    setCopyDone]    = useState(false);
+  const [downloading,  setDownloading]  = useState(false);
+  const [copying,      setCopying]      = useState(false);
+  const [copyDone,     setCopyDone]     = useState(false);
+  const [queueAction,  setQueueAction]  = useState<"queue" | "draft" | null>(null);
+  const [queueDone,    setQueueDone]    = useState<"queue" | "draft" | null>(null);
 
   // Pre-fill partner code from localStorage on mount
   useEffect(() => {
@@ -143,6 +147,36 @@ export default function SignalExportStudio({ initialSignal }: Props) {
     setCopyDone(true);
     setTimeout(() => setCopyDone(false), 2000);
   }, [signal.sport, options, copying]);
+
+  const handleQueuePost = useCallback(() => {
+    if (queueAction) return;
+    setQueueAction("queue");
+    queuePost({
+      platform:         "x",
+      content:          xPostTemplate({ sport: signal.sport, title: signal.title, description: signal.description, movement: signal.movement, direction: signal.direction, confidence: signal.confidence, exchange: signal.exchange, type: signal.type }),
+      distributionType: "signal-card",
+      metadata:         { sport: signal.sport, exportLayoutId: options.layout, exportThemeId: options.theme },
+      partnerCode:      options.partnerCode || undefined,
+    });
+    setQueueAction(null);
+    setQueueDone("queue");
+    setTimeout(() => setQueueDone(null), 2500);
+  }, [signal, options, queueAction]);
+
+  const handleSaveDraft = useCallback(() => {
+    if (queueAction) return;
+    setQueueAction("draft");
+    saveDraft({
+      platform:         "x",
+      content:          xPostTemplate({ sport: signal.sport, title: signal.title, description: signal.description, movement: signal.movement, direction: signal.direction, confidence: signal.confidence, exchange: signal.exchange, type: signal.type }),
+      distributionType: "signal-card",
+      metadata:         { sport: signal.sport, exportLayoutId: options.layout, exportThemeId: options.theme },
+      partnerCode:      options.partnerCode || undefined,
+    });
+    setQueueAction(null);
+    setQueueDone("draft");
+    setTimeout(() => setQueueDone(null), 2500);
+  }, [signal, options, queueAction]);
 
   // ─── Render ───────────────────────────────────────────────────────────────
 
@@ -357,8 +391,26 @@ export default function SignalExportStudio({ initialSignal }: Props) {
           </button>
         </div>
 
+        {/* Distribution actions */}
+        <div className="flex gap-2 mt-3">
+          <button
+            onClick={handleQueuePost}
+            disabled={!!queueAction}
+            className="px-3 py-1.5 border border-zinc-800 text-zinc-600 text-[10px] font-mono rounded-sm hover:border-zinc-600 hover:text-zinc-300 transition-colors disabled:opacity-40"
+          >
+            {queueDone === "queue" ? "✓ Queued" : "Queue Post"}
+          </button>
+          <button
+            onClick={handleSaveDraft}
+            disabled={!!queueAction}
+            className="px-3 py-1.5 border border-zinc-800 text-zinc-600 text-[10px] font-mono rounded-sm hover:border-zinc-600 hover:text-zinc-300 transition-colors disabled:opacity-40"
+          >
+            {queueDone === "draft" ? "✓ Draft Saved" : "Save Draft"}
+          </button>
+        </div>
+
         {/* Compliance */}
-        <p className="text-zinc-800 text-[9px] font-mono mt-4">
+        <p className="text-zinc-800 text-[9px] font-mono mt-3">
           Market intelligence only · Not financial advice
         </p>
       </div>

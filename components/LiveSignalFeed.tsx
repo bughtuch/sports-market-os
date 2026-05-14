@@ -3,6 +3,7 @@
 import { useLiveMarketData } from "@/hooks/useLiveMarketData";
 import SignalCard from "@/components/SignalCard";
 import SaveToWatchlistButton from "@/components/SaveToWatchlistButton";
+import SignalQuickActions from "@/components/SignalQuickActions";
 import type { MarketSignal } from "@/lib/providers/types";
 
 function toSignalCardProps(s: MarketSignal) {
@@ -87,7 +88,18 @@ export default function LiveSignalFeed() {
           : signals.map((signal) => (
               <div key={signal.id} className="relative feed-enter">
                 <SignalCard {...toSignalCardProps(signal)} />
-                <div className="absolute bottom-[14px] right-[14px]">
+                <div className="absolute bottom-[14px] right-[14px] flex items-center gap-2">
+                  <SignalQuickActions
+                    sport={signal.sport}
+                    title={signal.title}
+                    description={signal.description}
+                    movement={signal.movement}
+                    direction={signal.direction}
+                    confidence={signal.confidence}
+                    exchange={signal.exchange}
+                    type={signal.type}
+                    signalId={signal.id}
+                  />
                   <SaveToWatchlistButton
                     sport={signal.sport}
                     marketName={signal.title}
