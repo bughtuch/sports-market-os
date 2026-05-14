@@ -20,6 +20,9 @@ import LiveSignalFeed from "@/components/LiveSignalFeed";
 import ProviderStatusPanel from "@/components/ProviderStatusPanel";
 import NewsCatalystFeed from "@/components/NewsCatalystFeed";
 import OddsMovementFeed from "@/components/OddsMovementFeed";
+import ExchangeFlowPanel from "@/components/ExchangeFlowPanel";
+import OrderBookPreview from "@/components/OrderBookPreview";
+import LiquiditySnapshotCards from "@/components/LiquiditySnapshotCards";
 import DataModeIndicator from "@/components/DataModeIndicator";
 import AIRegimePanel from "@/components/AIRegimePanel";
 import AINarrativePanel from "@/components/AINarrativePanel";
@@ -373,6 +376,15 @@ export default function TerminalPage() {
 
             {/* Odds Movement */}
             <OddsMovementFeed />
+
+            {/* Exchange Flow */}
+            <ExchangeFlowPanel />
+
+            {/* Order Book */}
+            <OrderBookPreview />
+
+            {/* Liquidity Snapshot */}
+            <LiquiditySnapshotCards />
 
             {/* Live Signal Feed */}
             <section className="p-4">

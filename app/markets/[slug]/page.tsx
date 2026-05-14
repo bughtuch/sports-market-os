@@ -7,6 +7,7 @@ import AIInsightCard from "@/components/AIInsightCard";
 import NewsCatalystCard from "@/components/NewsCatalystCard";
 import RelatedMarkets from "@/components/RelatedMarkets";
 import MarketPricingIntelligence from "@/components/MarketPricingIntelligence";
+import MarketExchangeMicrostructure from "@/components/MarketExchangeMicrostructure";
 
 export async function generateStaticParams() {
   return getAllMarkets().map((m) => ({ slug: m.slug }));
@@ -166,6 +167,16 @@ export default async function MarketPage({
             Pricing Intelligence
           </p>
           <MarketPricingIntelligence sport={market.sport} />
+        </div>
+      </section>
+
+      {/* Exchange Microstructure */}
+      <section className="px-6 py-6 border-b border-zinc-900/80">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">
+            Exchange Microstructure
+          </p>
+          <MarketExchangeMicrostructure sport={market.sport} />
         </div>
       </section>
 

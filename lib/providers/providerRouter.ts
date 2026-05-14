@@ -28,6 +28,8 @@ import { MockProvider } from "./mockProvider";
 import { getNewsWithMode } from "./newsProvider";
 import { getNewsMode } from "./newsApiProvider";
 import { getOddsWithMode, getOddsMode } from "./oddsProvider";
+import { isBetfairConfigured } from "../exchanges/betfairReadOnlyAdapter";
+import { isProphetXConfigured } from "../exchanges/prophetxReadOnlyAdapter";
 
 // ─── Active provider selection ────────────────────────────────────────────────
 
@@ -95,6 +97,9 @@ export async function routeProviderStatus(): Promise<ProviderStatusResponse> {
     return mode === "simulation" ? "simulated" : "online";
   }
 
+  const betfairLive  = isBetfairConfigured();
+  const prophetxLive = isProphetXConfigured();
+
   const patched: ProviderStatus[] = providers.map((p) => {
     if (p.id === "ps-002") {
       return {
@@ -118,6 +123,24 @@ export async function routeProviderStatus(): Promise<ProviderStatusResponse> {
             : oddsMode === "hybrid"
             ? "Hybrid — live odds from The Odds API merged with simulation."
             : "Live — The Odds API active.",
+      };
+    }
+    if (p.id === "ps-006") {
+      return {
+        ...p,
+        status: betfairLive ? "online" : "planned",
+        description: betfairLive
+          ? "Betfair Exchange Streaming API connected — read-only price feed active."
+          : "Exchange Streaming API adapter — set BETFAIR_APP_KEY + BETFAIR_SESSION_TOKEN + BETFAIR_READONLY_MODE=true to activate.",
+      };
+    }
+    if (p.id === "ps-007") {
+      return {
+        ...p,
+        status: prophetxLive ? "online" : "planned",
+        description: prophetxLive
+          ? "ProphetX market data feed connected — read-only order book active."
+          : "ProphetX market data adapter — pending commercial API agreement. Set PROPHETX_API_KEY + PROPHETX_READONLY_MODE=true.",
       };
     }
     return p;
