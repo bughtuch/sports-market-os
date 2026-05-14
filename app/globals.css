@@ -154,6 +154,18 @@ body[data-screenshot="1"] .terminal-activity-strip {
   animation: feed-enter 0.2s ease-out forwards;
 }
 
+/* ─── Mobile terminal improvements ──────────────────────────────────────────── */
+
+/* Larger touch targets on mobile for signal cards and nav items */
+@media (max-width: 768px) {
+  .pulse-dot {
+    /* Slightly larger on mobile for visibility */
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* ─── Scrollbar styling ──────────────────────────────────────────────────────── */
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 4px;

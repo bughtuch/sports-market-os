@@ -61,10 +61,18 @@ export default function AlertRail() {
       {/* Event list */}
       <div className="overflow-y-auto" style={{ maxHeight: "270px" }}>
         {events.length === 0 ? (
-          <div className="px-3 py-5 text-center">
-            <span className="text-zinc-700 text-[9px] font-mono">
-              Awaiting feed...
-            </span>
+          <div className="px-3 py-6 text-center space-y-1">
+            <div className="flex items-center justify-center gap-1.5 mb-2">
+              <span className="w-1 h-1 rounded-full bg-zinc-700 animate-pulse" />
+              <span className="w-1 h-1 rounded-full bg-zinc-800 animate-pulse" style={{ animationDelay: "0.2s" }} />
+              <span className="w-1 h-1 rounded-full bg-zinc-700 animate-pulse" style={{ animationDelay: "0.4s" }} />
+            </div>
+            <p className="text-zinc-700 text-[9px] font-mono uppercase tracking-widest">
+              Feed initialising
+            </p>
+            <p className="text-zinc-800 text-[8px] font-mono leading-relaxed">
+              Market events will appear as they are detected
+            </p>
           </div>
         ) : (
           events.map((evt) => {

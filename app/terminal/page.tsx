@@ -30,6 +30,7 @@ import AIVolatilityPanel from "@/components/AIVolatilityPanel";
 import AIBehaviourPanel from "@/components/AIBehaviourPanel";
 import AIEngineStatus from "@/components/AIEngineStatus";
 import SaveWorkspaceButton from "@/components/SaveWorkspaceButton";
+import MobilePanelsDrawer from "@/components/MobilePanelsDrawer";
 
 // ─── Mock pulse data ──────────────────────────────────────────────────────────
 
@@ -242,9 +243,11 @@ export default function TerminalPage() {
       {/* Client-side layer: welcome overlay + keyboard shortcuts */}
       <TerminalClientLayer />
 
-      {/* Fixed top bars */}
-      <MarketTicker />
-      <TerminalHeader />
+      {/* Top bars — sticky on mobile so they stay visible while scrolling */}
+      <div className="sticky top-0 z-30 md:static md:z-auto shrink-0">
+        <MarketTicker />
+        <TerminalHeader />
+      </div>
 
       {/* Main layout */}
       <div className="flex flex-1 flex-col md:flex-row md:overflow-hidden">
@@ -265,7 +268,7 @@ export default function TerminalPage() {
               {["All Sports", "Free", "Premium", "API"].map((f, i) => (
                 <button
                   key={f}
-                  className={`text-[9px] font-mono uppercase tracking-wider transition-colors ${
+                  className={`hidden sm:block text-[9px] font-mono uppercase tracking-wider transition-colors ${
                     i === 0
                       ? "text-white border border-zinc-700 px-2 py-0.5 rounded-sm"
                       : "text-zinc-600 hover:text-white"
@@ -281,6 +284,8 @@ export default function TerminalPage() {
               <span className="hidden lg:block text-zinc-800 text-[9px] font-mono" title="Toggle screenshot mode">
                 Alt+S
               </span>
+              {/* Mobile: open panels drawer */}
+              <MobilePanelsDrawer />
             </div>
           </div>
 
@@ -378,8 +383,8 @@ export default function TerminalPage() {
           </main>
         </div>
 
-        {/* Right panel — stacks below on mobile */}
-        <div className="flex flex-col md:w-72 shrink-0 border-t md:border-t-0 md:border-l border-zinc-800/60 md:overflow-hidden">
+        {/* Right panel — desktop only; mobile uses MobilePanelsDrawer */}
+        <div className="hidden md:flex flex-col md:w-72 shrink-0 md:border-l border-zinc-800/60 md:overflow-hidden">
           <AlertRail />
           <AIPanel />
           <Watchlist />

@@ -102,6 +102,18 @@ export default function Watchlist() {
         <span className="text-zinc-700 text-[9px] font-mono">{items.length} MARKETS</span>
       </div>
 
+      {/* Empty state */}
+      {items.length === 0 && (
+        <div className="px-4 py-6 text-center">
+          <p className="text-zinc-700 text-[9px] font-mono uppercase tracking-widest mb-1">
+            No markets tracked
+          </p>
+          <p className="text-zinc-800 text-[8px] font-mono leading-relaxed">
+            Add markets from the signal feed to begin tracking
+          </p>
+        </div>
+      )}
+
       {/* Rows */}
       <div className="divide-y divide-zinc-800/30">
         {items.map((item) => {
