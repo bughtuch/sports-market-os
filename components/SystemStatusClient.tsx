@@ -286,6 +286,31 @@ export default function SystemStatusClient({
         </div>
       </div>
 
+      {/* ─── Daily Brief Engine ────────────────────────────────────── */}
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <p className="text-zinc-700 text-[9px] font-mono uppercase tracking-widest">Daily Brief Engine</p>
+          <div className="flex-1 h-px bg-zinc-900" />
+          <span className="text-emerald-400 text-[9px] font-mono">OPERATIONAL</span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+          {[
+            { label: "Engine Status",          status: "OPERATIONAL", color: "text-emerald-400", note: "briefGeneration.ts active" },
+            { label: "Session Detection",      status: "ACTIVE",      color: "text-emerald-400", note: "Morning / Midday / Overnight auto" },
+            { label: "Persistence Layer",      status: "ACTIVE",      color: "text-emerald-400", note: "daily_briefs + sections tables" },
+            { label: "Scoring Engine",         status: "ACTIVE",      color: "text-emerald-400", note: "briefScoring.ts — deterministic" },
+            { label: "Creator Opportunities",  status: "ACTIVE",      color: "text-emerald-400", note: "Injected per brief generation" },
+            { label: "Email Queue",            status: emailConfigured ? "READY" : "PENDING", color: emailConfigured ? "text-emerald-400" : "text-zinc-500", note: emailConfigured ? "notification_events channel" : "Resend not connected" },
+          ].map(d => (
+            <div key={d.label} className="bg-zinc-950 border border-zinc-800/60 rounded-sm px-3 py-2.5">
+              <p className="text-zinc-600 text-[8px] font-mono uppercase tracking-wider mb-0.5">{d.label}</p>
+              <p className={`text-[10px] font-mono font-medium ${d.color}`}>{d.status}</p>
+              <p className="text-zinc-700 text-[9px]">{d.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ─── Footer ────────────────────────────────────────────────── */}
       <div className="border-t border-zinc-900/60 pt-4 flex items-center justify-between">
         <p className="text-zinc-700 text-[9px] font-mono">

@@ -5,8 +5,11 @@ import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import WatchlistIntelligencePanel from "@/components/WatchlistIntelligencePanel";
+import DailyBriefHistoryRail from "@/components/DailyBriefHistoryRail";
 import { generateDailyBrief } from "@/lib/briefs/dailyBriefGenerator";
 import { BRIEF_TYPE_LABELS } from "@/lib/briefs/briefTypes";
+import { scoreBrief } from "@/lib/dailyBriefs/briefScoring";
+import { CONFIDENCE_COLOR } from "@/lib/dailyBriefs/briefTypes";
 
 export const metadata: Metadata = {
   title: "Daily Intelligence Brief | Sports Market OS",
@@ -24,8 +27,9 @@ const SECTION_SEVERITY_COLOR: Record<string, string> = {
 };
 
 export default function DailyBriefPage() {
-  const brief = generateDailyBrief();
-  const label = BRIEF_TYPE_LABELS[brief.type];
+  const brief  = generateDailyBrief();
+  const label  = BRIEF_TYPE_LABELS[brief.type];
+  const scores = scoreBrief(brief);
 
   return (
     <div className="min-h-screen md:h-screen bg-black text-white flex flex-col md:overflow-hidden">
@@ -65,16 +69,27 @@ export default function DailyBriefPage() {
                   {brief.subtitle}
                 </p>
               </div>
-              <div className="shrink-0 text-right">
-                <p className="text-zinc-600 text-[9px] font-mono mb-0.5">GENERATED</p>
-                <p className="text-white text-sm font-mono">
-                  {new Date(brief.generatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                </p>
-                <p className="text-zinc-700 text-[9px] font-mono">
-                  {new Date(brief.generatedAt).toLocaleDateString("en-GB", {
-                    day: "numeric", month: "short", year: "numeric",
-                  })}
-                </p>
+              <div className="shrink-0 text-right space-y-2">
+                <div>
+                  <p className="text-zinc-600 text-[9px] font-mono mb-0.5">GENERATED</p>
+                  <p className="text-white text-sm font-mono">
+                    {new Date(brief.generatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  </p>
+                  <p className="text-zinc-700 text-[9px] font-mono">
+                    {new Date(brief.generatedAt).toLocaleDateString("en-GB", {
+                      day: "numeric", month: "short", year: "numeric",
+                    })}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-zinc-600 text-[9px] font-mono mb-0.5">AI CONFIDENCE</p>
+                  <p className={`text-2xl font-bold tabular-nums ${CONFIDENCE_COLOR(scores.aiConfidence)}`}>
+                    {scores.aiConfidence}%
+                  </p>
+                  <p className="text-zinc-700 text-[9px] font-mono">
+                    Volatility: {scores.volatilitySeverity}%
+                  </p>
+                </div>
               </div>
             </div>
           </section>
@@ -145,8 +160,19 @@ export default function DailyBriefPage() {
               </p>
             </div>
 
-            {/* Right panel — watchlist intelligence */}
+            {/* Right panel — watchlist intelligence + brief history */}
             <div className="lg:w-80 shrink-0 border-t lg:border-t-0 lg:border-l border-zinc-900 px-6 py-6">
+              {/* Brief history rail */}
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <p className="text-zinc-500 text-[9px] font-mono uppercase tracking-widest">
+                    Brief History
+                  </p>
+                  <div className="flex-1 h-px bg-zinc-900" />
+                </div>
+                <DailyBriefHistoryRail />
+              </div>
+
               <div className="flex items-center gap-2 mb-4">
                 <p className="text-zinc-500 text-[9px] font-mono uppercase tracking-widest">
                   Watchlist Intelligence
