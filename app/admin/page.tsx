@@ -21,6 +21,7 @@ import AdminPartnerProfiles from "@/components/admin/AdminPartnerProfiles";
 import AdminReferralEvents from "@/components/admin/AdminReferralEvents";
 import AdminDistribution from "@/components/admin/AdminDistribution";
 import AdminSystemStatus from "@/components/admin/AdminSystemStatus";
+import AdminProviderActivation from "@/components/admin/AdminProviderActivation";
 import AdminConsoleNav from "@/components/admin/AdminConsoleNav";
 
 export const metadata: Metadata = {
@@ -108,6 +109,12 @@ export default async function AdminPage() {
           <section id="system">
             <SectionHeader label="System & Provider Status" />
             <AdminSystemStatus />
+          </section>
+
+          {/* ─── Provider Activation ─────────────────────────────────────── */}
+          <section id="providers">
+            <SectionHeader label="Provider Activation Readiness" />
+            <AdminProviderActivation />
           </section>
 
           {/* ─── Admin footer ────────────────────────────────────────────── */}

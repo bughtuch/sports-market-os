@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { label: "Referral Events",     href: "#events",        dot: "bg-blue-400" },
   { label: "Distribution",        href: "#distribution",  dot: "bg-violet-400" },
   { label: "System Status",       href: "#system",        dot: "bg-teal-400" },
+  { label: "Provider Activation", href: "#providers",     dot: "bg-blue-400" },
 ];
 
 export default function AdminConsoleNav() {

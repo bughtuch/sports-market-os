@@ -6,6 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import SystemStatusClient from "@/components/SystemStatusClient";
 import { getProviderHealth } from "@/lib/providers/providerHealth";
+import { getSystemReadiness } from "@/lib/providerConfig/providerReadiness";
 
 export const metadata: Metadata = {
   title: "System Status — Provider Health & Data Modes | Sports Market OS",
@@ -17,7 +18,8 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default function SystemStatusPage() {
-  const summary = getProviderHealth();
+  const summary   = getProviderHealth();
+  const readiness = getSystemReadiness();
 
   const scoreColor =
     summary.systemHealthScore >= 80 ? "text-emerald-400" :
@@ -70,6 +72,39 @@ export default function SystemStatusPage() {
                   </p>
                 </div>
               </div>
+            </div>
+          </section>
+
+          {/* Readiness summary strip */}
+          <section className="px-6 py-3 border-b border-zinc-900 bg-zinc-950/30">
+            <div className="flex flex-wrap items-center gap-6">
+              <div className="flex items-center gap-2">
+                <span className="text-zinc-600 text-[9px] font-mono uppercase tracking-wider">Activation Readiness</span>
+                <span className={`text-sm font-mono font-bold ${
+                  readiness.overallReadiness >= 80 ? "text-emerald-400" :
+                  readiness.overallReadiness >= 50 ? "text-amber-400"   : "text-red-400"
+                }`}>{readiness.overallReadiness}%</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span className="text-zinc-500 text-[9px] font-mono">{readiness.liveReadyCount} live</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <span className="text-zinc-500 text-[9px] font-mono">{readiness.simulatedCount} simulated</span>
+              </div>
+              {readiness.missingRequirementsCount > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                  <span className="text-red-400 text-[9px] font-mono">{readiness.missingRequirementsCount} missing env vars</span>
+                </div>
+              )}
+              <Link
+                href="/provider-config"
+                className="text-zinc-600 text-[9px] font-mono hover:text-zinc-400 transition-colors ml-auto"
+              >
+                Provider Config →
+              </Link>
             </div>
           </section>
 
