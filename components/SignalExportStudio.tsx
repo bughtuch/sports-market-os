@@ -128,14 +128,34 @@ export default function SignalExportStudio({ initialSignal }: Props) {
     setSignal(s => ({ ...s, [key]: value }));
   }
 
+  // Track export event via API (best-effort, never blocks UI)
+  function trackExportEvent(destination: string) {
+    fetch("/api/distribution/export-events", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({
+        exportType:  destination,
+        layout:      options.layout,
+        theme:       options.theme,
+        signalTitle: signal.title,
+        sport:       signal.sport,
+        destination,
+        partnerCode: options.partnerCode || undefined,
+      }),
+    }).catch(() => {
+      // Silent — analytics failure must never surface
+    });
+  }
+
   const handleDownload = useCallback(async () => {
     if (!captureRef.current || downloading) return;
     setDownloading(true);
     const filename = exportFilename(signal.sport, options.layout);
     await downloadNodeAsPng(captureRef.current, filename, 2);
     trackExport({ layout: options.layout, theme: options.theme, sport: signal.sport, partnerCode: options.partnerCode || undefined });
+    trackExportEvent("download");
     setDownloading(false);
-  }, [signal.sport, options, downloading]);
+  }, [signal.sport, options, downloading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCopy = useCallback(async () => {
     if (!captureRef.current || copying) return;
@@ -143,10 +163,11 @@ export default function SignalExportStudio({ initialSignal }: Props) {
     const filename = exportFilename(signal.sport, options.layout);
     await copyNodeAsImage(captureRef.current, filename);
     trackExport({ layout: options.layout, theme: options.theme, sport: signal.sport, partnerCode: options.partnerCode || undefined });
+    trackExportEvent("clipboard");
     setCopying(false);
     setCopyDone(true);
     setTimeout(() => setCopyDone(false), 2000);
-  }, [signal.sport, options, copying]);
+  }, [signal.sport, options, copying]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleQueuePost = useCallback(() => {
     if (queueAction) return;
@@ -158,10 +179,17 @@ export default function SignalExportStudio({ initialSignal }: Props) {
       metadata:         { sport: signal.sport, exportLayoutId: options.layout, exportThemeId: options.theme },
       partnerCode:      options.partnerCode || undefined,
     });
+    // Also persist to cloud and track export event
+    fetch("/api/distribution/posts", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ platform: "x", content: xPostTemplate({ sport: signal.sport, title: signal.title, description: signal.description }), status: "queued", distributionType: "signal-card", partnerCode: options.partnerCode || undefined, metadata: { sport: signal.sport } }),
+    }).catch(() => {});
+    trackExportEvent("queue");
     setQueueAction(null);
     setQueueDone("queue");
     setTimeout(() => setQueueDone(null), 2500);
-  }, [signal, options, queueAction]);
+  }, [signal, options, queueAction]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSaveDraft = useCallback(() => {
     if (queueAction) return;
@@ -173,10 +201,16 @@ export default function SignalExportStudio({ initialSignal }: Props) {
       metadata:         { sport: signal.sport, exportLayoutId: options.layout, exportThemeId: options.theme },
       partnerCode:      options.partnerCode || undefined,
     });
+    fetch("/api/distribution/posts", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ platform: "x", content: xPostTemplate({ sport: signal.sport, title: signal.title, description: signal.description }), status: "draft", distributionType: "signal-card", partnerCode: options.partnerCode || undefined, metadata: { sport: signal.sport } }),
+    }).catch(() => {});
+    trackExportEvent("draft");
     setQueueAction(null);
     setQueueDone("draft");
     setTimeout(() => setQueueDone(null), 2500);
-  }, [signal, options, queueAction]);
+  }, [signal, options, queueAction]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ─── Render ───────────────────────────────────────────────────────────────
 

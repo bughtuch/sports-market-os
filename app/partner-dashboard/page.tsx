@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
 import { getPartnerProfile, getPartnerMetrics } from "@/lib/partners/partnerTracking";
 import { buildReferralDisplay, buildReferralUrl } from "@/lib/partners/referralUtils";
+import { getExportEvents, getDistributionStats } from "@/lib/distribution/distributionDb";
 import PartnerDashboardClient from "@/components/PartnerDashboardClient";
 
 export const metadata: Metadata = {
@@ -24,8 +25,12 @@ export default async function PartnerDashboardPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/signin");
 
-  // Fetch partner data
-  const profile = await getPartnerProfile();
+  // Fetch partner data + distribution analytics in parallel
+  const [profile, exportEvents, distStats] = await Promise.all([
+    getPartnerProfile(),
+    getExportEvents(user.id, 5),
+    getDistributionStats(user.id),
+  ]);
   const metrics = profile ? await getPartnerMetrics(profile.partnerCode) : null;
 
   const referralUrl     = profile ? buildReferralUrl(profile.partnerCode)     : null;
@@ -125,7 +130,7 @@ export default async function PartnerDashboardPage() {
             </div>
           </section>
 
-          {/* ─── Content performance placeholder ────────────────────────── */}
+          {/* ─── Content performance ─────────────────────────────────────── */}
           <section className="px-6 py-6 border-b border-zinc-900">
             <div className="flex items-center gap-2 mb-4">
               <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
@@ -133,11 +138,12 @@ export default async function PartnerDashboardPage() {
               </span>
               <div className="flex-1 h-px bg-zinc-900" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               {[
-                { label: "Posts Generated",   value: "—", note: "Connect Content Command" },
-                { label: "Exports Created",   value: metrics ? metrics.exports.toString() : "0", note: "tracked referral exports" },
-                { label: "API Referrals",     value: metrics ? metrics.apiReferrals.toString() : "0", note: "attributed API leads" },
+                { label: "Queued Posts",    value: distStats.queuedPosts.toString(),  note: "in distribution queue" },
+                { label: "Posts Sent",      value: distStats.postedPosts.toString(),  note: "marked as posted" },
+                { label: "Exports Created", value: distStats.totalExports.toString(), note: "export studio events" },
+                { label: "API Referrals",   value: metrics ? metrics.apiReferrals.toString() : "0", note: "attributed API leads" },
               ].map(({ label, value, note }) => (
                 <div key={label} className="p-4 bg-zinc-950 border border-zinc-800/60 rounded-sm">
                   <p className="text-zinc-600 text-[8px] font-mono uppercase tracking-widest mb-1">{label}</p>
@@ -147,6 +153,32 @@ export default async function PartnerDashboardPage() {
               ))}
             </div>
           </section>
+
+          {/* ─── Recent export events ────────────────────────────────────── */}
+          {exportEvents.length > 0 && (
+            <section className="px-6 py-6 border-b border-zinc-900">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
+                  Recent Exports
+                </span>
+                <div className="flex-1 h-px bg-zinc-900" />
+                <span className="text-zinc-700 text-[8px] font-mono">{exportEvents.length} events</span>
+              </div>
+              <div className="space-y-1.5">
+                {exportEvents.map(ev => (
+                  <div key={ev.id} className="flex items-center gap-3 bg-zinc-950 border border-zinc-800/60 rounded-sm px-3 py-2 text-[10px]">
+                    <span className="text-purple-400 font-mono shrink-0">{ev.export_type ?? "export"}</span>
+                    {ev.sport && <span className="text-zinc-500 font-mono shrink-0">{ev.sport}</span>}
+                    {ev.layout && <span className="text-zinc-700 font-mono shrink-0">{ev.layout}</span>}
+                    <span className="text-zinc-400 flex-1 truncate">{ev.signal_title ?? "—"}</span>
+                    <span className="text-zinc-700 font-mono shrink-0">
+                      {new Date(ev.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* ─── Quick links ─────────────────────────────────────────────── */}
           <section className="px-6 py-6 border-b border-zinc-900">

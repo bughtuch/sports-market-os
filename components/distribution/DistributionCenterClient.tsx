@@ -3,9 +3,13 @@
 /**
  * DistributionCenterClient — main distribution center UI.
  *
- * Tabs: Queue · Scheduled · Posted · Failed · Drafts · Broadcast Groups · Analytics
- * Reads/writes localStorage queue via distributionQueue utils.
- * No real API posting — mock/queue shell only.
+ * Sync mode detection (Sprint 21):
+ *   - On mount, probe GET /api/distribution/posts
+ *   - If 200: mode="cloud" — posts loaded from Supabase (merged with localStorage)
+ *   - If 401/error: mode="local" — localStorage only
+ *
+ * Mutations always update localStorage for offline resilience.
+ * Cloud mutations (create/delete/update) sync via API when in cloud mode.
  */
 
 import { useEffect, useState, useCallback } from "react";
@@ -232,8 +236,38 @@ export default function DistributionCenterClient() {
   const [tab,    setTab]    = useState<Tab>("queue");
   const [posts,  setPosts]  = useState<DistributionPost[]>([]);
   const [stats,  setStats]  = useState<QueueStats>({ queued: 0, scheduled: 0, posted: 0, failed: 0, drafts: 0, estimatedReach: 0 });
+  const [mode,   setMode]   = useState<"detecting" | "cloud" | "local">("detecting");
 
-  const refresh = useCallback(() => {
+  const refresh = useCallback(async () => {
+    // Try API first — determines cloud vs local mode
+    try {
+      const res = await fetch("/api/distribution/posts", { cache: "no-store" });
+      if (res.ok) {
+        const json = await res.json();
+        // Merge API posts with any local posts not yet in cloud
+        const localPosts = getQueue();
+        const apiPosts   = (json.posts ?? []) as DistributionPost[];
+        // API is authoritative when signed in — show API data
+        // Keep local-only posts that have no cloud id (created offline)
+        const apiIds = new Set(apiPosts.map((p: DistributionPost) => p.id));
+        const localOnly = localPosts.filter(p => !apiIds.has(p.id) && p.id.startsWith("dist_"));
+        setPosts([...apiPosts, ...localOnly]);
+        setStats({
+          queued:    apiPosts.filter(p => p.status === "queued").length,
+          scheduled: apiPosts.filter(p => p.status === "scheduled").length,
+          posted:    apiPosts.filter(p => p.status === "posted").length,
+          failed:    apiPosts.filter(p => p.status === "failed").length,
+          drafts:    apiPosts.filter(p => p.status === "draft").length,
+          estimatedReach: 0,
+        });
+        setMode("cloud");
+        return;
+      }
+    } catch {
+      // Fall through to localStorage
+    }
+    // Fallback: localStorage
+    setMode("local");
     seedQueueIfEmpty();
     setPosts(getQueue());
     setStats(getQueueStats());
@@ -288,6 +322,20 @@ export default function DistributionCenterClient() {
         <span className="text-zinc-600 text-[9px] font-mono">
           Est. queued reach: <span className="text-zinc-400">{formatReach(stats.estimatedReach)}</span>
         </span>
+        {/* Sync mode badge */}
+        {mode === "cloud" ? (
+          <span className="flex items-center gap-1 text-[8px] font-mono text-emerald-700 border border-emerald-900/50 px-1.5 py-0.5 rounded-sm">
+            <span className="w-1 h-1 rounded-full bg-emerald-500" />
+            Cloud synced
+          </span>
+        ) : mode === "local" ? (
+          <span className="flex items-center gap-1 text-[8px] font-mono text-amber-700 border border-amber-900/50 px-1.5 py-0.5 rounded-sm">
+            <span className="w-1 h-1 rounded-full bg-amber-500" />
+            Local mode
+          </span>
+        ) : (
+          <span className="text-[8px] font-mono text-zinc-700">syncing…</span>
+        )}
         <button onClick={refresh} className="text-zinc-700 text-[9px] font-mono hover:text-zinc-400 transition-colors">
           ↺ Refresh
         </button>
@@ -355,6 +403,21 @@ export default function DistributionCenterClient() {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Local → cloud sync offer */}
+      {mode === "local" && posts.some(p => p.id.startsWith("dist_")) && (
+        <div className="mt-4 bg-zinc-950 border border-zinc-800/60 rounded-sm px-4 py-3 flex items-center justify-between gap-4">
+          <p className="text-zinc-500 text-[10px] leading-relaxed">
+            You have local drafts. Sign in to sync them to your account.
+          </p>
+          <a
+            href="/signin"
+            className="text-[9px] font-mono text-zinc-400 hover:text-white border border-zinc-700 hover:border-zinc-500 px-2.5 py-1 rounded-sm transition-colors shrink-0"
+          >
+            Sign in →
+          </a>
         </div>
       )}
 

@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { label: "Partner Applications",href: "#applications",  dot: "bg-amber-400" },
   { label: "Partner Profiles",    href: "#profiles",      dot: "bg-emerald-400" },
   { label: "Referral Events",     href: "#events",        dot: "bg-blue-400" },
+  { label: "Distribution",        href: "#distribution",  dot: "bg-violet-400" },
 ];
 
 export default function AdminConsoleNav() {

@@ -19,6 +19,7 @@ import AdminOverview from "@/components/admin/AdminOverview";
 import AdminPartnerApplications from "@/components/admin/AdminPartnerApplications";
 import AdminPartnerProfiles from "@/components/admin/AdminPartnerProfiles";
 import AdminReferralEvents from "@/components/admin/AdminReferralEvents";
+import AdminDistribution from "@/components/admin/AdminDistribution";
 import AdminConsoleNav from "@/components/admin/AdminConsoleNav";
 
 export const metadata: Metadata = {
@@ -94,6 +95,12 @@ export default async function AdminPage() {
           <section id="events">
             <SectionHeader label="Referral Events" />
             <AdminReferralEvents />
+          </section>
+
+          {/* ─── Distribution + Export Analytics ─────────────────────────── */}
+          <section id="distribution">
+            <SectionHeader label="Distribution & Export Analytics" />
+            <AdminDistribution />
           </section>
 
           {/* ─── Admin footer ────────────────────────────────────────────── */}
