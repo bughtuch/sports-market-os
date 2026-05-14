@@ -107,7 +107,7 @@ export const CHANNEL_LABELS: Record<DeliveryChannel, string> = {
 };
 
 export const CHANNEL_STATUS: Record<DeliveryChannel, "ready" | "pending" | "mock"> = {
-  "email":             "pending",   // Resend not yet connected
+  "email":             "ready",     // Resend connected
   "telegram":          "pending",   // Bot not yet connected
   "push":              "pending",   // Web-push not yet enabled
   "in-app":            "ready",     // Always available

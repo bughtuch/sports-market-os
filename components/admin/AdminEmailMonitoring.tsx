@@ -16,9 +16,13 @@ interface QueueResponse {
   emailConfigured: boolean;
 }
 
+type TestState = "idle" | "sending" | "sent" | "error";
+
 export default function AdminEmailMonitoring() {
-  const [data, setData]       = useState<QueueResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData]         = useState<QueueResponse | null>(null);
+  const [loading, setLoading]   = useState(true);
+  const [testState, setTestState] = useState<TestState>("idle");
+  const [testMsg, setTestMsg]   = useState("");
 
   useEffect(() => {
     fetch("/api/email/queue")
@@ -26,6 +30,28 @@ export default function AdminEmailMonitoring() {
       .then((d: QueueResponse) => { setData(d); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
+
+  async function sendTestEmail() {
+    setTestState("sending");
+    setTestMsg("");
+    try {
+      const res  = await fetch("/api/email/test", { method: "POST" });
+      const body = await res.json() as { sent?: boolean; skipped?: boolean; to?: string; error?: string };
+      if (body.sent) {
+        setTestState("sent");
+        setTestMsg(`Delivered to ${body.to}`);
+      } else if (body.skipped) {
+        setTestState("error");
+        setTestMsg("Resend not configured");
+      } else {
+        setTestState("error");
+        setTestMsg(body.error ?? "Unknown error");
+      }
+    } catch {
+      setTestState("error");
+      setTestMsg("Request failed");
+    }
+  }
 
   const stats = data?.stats;
   const configured = data?.emailConfigured ?? false;
@@ -56,14 +82,32 @@ export default function AdminEmailMonitoring() {
         </span>
       </div>
 
-      {/* Config status */}
+      {/* Config status + test button */}
       <div className="mb-6 p-3 border border-zinc-800 rounded-sm">
         <p className="text-[9px] font-mono text-zinc-500 tracking-widest uppercase mb-2">Resend Integration</p>
-        <div className="flex items-center gap-2">
-          <div className={`w-1.5 h-1.5 rounded-full ${configured ? "bg-emerald-400" : "bg-zinc-600"}`} />
-          <span className={`text-xs font-mono ${configured ? "text-emerald-400" : "text-zinc-500"}`}>
-            {configured ? "RESEND_API_KEY configured — email active" : "RESEND_API_KEY not set — email suppressed"}
-          </span>
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-2">
+            <div className={`w-1.5 h-1.5 rounded-full ${configured ? "bg-emerald-400" : "bg-zinc-600"}`} />
+            <span className={`text-xs font-mono ${configured ? "text-emerald-400" : "text-zinc-500"}`}>
+              {configured ? "RESEND_API_KEY configured — email active" : "RESEND_API_KEY not set — email suppressed"}
+            </span>
+          </div>
+          {configured && (
+            <div className="flex items-center gap-3">
+              <button
+                onClick={sendTestEmail}
+                disabled={testState === "sending"}
+                className="text-[10px] font-mono px-3 py-1 border border-zinc-700 text-zinc-300 rounded-sm hover:border-zinc-500 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {testState === "sending" ? "Sending…" : "Send Test Email"}
+              </button>
+              {testMsg && (
+                <span className={`text-[10px] font-mono ${testState === "sent" ? "text-emerald-400" : "text-red-400"}`}>
+                  {testState === "sent" ? "✓ " : "✗ "}{testMsg}
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

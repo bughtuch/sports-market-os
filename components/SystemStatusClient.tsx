@@ -252,8 +252,8 @@ export default function SystemStatusClient({ summary }: { summary: ProviderHealt
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {[
-            { label: "Resend API",    status: "pending", color: "text-zinc-500",  note: "Set RESEND_API_KEY to activate" },
-            { label: "Email Queue",   status: "pending", color: "text-zinc-500",  note: "Backed by notification_events" },
+            { label: "Resend API",    status: "active",  color: "text-emerald-400", note: "Connected" },
+            { label: "Email Queue",   status: "active",  color: "text-emerald-400", note: "Backed by notification_events" },
             { label: "Preview Page",  status: "active",  color: "text-emerald-400", note: "/email-preview (noindex)" },
           ].map(d => (
             <div key={d.label} className="bg-zinc-950 border border-zinc-800/60 rounded-sm px-3 py-2.5">
