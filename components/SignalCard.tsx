@@ -166,16 +166,10 @@ export default function SignalCard({
         <div className="flex items-center gap-2">
           <span className="w-1 h-1 rounded-full bg-emerald-500/40 pulse-dot" />
           <Link
-            href="/content-command#x-posts"
+            href={`/export-studio?sport=${encodeURIComponent(sport)}&title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&movement=${encodeURIComponent(movement ?? "")}&direction=${direction}&confidence=${confidence}&exchange=${encodeURIComponent(exchange ?? "")}&type=${encodeURIComponent(type)}`}
             className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px] font-mono text-zinc-600 hover:text-zinc-300 border border-zinc-800 hover:border-zinc-600 px-1.5 py-0.5 rounded-sm"
           >
-            Create Post →
-          </Link>
-          <Link
-            href="/content-command#shorts"
-            className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px] font-mono text-zinc-600 hover:text-zinc-300 border border-zinc-800 hover:border-zinc-600 px-1.5 py-0.5 rounded-sm"
-          >
-            Short →
+            Export →
           </Link>
         </div>
       </div>
