@@ -33,8 +33,8 @@ const quickActions = [
     accent: "text-zinc-300",
     accentBg: "bg-zinc-300/5",
     accentBorder: "hover:border-zinc-500/30",
-    href: "#",
-    badge: "Coming",
+    href: "/content-command#x-posts",
+    badge: "Live",
   },
   {
     label: "Telegram Broadcast",
@@ -43,8 +43,8 @@ const quickActions = [
     accent: "text-blue-400",
     accentBg: "bg-blue-400/5",
     accentBorder: "hover:border-blue-400/30",
-    href: "#",
-    badge: "Beta",
+    href: "/content-command#telegram",
+    badge: "Live",
   },
   {
     label: "Reddit Breakdown",
@@ -162,8 +162,9 @@ function SectionHeader({ label, sublabel }: { label: string; sublabel?: string }
 
 function BadgePill({ label }: { label: string }) {
   const styles: Record<string, string> = {
-    Core: "text-emerald-400 border-emerald-400/30 bg-emerald-400/5",
-    Beta: "text-blue-400 border-blue-400/30 bg-blue-400/5",
+    Core:   "text-emerald-400 border-emerald-400/30 bg-emerald-400/5",
+    Live:   "text-emerald-400 border-emerald-400/30 bg-emerald-400/5",
+    Beta:   "text-blue-400 border-blue-400/30 bg-blue-400/5",
     Coming: "text-zinc-600 border-zinc-700 bg-zinc-900",
   };
   return (

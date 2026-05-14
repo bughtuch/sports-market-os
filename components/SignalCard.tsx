@@ -163,13 +163,19 @@ export default function SignalCard({
         <span className="text-[9px] text-zinc-800 font-mono tracking-wider">
           Powered by Sports Market OS
         </span>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <span className="w-1 h-1 rounded-full bg-emerald-500/40 pulse-dot" />
           <Link
-            href="/creator-studio"
+            href="/content-command#x-posts"
             className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px] font-mono text-zinc-600 hover:text-zinc-300 border border-zinc-800 hover:border-zinc-600 px-1.5 py-0.5 rounded-sm"
           >
-            Share →
+            Create Post →
+          </Link>
+          <Link
+            href="/content-command#shorts"
+            className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px] font-mono text-zinc-600 hover:text-zinc-300 border border-zinc-800 hover:border-zinc-600 px-1.5 py-0.5 rounded-sm"
+          >
+            Short →
           </Link>
         </div>
       </div>

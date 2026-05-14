@@ -69,6 +69,13 @@ export default function AccountDropdown({ user }: { user: User }) {
               Creator Studio
             </Link>
             <Link
+              href="/content-command"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 text-zinc-400 text-xs hover:text-white hover:bg-zinc-900 transition-colors"
+            >
+              Content Command
+            </Link>
+            <Link
               href="/pricing"
               onClick={() => setOpen(false)}
               className="flex items-center gap-2 px-3 py-2 text-zinc-400 text-xs hover:text-white hover:bg-zinc-900 transition-colors"

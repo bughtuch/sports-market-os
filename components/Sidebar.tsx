@@ -78,11 +78,12 @@ const tradingApps: NavItem[] = [
 ];
 
 const growth: NavItem[] = [
-  { label: "Creator Studio",  href: "/creator-studio",  dotColor: "bg-purple-400", live: true },
-  { label: "Partner Program", href: "/partner-program", dotColor: "bg-amber-400" },
-  { label: "API Access",      href: "/api-access",      dotColor: "bg-blue-400" },
-  { label: "Pricing",         href: "/pricing" },
-  { label: "Contact",         href: "/contact" },
+  { label: "Creator Studio",   href: "/creator-studio",   dotColor: "bg-purple-400", live: true },
+  { label: "Content Command",  href: "/content-command",  dotColor: "bg-red-400",    live: true },
+  { label: "Partner Program",  href: "/partner-program",  dotColor: "bg-amber-400" },
+  { label: "API Access",       href: "/api-access",       dotColor: "bg-blue-400" },
+  { label: "Pricing",          href: "/pricing" },
+  { label: "Contact",          href: "/contact" },
 ];
 
 function NavSection({
