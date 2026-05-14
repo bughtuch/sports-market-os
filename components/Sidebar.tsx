@@ -72,9 +72,9 @@ const mainNav: NavItem[] = [
 ];
 
 const tradingApps: NavItem[] = [
-  { label: "Horse Racing Trader", href: "#", live: true },
-  { label: "Tennis Trader UK", href: "#", live: true },
-  { label: "Tennis Trader USA", href: "#", live: true },
+  { label: "Horse Racing Trader", href: "/terminal" },
+  { label: "Tennis Trader UK",    href: "/terminal" },
+  { label: "Tennis Trader USA",   href: "/terminal" },
 ];
 
 const growth: NavItem[] = [

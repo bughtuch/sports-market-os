@@ -1,13 +1,15 @@
 import Link from "next/link";
 
 const PLATFORM_LINKS = [
-  { label: "Terminal",        href: "/terminal" },
-  { label: "Markets",         href: "/markets" },
-  { label: "Creator Studio",  href: "/creator-studio" },
-  { label: "Pricing",         href: "/pricing" },
-  { label: "Partner Program", href: "/partner-program" },
-  { label: "API Access",      href: "/api-access" },
-  { label: "Contact",         href: "/contact" },
+  { label: "Terminal",             href: "/terminal" },
+  { label: "Markets",              href: "/markets" },
+  { label: "Creator Studio",       href: "/creator-studio" },
+  { label: "Export Studio",        href: "/export-studio" },
+  { label: "Distribution Center",  href: "/distribution-center" },
+  { label: "Pricing",              href: "/pricing" },
+  { label: "Partner Program",      href: "/partner-program" },
+  { label: "API Access",           href: "/api-access" },
+  { label: "Contact",              href: "/contact" },
 ];
 
 const LEGAL_LINKS = [
