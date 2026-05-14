@@ -221,6 +221,29 @@ export default function SystemStatusClient({ summary }: { summary: ProviderHealt
         </div>
       </div>
 
+      {/* ─── Notification System ───────────────────────────────────── */}
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <p className="text-zinc-700 text-[9px] font-mono uppercase tracking-widest">Notification System</p>
+          <div className="flex-1 h-px bg-zinc-900" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          {[
+            { label: "In-App Delivery",     status: "active",  color: "text-emerald-400", note: "Always available" },
+            { label: "Email (Resend)",       status: "pending", color: "text-zinc-500",    note: "Resend not connected" },
+            { label: "Telegram Bot",         status: "pending", color: "text-zinc-500",    note: "Bot not connected" },
+            { label: "Web Push",             status: "pending", color: "text-zinc-500",    note: "Permission required" },
+            { label: "Creator Broadcast",    status: "mock",    color: "text-amber-400",   note: "Simulated queue" },
+          ].map(d => (
+            <div key={d.label} className="bg-zinc-950 border border-zinc-800/60 rounded-sm px-3 py-2.5">
+              <p className="text-zinc-600 text-[8px] font-mono uppercase tracking-wider mb-0.5">{d.label}</p>
+              <p className={`text-[10px] font-mono font-medium ${d.color}`}>{d.status.toUpperCase()}</p>
+              <p className="text-zinc-700 text-[9px]">{d.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ─── Footer ────────────────────────────────────────────────── */}
       <div className="border-t border-zinc-900/60 pt-4 flex items-center justify-between">
         <p className="text-zinc-700 text-[9px] font-mono">

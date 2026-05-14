@@ -86,6 +86,7 @@ const growth: NavItem[] = [
   { label: "Alerts",               href: "/alerts",               dotColor: "bg-amber-400" },
   { label: "System Status",        href: "/system-status",        dotColor: "bg-teal-400" },
   { label: "Provider Config",      href: "/provider-config",      dotColor: "bg-blue-400" },
+  { label: "Notifications",        href: "/notification-settings",dotColor: "bg-violet-400" },
   { label: "Partner Dashboard",    href: "/partner-dashboard",    dotColor: "bg-zinc-400" },
   { label: "Partner Ecosystem",    href: "/partners",             dotColor: "bg-teal-400" },
   { label: "Partner Program",      href: "/partner-program",      dotColor: "bg-amber-400" },

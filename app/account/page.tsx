@@ -13,6 +13,7 @@ import { getPlan } from "@/lib/plans/plans";
 import DailyBriefWidget from "@/components/DailyBriefWidget";
 import AccountPreferences from "@/components/AccountPreferences";
 import AccountAlertSummary from "@/components/AccountAlertSummary";
+import AccountNotificationStatus from "@/components/AccountNotificationStatus";
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -319,6 +320,17 @@ export default async function AccountPage() {
             <AccountAlertSummary />
           </section>
 
+          {/* Notification Status */}
+          <section className="px-6 py-5 border-b border-zinc-900">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">Notifications</p>
+              <Link href="/notification-settings" className="text-zinc-600 text-[9px] font-mono hover:text-zinc-400 transition-colors">
+                Configure →
+              </Link>
+            </div>
+            <AccountNotificationStatus />
+          </section>
+
           {/* Quick links */}
           <section className="px-6 py-5">
             <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">Quick Links</p>
@@ -330,7 +342,8 @@ export default async function AccountPage() {
               <Link href="/creator-studio"    className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Creator Studio →</Link>
               <Link href="/system-status"     className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">System Status →</Link>
               <Link href="/pricing"           className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Pricing →</Link>
-              <Link href="/partner-program"   className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Partner Program →</Link>
+              <Link href="/partner-program"        className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Partner Program →</Link>
+              <Link href="/notification-settings"  className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Notifications →</Link>
               <Link href="/api-access"        className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">API Access →</Link>
             </div>
           </section>

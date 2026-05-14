@@ -10,7 +10,8 @@ const NAV_ITEMS = [
   { label: "Distribution",        href: "#distribution",  dot: "bg-violet-400" },
   { label: "System Status",       href: "#system",        dot: "bg-teal-400" },
   { label: "Provider Activation", href: "#providers",     dot: "bg-blue-400" },
-  { label: "Alert Monitoring",    href: "#alerts",        dot: "bg-amber-400" },
+  { label: "Alert Monitoring",    href: "#alerts",         dot: "bg-amber-400" },
+  { label: "Notifications",       href: "#notifications",  dot: "bg-violet-400" },
 ];
 
 export default function AdminConsoleNav() {
