@@ -244,6 +244,27 @@ export default function SystemStatusClient({ summary }: { summary: ProviderHealt
         </div>
       </div>
 
+      {/* ─── Email Delivery ────────────────────────────────────────── */}
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <p className="text-zinc-700 text-[9px] font-mono uppercase tracking-widest">Email Delivery</p>
+          <div className="flex-1 h-px bg-zinc-900" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+          {[
+            { label: "Resend API",    status: "pending", color: "text-zinc-500",  note: "Set RESEND_API_KEY to activate" },
+            { label: "Email Queue",   status: "pending", color: "text-zinc-500",  note: "Backed by notification_events" },
+            { label: "Preview Page",  status: "active",  color: "text-emerald-400", note: "/email-preview (noindex)" },
+          ].map(d => (
+            <div key={d.label} className="bg-zinc-950 border border-zinc-800/60 rounded-sm px-3 py-2.5">
+              <p className="text-zinc-600 text-[8px] font-mono uppercase tracking-wider mb-0.5">{d.label}</p>
+              <p className={`text-[10px] font-mono font-medium ${d.color}`}>{d.status.toUpperCase()}</p>
+              <p className="text-zinc-700 text-[9px]">{d.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ─── Footer ────────────────────────────────────────────────── */}
       <div className="border-t border-zinc-900/60 pt-4 flex items-center justify-between">
         <p className="text-zinc-700 text-[9px] font-mono">

@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { label: "Provider Activation", href: "#providers",     dot: "bg-blue-400" },
   { label: "Alert Monitoring",    href: "#alerts",         dot: "bg-amber-400" },
   { label: "Notifications",       href: "#notifications",  dot: "bg-violet-400" },
+  { label: "Email Monitoring",    href: "#email",          dot: "bg-cyan-400" },
 ];
 
 export default function AdminConsoleNav() {
