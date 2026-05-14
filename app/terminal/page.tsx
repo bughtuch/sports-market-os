@@ -33,6 +33,7 @@ import AIVolatilityPanel from "@/components/AIVolatilityPanel";
 import AIBehaviourPanel from "@/components/AIBehaviourPanel";
 import AIEngineStatus from "@/components/AIEngineStatus";
 import SaveWorkspaceButton from "@/components/SaveWorkspaceButton";
+import DailyBriefWidget from "@/components/DailyBriefWidget";
 import MobilePanelsDrawer from "@/components/MobilePanelsDrawer";
 
 // ─── Mock pulse data ──────────────────────────────────────────────────────────
@@ -365,6 +366,17 @@ export default function TerminalPage() {
 
             {/* AI Engine Status */}
             <AIEngineStatus />
+
+            {/* Today's Brief */}
+            <section className="px-4 py-4 border-b border-zinc-900/80">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
+                  Today&apos;s Intelligence Brief
+                </span>
+                <div className="flex-1 h-px bg-zinc-900" />
+              </div>
+              <DailyBriefWidget />
+            </section>
 
             {/* Intelligence Event Stack */}
             <EventStack />

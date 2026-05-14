@@ -78,16 +78,19 @@ const tradingApps: NavItem[] = [
 ];
 
 const growth: NavItem[] = [
-  { label: "Creator Studio",    href: "/creator-studio",    dotColor: "bg-purple-400",  live: true },
-  { label: "Content Command",   href: "/content-command",   dotColor: "bg-red-400",     live: true },
-  { label: "Export Studio",          href: "/export-studio",          dotColor: "bg-violet-400" },
-  { label: "Distribution Center",    href: "/distribution-center",    dotColor: "bg-sky-400" },
-  { label: "Partner Dashboard", href: "/partner-dashboard", dotColor: "bg-emerald-400" },
-  { label: "Partner Ecosystem", href: "/partners",          dotColor: "bg-teal-400" },
-  { label: "Partner Program",   href: "/partner-program",   dotColor: "bg-amber-400" },
-  { label: "API Access",        href: "/api-access",        dotColor: "bg-blue-400" },
-  { label: "Pricing",           href: "/pricing" },
-  { label: "Contact",           href: "/contact" },
+  { label: "Creator Studio",       href: "/creator-studio",       dotColor: "bg-purple-400",  live: true },
+  { label: "Content Command",      href: "/content-command",      dotColor: "bg-red-400",     live: true },
+  { label: "Export Studio",        href: "/export-studio",        dotColor: "bg-violet-400" },
+  { label: "Distribution Center",  href: "/distribution-center",  dotColor: "bg-sky-400" },
+  { label: "Daily Brief",          href: "/daily-brief",          dotColor: "bg-emerald-400" },
+  { label: "Alerts",               href: "/alerts",               dotColor: "bg-amber-400" },
+  { label: "System Status",        href: "/system-status",        dotColor: "bg-teal-400" },
+  { label: "Partner Dashboard",    href: "/partner-dashboard",    dotColor: "bg-zinc-400" },
+  { label: "Partner Ecosystem",    href: "/partners",             dotColor: "bg-teal-400" },
+  { label: "Partner Program",      href: "/partner-program",      dotColor: "bg-amber-400" },
+  { label: "API Access",           href: "/api-access",           dotColor: "bg-blue-400" },
+  { label: "Pricing",              href: "/pricing" },
+  { label: "Contact",              href: "/contact" },
 ];
 
 function NavSection({

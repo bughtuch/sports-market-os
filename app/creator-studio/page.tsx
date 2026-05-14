@@ -11,6 +11,7 @@ import MostSharedSignals from "@/components/MostSharedSignals";
 import PartnerApplyButton from "@/components/PartnerApplyButton";
 import CreatorIdentityBanner from "@/components/CreatorIdentityBanner";
 import CreatorPartnerPanel from "@/components/CreatorPartnerPanel";
+import DailyBriefWidget from "@/components/DailyBriefWidget";
 import { createClient } from "@/lib/supabase/server";
 import { getProfile } from "@/lib/db/profile";
 
@@ -265,6 +266,14 @@ export default async function CreatorStudioPage() {
           <section className="px-6 py-4 border-b border-zinc-900">
             <div className="max-w-sm">
               <CreatorPartnerPanel />
+            </div>
+          </section>
+
+          {/* ─── Today's Brief ──────────────────────────────────────────── */}
+          <section className="px-6 py-4 border-b border-zinc-900">
+            <SectionHeader label="Today's Intelligence Brief" />
+            <div className="max-w-xl">
+              <DailyBriefWidget />
             </div>
           </section>
 

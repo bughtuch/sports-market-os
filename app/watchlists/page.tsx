@@ -4,6 +4,7 @@ import MarketTicker from "@/components/MarketTicker";
 import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
 import WatchlistsClient from "@/components/WatchlistsClient";
+import WatchlistIntelligencePanel from "@/components/WatchlistIntelligencePanel";
 import { createClient } from "@/lib/supabase/server";
 import { getUserWatchlists, getWatchlistMarkets } from "@/lib/db/watchlists";
 
@@ -52,6 +53,18 @@ export default async function WatchlistsPage() {
           </section>
 
           <WatchlistsClient initialWatchlists={watchlists} initialMarkets={markets} />
+
+          {/* Watchlist Intelligence */}
+          <section className="px-6 py-5 border-t border-zinc-900">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
+                Watchlist Intelligence
+              </span>
+              <div className="flex-1 h-px bg-zinc-900" />
+              <span className="text-zinc-700 text-[8px] font-mono">AI · Volatility · Flow · Catalysts</span>
+            </div>
+            <WatchlistIntelligencePanel />
+          </section>
         </main>
       </div>
     </div>

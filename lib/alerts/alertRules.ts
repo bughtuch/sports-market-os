@@ -1,0 +1,60 @@
+import type { AlertRule } from "./alertTypes";
+
+export const DEFAULT_ALERT_RULES: AlertRule[] = [
+  {
+    id:          "rule-001",
+    name:        "Volatility Spike — Horse Racing",
+    category:    "volatility-spike",
+    description: "Trigger when implied volatility exceeds +2σ on any Betfair Horse Racing market.",
+    threshold:   2.0,
+    sport:       "Horse Racing",
+    enabled:     true,
+  },
+  {
+    id:          "rule-002",
+    name:        "Queue Deterioration",
+    category:    "queue-deterioration",
+    description: "Trigger when Betfair queue depth falls below 30% of session average.",
+    threshold:   0.3,
+    sport:       "Horse Racing",
+    enabled:     true,
+  },
+  {
+    id:          "rule-003",
+    name:        "High-Severity Catalyst",
+    category:    "catalyst-event",
+    description: "Trigger on any catalyst event classified as high or critical severity.",
+    enabled:     true,
+  },
+  {
+    id:          "rule-004",
+    name:        "AI Confidence Threshold",
+    category:    "ai-confidence",
+    description: "Trigger when AI signal confidence exceeds 85% on a monitored market.",
+    threshold:   85,
+    enabled:     true,
+  },
+  {
+    id:          "rule-005",
+    name:        "Exchange Flow Rotation",
+    category:    "exchange-flow-shift",
+    description: "Trigger when cross-exchange flow rotation exceeds 80th percentile for session.",
+    threshold:   80,
+    enabled:     true,
+  },
+  {
+    id:          "rule-006",
+    name:        "Market Regime Change",
+    category:    "market-regime-change",
+    description: "Trigger when AI regime classification changes for a monitored sport.",
+    enabled:     true,
+  },
+  {
+    id:          "rule-007",
+    name:        "Watchlist Movement",
+    category:    "watchlist",
+    description: "Trigger when any watchlisted market exceeds a 10% price movement.",
+    threshold:   10,
+    enabled:     true,
+  },
+];

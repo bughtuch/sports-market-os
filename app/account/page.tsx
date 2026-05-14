@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getProfile } from "@/lib/db/profile";
 import { normalizePlan, getMockUsage, canAccessFeature } from "@/lib/plans/featureAccess";
 import { getPlan } from "@/lib/plans/plans";
+import DailyBriefWidget from "@/components/DailyBriefWidget";
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -262,16 +263,51 @@ export default async function AccountPage() {
             </div>
           </section>
 
+          {/* Today's Brief */}
+          <section className="px-6 py-5 border-b border-zinc-900">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">Today&apos;s Intelligence Brief</p>
+              <Link href="/daily-brief" className="text-zinc-600 text-[9px] font-mono hover:text-zinc-400 transition-colors">
+                Full brief →
+              </Link>
+            </div>
+            <div className="max-w-2xl">
+              <DailyBriefWidget />
+            </div>
+          </section>
+
+          {/* Daily stickiness metrics */}
+          <section className="px-6 py-5 border-b border-zinc-900">
+            <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">Today&apos;s Activity</p>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 max-w-2xl">
+              {[
+                { label: "Markets Monitored",  value: "64",   color: "text-white" },
+                { label: "Today's Scans",      value: "1,284",color: "text-emerald-400" },
+                { label: "New Catalysts",      value: "8",    color: "text-amber-400" },
+                { label: "Exchange Shifts",    value: "3",    color: "text-blue-400" },
+                { label: "Last Active",        value: "Now",  color: "text-zinc-400" },
+              ].map(m => (
+                <div key={m.label} className="bg-zinc-950 border border-zinc-800/60 rounded-sm p-3">
+                  <p className="text-zinc-700 text-[8px] font-mono uppercase tracking-wider mb-1">{m.label}</p>
+                  <p className={`text-sm font-semibold font-mono tabular-nums ${m.color}`}>{m.value}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* Quick links */}
           <section className="px-6 py-5">
             <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">Quick Links</p>
             <div className="flex flex-wrap gap-3">
               <Link href="/terminal"       className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Terminal →</Link>
-              <Link href="/watchlists"     className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Watchlists →</Link>
-              <Link href="/creator-studio" className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Creator Studio →</Link>
-              <Link href="/pricing"        className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Pricing →</Link>
-              <Link href="/partner-program"className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Partner Program →</Link>
-              <Link href="/api-access"     className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">API Access →</Link>
+              <Link href="/watchlists"        className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Watchlists →</Link>
+              <Link href="/daily-brief"       className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Daily Brief →</Link>
+              <Link href="/alerts"            className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Alerts →</Link>
+              <Link href="/creator-studio"    className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Creator Studio →</Link>
+              <Link href="/system-status"     className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">System Status →</Link>
+              <Link href="/pricing"           className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Pricing →</Link>
+              <Link href="/partner-program"   className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">Partner Program →</Link>
+              <Link href="/api-access"        className="text-xs font-mono text-zinc-400 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors">API Access →</Link>
             </div>
           </section>
 
