@@ -24,6 +24,7 @@ import type {
   ProviderStatusResponse,
 } from "./types";
 import { MockProvider } from "./mockProvider";
+import { getNewsWithMode } from "./newsProvider";
 
 // ─── Active provider selection ────────────────────────────────────────────────
 
@@ -53,9 +54,14 @@ export async function routeSignals(): Promise<SignalsResponse> {
 }
 
 export async function routeNews(): Promise<NewsResponse> {
-  const provider = getActiveProvider();
-  const items = await provider.getNews();
-  return { items, meta: makeMeta(provider, items.length) };
+  const result = await getNewsWithMode();
+  const meta: ResponseMeta = {
+    mode: result.mode,
+    provider: result.liveSuccess ? "NewsAPI.org" : "MockProvider",
+    timestamp: new Date().toISOString(),
+    count: result.items.length,
+  };
+  return { items: result.items, meta };
 }
 
 export async function routeOdds(): Promise<OddsResponse> {

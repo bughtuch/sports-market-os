@@ -61,6 +61,8 @@ export interface NewsItem {
   linkedMarket: string;
   catalystType: string;
   impact: string;
+  /** External source URL — present on live/hybrid items, absent on simulation */
+  url?: string;
 }
 
 // ─── Odds Snapshot ────────────────────────────────────────────────────────────

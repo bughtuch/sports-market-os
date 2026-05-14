@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { NewsItem, CatalystSeverity, SportType } from "@/lib/providers/types";
+import type { NewsItem, CatalystSeverity, SportType, DataMode } from "@/lib/providers/types";
 
 const SEVERITY_CONFIG: Record<CatalystSeverity, { text: string; bg: string; border: string; label: string }> = {
   low:      { text: "text-zinc-400",   bg: "bg-zinc-400/10",   border: "border-zinc-400/20",   label: "LOW" },
@@ -20,8 +20,15 @@ const SPORT_COLORS: Record<SportType, string> = {
   "Prediction Markets": "text-purple-400",
 };
 
+const MODE_CONFIG: Record<DataMode, { label: string; dot: string; text: string }> = {
+  simulation: { label: "SIMULATED", dot: "bg-amber-400",  text: "text-amber-600" },
+  hybrid:     { label: "HYBRID",    dot: "bg-blue-400",   text: "text-blue-500" },
+  live:       { label: "LIVE",      dot: "bg-emerald-400", text: "text-emerald-500" },
+};
+
 export default function NewsCatalystFeed() {
   const [items, setItems] = useState<NewsItem[]>([]);
+  const [mode, setMode] = useState<DataMode>("simulation");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,8 +36,9 @@ export default function NewsCatalystFeed() {
       try {
         const res = await fetch("/api/live/news");
         if (res.ok) {
-          const json = await res.json() as { items?: NewsItem[] };
+          const json = await res.json() as { items?: NewsItem[]; meta?: { mode?: DataMode } };
           if (json.items?.length) setItems(json.items);
+          if (json.meta?.mode) setMode(json.meta.mode);
         }
       } catch {
         // noop — show empty state
@@ -43,6 +51,8 @@ export default function NewsCatalystFeed() {
     return () => clearInterval(timer);
   }, []);
 
+  const modeCfg = MODE_CONFIG[mode];
+
   return (
     <section className="border-b border-zinc-900/80">
       <div className="px-4 py-3 flex items-center gap-2">
@@ -50,9 +60,11 @@ export default function NewsCatalystFeed() {
           News Catalysts
         </span>
         <div className="flex-1 h-px bg-zinc-900" />
-        <div className="flex items-center gap-1">
-          <span className="w-1 h-1 rounded-full bg-amber-400 pulse-dot" />
-          <span className="text-amber-600 text-[9px] font-mono">WIRE</span>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            <span className={`w-1 h-1 rounded-full ${modeCfg.dot} pulse-dot`} />
+            <span className={`${modeCfg.text} text-[9px] font-mono`}>{modeCfg.label}</span>
+          </div>
         </div>
       </div>
 
@@ -99,10 +111,22 @@ export default function NewsCatalystFeed() {
                 {/* Impact */}
                 <p className="text-zinc-500 text-[10px] leading-relaxed mb-1.5">{item.impact}</p>
 
-                {/* Linked market */}
-                <div className="flex items-center gap-1">
-                  <span className="text-zinc-700 text-[9px] font-mono">→</span>
-                  <span className="text-zinc-500 text-[9px] font-mono">{item.linkedMarket}</span>
+                {/* Footer row */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1">
+                    <span className="text-zinc-700 text-[9px] font-mono">→</span>
+                    <span className="text-zinc-500 text-[9px] font-mono">{item.linkedMarket}</span>
+                  </div>
+                  {item.url && (
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-zinc-600 hover:text-zinc-400 text-[9px] font-mono transition-colors"
+                    >
+                      Source →
+                    </a>
+                  )}
                 </div>
               </div>
             );

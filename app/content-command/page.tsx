@@ -9,6 +9,7 @@ import ShortsScriptGenerator from "@/components/ShortsScriptGenerator";
 import TelegramBroadcastGenerator from "@/components/TelegramBroadcastGenerator";
 import CreatorOutreachQueue from "@/components/CreatorOutreachQueue";
 import WeeklyContentCalendar from "@/components/WeeklyContentCalendar";
+import CatalystContentGenerator from "@/components/CatalystContentGenerator";
 
 export const metadata: Metadata = {
   title: "Content Command — Creator Pipeline | Sports Market OS",
@@ -115,6 +116,7 @@ export default function ContentCommandPage() {
             {/* Quick-jump nav */}
             <div className="flex flex-wrap gap-2 mt-5">
               {[
+                { href: "#catalysts", label: "Live Catalysts",  color: "text-emerald-400" },
                 { href: "#x-posts",   label: "X Posts",         color: "text-zinc-300" },
                 { href: "#shorts",    label: "YouTube Shorts",  color: "text-red-400" },
                 { href: "#telegram",  label: "Telegram",        color: "text-blue-400" },
@@ -130,6 +132,16 @@ export default function ContentCommandPage() {
                 </a>
               ))}
             </div>
+          </section>
+
+          {/* ─── Real Catalyst Feed ─────────────────────────────────────── */}
+          <section id="catalysts" className="px-6 py-6 border-b border-zinc-900 scroll-mt-4">
+            <SectionHeader
+              label="Real Catalyst Feed"
+              sublabel="Generate content from live news"
+              accentClass="text-emerald-400"
+            />
+            <CatalystContentGenerator />
           </section>
 
           {/* ─── X Post Generator ───────────────────────────────────────── */}
