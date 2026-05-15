@@ -15,7 +15,7 @@ const baseItems: WatchItem[] = [
   { name: "Lakers vs Celtics",    sport: "NBA",  volatility: 55, accentColor: "#3b82f6" },
   { name: "UFC Main Event",       sport: "UFC",  volatility: 84, accentColor: "#f97316" },
   { name: "NFL Spread Watch",     sport: "NFL",  volatility: 42, accentColor: "#ef4444" },
-  { name: "Prediction Contract",  sport: "PRED", volatility: 91, accentColor: "#a855f7" },
+  { name: "Wimbledon final",       sport: "TEN",  volatility: 84, accentColor: "#10b981" },
 ];
 
 export default function Watchlist() {
