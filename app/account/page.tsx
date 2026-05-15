@@ -17,6 +17,7 @@ import AccountNotificationStatus from "@/components/AccountNotificationStatus";
 import AccountActivityDashboard from "@/components/AccountActivityDashboard";
 import BillingSection from "@/components/BillingSection";
 import { isStripeConfigured } from "@/lib/stripe/stripeClient";
+import TradeLiveButton from "@/components/TradeLiveButton";
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -334,6 +335,34 @@ export default async function AccountPage() {
               <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">Activity & Intelligence Habit</p>
             </div>
             <AccountActivityDashboard />
+          </section>
+
+          {/* Live Exchange Routing */}
+          <section className="px-6 py-5 border-b border-zinc-900">
+            <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">Live Exchange Routing</p>
+            <div className="bg-zinc-950 border border-zinc-800/60 rounded-sm p-5 max-w-2xl">
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot" />
+                    <span className="text-emerald-400 text-[10px] font-mono uppercase tracking-wider">Connected</span>
+                  </div>
+                  <p className="text-white text-sm font-medium">Betfair Exchange</p>
+                  <p className="text-zinc-500 text-xs mt-1">
+                    Intelligence-to-exchange routing active. Execution occurs on Betfair Exchange.
+                    Sports Market OS provides intelligence only.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <TradeLiveButton sport="Horse Racing" variant="compact" source="account" label="Horse Racing →" />
+                <TradeLiveButton sport="Tennis"       variant="compact" source="account" label="Tennis →" />
+                <TradeLiveButton sport="Football"     variant="compact" source="account" label="Football →" />
+              </div>
+              <p className="text-zinc-800 text-[9px] font-mono mt-3">
+                Affiliate routing active · No custody · No wager execution
+              </p>
+            </div>
           </section>
 
           {/* Quick links */}

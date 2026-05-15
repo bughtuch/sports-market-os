@@ -8,6 +8,7 @@ import NewsCatalystCard from "@/components/NewsCatalystCard";
 import RelatedMarkets from "@/components/RelatedMarkets";
 import MarketPricingIntelligence from "@/components/MarketPricingIntelligence";
 import MarketExchangeMicrostructure from "@/components/MarketExchangeMicrostructure";
+import TradeLiveButton from "@/components/TradeLiveButton";
 
 export async function generateStaticParams() {
   return getAllMarkets().map((m) => ({ slug: m.slug }));
@@ -177,6 +178,25 @@ export default async function MarketPage({
             Exchange Microstructure
           </p>
           <MarketExchangeMicrostructure sport={market.sport} />
+        </div>
+      </section>
+
+      {/* Betfair routing */}
+      <section className="px-6 py-5 border-b border-zinc-900/80">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
+          <div>
+            <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
+              Live Exchange
+            </p>
+            <p className="text-zinc-400 text-xs">
+              Execution occurs on Betfair Exchange. Sports Market OS provides intelligence only.
+            </p>
+          </div>
+          <TradeLiveButton
+            sport={market.sport}
+            variant="compact"
+            source="market_page"
+          />
         </div>
       </section>
 

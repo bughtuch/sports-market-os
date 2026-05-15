@@ -30,6 +30,7 @@ import AdminBriefMonitoring from "@/components/admin/AdminBriefMonitoring";
 import AdminRetentionDashboard from "@/components/admin/AdminRetentionDashboard";
 import AdminApiMonitoring from "@/components/admin/AdminApiMonitoring";
 import AdminBillingMonitoring from "@/components/admin/AdminBillingMonitoring";
+import AdminBetfairMonitoring from "@/components/admin/AdminBetfairMonitoring";
 
 export const metadata: Metadata = {
   title: "Admin Console | Sports Market OS",
@@ -164,6 +165,12 @@ export default async function AdminPage() {
           <section id="billing">
             <SectionHeader label="Billing & Subscriptions" />
             <AdminBillingMonitoring />
+          </section>
+
+          {/* ─── Betfair Routing Monitoring ──────────────────────────────── */}
+          <section id="betfair">
+            <SectionHeader label="Betfair Exchange Routing" />
+            <AdminBetfairMonitoring />
           </section>
 
           {/* ─── Admin footer ────────────────────────────────────────────── */}

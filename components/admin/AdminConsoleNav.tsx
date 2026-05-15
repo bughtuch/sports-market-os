@@ -17,6 +17,7 @@ const NAV_ITEMS = [
   { label: "Retention",           href: "#retention",      dot: "bg-blue-400" },
   { label: "API Monitoring",      href: "#api",            dot: "bg-blue-400" },
   { label: "Billing",             href: "#billing",        dot: "bg-emerald-400" },
+  { label: "Betfair Routing",     href: "#betfair",        dot: "bg-emerald-400" },
 ];
 
 export default function AdminConsoleNav() {

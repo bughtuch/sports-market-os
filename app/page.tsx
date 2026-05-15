@@ -3,6 +3,7 @@ import MarketTicker from "@/components/MarketTicker";
 import SportsHubCard, { type SportsHubData } from "@/components/SportsHubCard";
 import NavAuth from "@/components/NavAuth";
 import Footer from "@/components/Footer";
+import TradeLiveButton from "@/components/TradeLiveButton";
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 
@@ -255,7 +256,7 @@ export default function HomePage() {
 
             <HeroTicker />
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <Link
                 href="/terminal"
                 className="inline-flex items-center gap-2 bg-white text-black text-sm font-medium px-6 py-3 rounded-sm hover:bg-zinc-200 transition-colors"
@@ -271,6 +272,12 @@ export default function HomePage() {
               >
                 Explore Markets
               </Link>
+              <TradeLiveButton
+                sport="Horse Racing"
+                variant="hero"
+                label="● LIVE ON BETFAIR EXCHANGE"
+                source="hero"
+              />
             </div>
           </div>
         </section>

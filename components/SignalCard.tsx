@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Sparkline from "@/components/Sparkline";
+import TradeLiveButton from "@/components/TradeLiveButton";
 
 export type SignalTag = "Free" | "Premium" | "Creator" | "API";
 
@@ -158,11 +159,15 @@ export default function SignalCard({
         <ConfidenceBar value={confidence} />
       </div>
 
-      {/* Watermark + export */}
+      {/* Watermark + export + betfair routing */}
       <div className="mt-3 pt-2.5 border-t border-zinc-900 flex items-center justify-between">
-        <span className="text-[9px] text-zinc-800 font-mono tracking-wider">
-          Powered by Sports Market OS
-        </span>
+        <div className="flex items-center gap-2">
+          <TradeLiveButton
+            sport={sport}
+            variant="signal"
+            source="signal_card"
+          />
+        </div>
         <div className="flex items-center gap-2">
           <span className="w-1 h-1 rounded-full bg-emerald-500/40 pulse-dot" />
           <Link

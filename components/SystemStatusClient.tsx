@@ -357,6 +357,47 @@ export default function SystemStatusClient({
         </div>
       </div>
 
+      {/* ─── Exchange Routing Layer ────────────────────────────────── */}
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <p className="text-zinc-700 text-[9px] font-mono uppercase tracking-widest">Exchange Routing Layer</p>
+          <div className="flex-1 h-px bg-zinc-900" />
+          <span className="text-emerald-400 text-[9px] font-mono">ACTIVE</span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {[
+            { label: "Betfair Exchange",   status: "ROUTING",    color: "text-emerald-400", note: "Outbound links active" },
+            { label: "Affiliate Layer",    status: "READY",      color: "text-emerald-400", note: "NEXT_PUBLIC_BETFAIR_AFFILIATE_ID" },
+            { label: "Click Tracking",     status: "ACTIVE",     color: "text-emerald-400", note: "localStorage ring-buffer" },
+            { label: "Execution",          status: "ON BETFAIR", color: "text-zinc-500",    note: "No custody — read-only" },
+          ].map(d => (
+            <div key={d.label} className="bg-zinc-950 border border-zinc-800/60 rounded-sm px-3 py-2.5">
+              <p className="text-zinc-600 text-[8px] font-mono uppercase tracking-wider mb-0.5">{d.label}</p>
+              <p className={`text-[10px] font-mono font-medium ${d.color}`}>{d.status}</p>
+              <p className="text-zinc-700 text-[9px]">{d.note}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-2 bg-zinc-950 border border-zinc-800/60 rounded-sm divide-y divide-zinc-900/60">
+          {[
+            { sport: "Horse Racing", status: "routed", note: "Betfair Exchange — UK & Irish racing" },
+            { sport: "Tennis",       status: "routed", note: "Betfair Exchange — ATP & WTA" },
+            { sport: "Football",     status: "routed", note: "Betfair Exchange — European leagues" },
+            { sport: "NBA / NFL / UFC", status: "routed", note: "Betfair Exchange — American / combat sports" },
+            { sport: "Prediction Markets", status: "unsupported", note: "Not available on Betfair Exchange" },
+          ].map(row => (
+            <div key={row.sport} className="flex items-center gap-3 px-4 py-2">
+              <span className={`w-1 h-1 rounded-full shrink-0 ${row.status === "routed" ? "bg-emerald-400" : "bg-zinc-700"}`} />
+              <span className="text-zinc-300 text-[10px] w-40 shrink-0">{row.sport}</span>
+              <span className="text-zinc-600 text-[9px] flex-1">{row.note}</span>
+              <span className={`text-[9px] font-mono ${row.status === "routed" ? "text-emerald-600" : "text-zinc-700"}`}>
+                {row.status.toUpperCase()}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ─── Footer ────────────────────────────────────────────────── */}
       <div className="border-t border-zinc-900/60 pt-4 flex items-center justify-between">
         <p className="text-zinc-700 text-[9px] font-mono">
