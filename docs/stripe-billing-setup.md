@@ -2,7 +2,7 @@
 
 ## Overview
 
-Stripe Checkout + Billing Portal integration for Partner ($99/mo) and API ($299/mo) plans.
+Stripe Checkout + Billing Portal integration for Partner ($97/mo) and API ($297/mo) plans.
 Plan state lives in `profiles.plan` — the API enforcement layer (Sprint 33) reads this directly.
 
 ---
@@ -12,8 +12,8 @@ Plan state lives in `profiles.plan` — the API enforcement layer (Sprint 33) re
 In the Stripe Dashboard (test mode first):
 
 1. **Create two products:**
-   - "Sports Market OS — Partner" → Recurring price $99/mo
-   - "Sports Market OS — API" → Recurring price $299/mo
+   - "Sports Market OS — Partner" → Recurring price $97/mo
+   - "Sports Market OS — API" → Recurring price $297/mo
 
 2. **Copy the Price IDs** (format: `price_...`) from each product.
 

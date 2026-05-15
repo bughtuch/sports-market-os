@@ -30,6 +30,6 @@ export function getPriceId(plan: BillablePlan): string | null {
 
 /** Monthly price in dollars — matches plans.ts. Used for display only. */
 export const PLAN_PRICE: Record<BillablePlan, number> = {
-  partner: 99,
-  api:     299,
+  partner: 97,
+  api:     297,
 };

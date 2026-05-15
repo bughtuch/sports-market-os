@@ -185,14 +185,14 @@ export default function BillingSection({
                   disabled={state === "loading"}
                   className="text-[11px] font-mono text-black bg-amber-400 px-4 py-2 rounded-sm hover:bg-amber-300 transition-colors disabled:opacity-40"
                 >
-                  {state === "loading" ? "Loading…" : "Upgrade to Partner — $99/mo"}
+                  {state === "loading" ? "Loading…" : "Upgrade to Partner — $97/mo"}
                 </button>
                 <button
                   onClick={() => void startCheckout("api")}
                   disabled={state === "loading"}
                   className="text-[11px] font-mono text-black bg-blue-400 px-4 py-2 rounded-sm hover:bg-blue-300 transition-colors disabled:opacity-40"
                 >
-                  {state === "loading" ? "Loading…" : "Unlock API Access — $299/mo"}
+                  {state === "loading" ? "Loading…" : "Unlock API Access — $297/mo"}
                 </button>
               </>
             )}

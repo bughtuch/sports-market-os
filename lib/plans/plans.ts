@@ -33,8 +33,8 @@ export const PLANS: PlanDefinition[] = [
   {
     id: "partner",
     name: "Partner",
-    monthlyPrice: 99,
-    annualPrice: 79,
+    monthlyPrice: 97,
+    annualPrice: 77,
     tagline: "Creator distribution infrastructure.",
     accentColor: "text-amber-400",
     accentBorder: "border-amber-400/40",
@@ -61,8 +61,8 @@ export const PLANS: PlanDefinition[] = [
   {
     id: "api",
     name: "API",
-    monthlyPrice: 299,
-    annualPrice: 239,
+    monthlyPrice: 297,
+    annualPrice: 237,
     tagline: "Structured data for intelligence systems.",
     accentColor: "text-blue-400",
     accentBorder: "border-blue-400/40",
