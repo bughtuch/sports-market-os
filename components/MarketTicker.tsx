@@ -1,21 +1,26 @@
 const tickerItems = [
-  { label: "HORSE RACING", message: "Queue health weakening at Ascot — late liquidity detected" },
-  { label: "TENNIS", message: "Momentum compression detected — Djokovic market volatility rising" },
-  { label: "NBA", message: "Sharp spread pressure building — late-side movement flagged" },
-  { label: "NFL", message: "Market volatility index rising — line movement accelerating" },
-  { label: "UFC", message: "Late money entering underdog side — behavioural shift detected" },
-  { label: "PREDICTION", message: "Volume surge flagged — contract pricing diverging from consensus" },
-  { label: "HORSE RACING", message: "Ascot liquidity spike detected — exchange imbalance forming" },
-  { label: "TENNIS", message: "AI flagged momentum shift — serve pattern regression noted" },
+  { label: "HORSE RACING", message: "BETFAIR · Ascot 14:30 lay liability imbalance forming — queue depth deteriorating" },
+  { label: "TENNIS",       message: "SMARKETS · Djokovic serve pattern regression flagged — matched volume 34% above 20-day mean" },
+  { label: "NBA",          message: "FANDUEL · Warriors spread pressure building — sharp-side consensus aligning with AI projection" },
+  { label: "NFL",          message: "DRAFTKINGS · Chiefs totals IV compression: three hours without a triggering event" },
+  { label: "UFC",          message: "BETFAIR · Poirier ML shortening without public volume match — informed positioning pattern" },
+  { label: "PREDICTION",   message: "POLYMARKET · US Election contract 6.8pt divergence from polling aggregate" },
+  { label: "FOOTBALL",     message: "PINNACLE · Asian handicap-to-match result rotation — institutional rebalancing pattern" },
+  { label: "HORSE RACING", message: "BETFAIR · Cheltenham 3:15 queue depth at 38% of pre-race average — 18 minutes out" },
+  { label: "TENNIS",       message: "BETFAIR · Roland Garros clay-court pace regression model updated — three surface corrections" },
+  { label: "NBA",          message: "BETMGM · Lakers late sharp positioning — line movement accelerating across three books" },
+  { label: "NFL",          message: "CAESARS · Bills defensive scheme data weighting adjustment — AI model recalibrating" },
+  { label: "FOOTBALL",     message: "BETFAIR · Champions League second-half volume pattern emerging — cross-market rotation" },
 ];
 
 const labelColors: Record<string, string> = {
   "HORSE RACING": "text-amber-400",
-  "TENNIS": "text-emerald-400",
-  "NBA": "text-blue-400",
-  "NFL": "text-red-400",
-  "UFC": "text-orange-400",
-  "PREDICTION": "text-purple-400",
+  "TENNIS":       "text-emerald-400",
+  "NBA":          "text-blue-400",
+  "NFL":          "text-red-400",
+  "UFC":          "text-orange-400",
+  "PREDICTION":   "text-purple-400",
+  "FOOTBALL":     "text-zinc-300",
 };
 
 export default function MarketTicker() {
@@ -29,11 +34,11 @@ export default function MarketTicker() {
             key={i}
             className="inline-flex items-center gap-2 px-6 text-xs tracking-wide"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-zinc-600 shrink-0" />
-            <span className={`font-semibold font-mono ${labelColors[item.label] ?? "text-zinc-400"}`}>
+            <span className="w-1 h-1 rounded-full bg-zinc-700 shrink-0" />
+            <span className={`font-semibold font-mono text-[10px] ${labelColors[item.label] ?? "text-zinc-400"}`}>
               {item.label}
             </span>
-            <span className="text-zinc-400">{item.message}</span>
+            <span className="text-zinc-500 text-[10px]">{item.message}</span>
           </span>
         ))}
       </div>

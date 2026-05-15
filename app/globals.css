@@ -23,13 +23,39 @@
 :root {
   --background: #000000;
   --foreground: #ffffff;
+
+  /* ── Design tokens v2 ─────────────────────────────────────────────────────── */
+  --bg-canvas:   #0A0A0B;
+  --bg-surface:  #111113;
+  --bg-elevated: #18181B;
+
+  --border-subtle:  rgba(255,255,255,0.06);
+  --border-default: rgba(255,255,255,0.09);
+  --border-strong:  rgba(255,255,255,0.14);
+
+  --text-primary:   #FFFFFF;
+  --text-secondary: #A1A1AA;
+  --text-tertiary:  #52525B;
+  --text-muted:     #27272A;
+
+  --accent:        #5EE7DF;
+  --accent-dim:    rgba(94,231,223,0.10);
+  --accent-border: rgba(94,231,223,0.22);
+  --accent-glow:   rgba(94,231,223,0.06);
+
+  --radius-card: 8px;
+  --radius-pill: 4px;
+
+  --motion-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-duration: 200ms;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans:  var(--font-geist-sans);
+  --font-mono:  var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
 }
 
 * {
@@ -59,7 +85,7 @@ body {
 
 /* pulse-dot duration driven by CSS custom property — overridden per regime */
 .pulse-dot {
-  animation: pulse-dot var(--pulse-duration, 2s) ease-in-out infinite;
+  animation: pulse-dot var(--pulse-duration, 1.4s) ease-in-out infinite;
 }
 
 .fade-up {

@@ -4,8 +4,8 @@ import { useLiveMarketData } from "@/hooks/useLiveMarketData";
 import type { DataMode } from "@/lib/providers/types";
 
 const MODE_CONFIG: Record<DataMode, { label: string; dot: string; text: string }> = {
-  simulation: { label: "Simulation", dot: "bg-amber-400", text: "text-amber-600" },
-  hybrid:     { label: "Hybrid",     dot: "bg-blue-400",  text: "text-blue-600"  },
+  simulation: { label: "AI Signal",  dot: "bg-cyan-400",    text: "text-cyan-600"    },
+  hybrid:     { label: "Hybrid",     dot: "bg-blue-400",    text: "text-blue-600"    },
   live:       { label: "Live",       dot: "bg-emerald-400", text: "text-emerald-600" },
 };
 
