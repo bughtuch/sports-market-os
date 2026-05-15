@@ -41,9 +41,9 @@ function ConfidenceBar({ value }: { value: number }) {
   return (
     <div className="flex items-center gap-2">
       <div className="h-0.5 flex-1 bg-zinc-800 rounded-full overflow-hidden">
-        <div className="h-full bg-zinc-400 rounded-full" style={{ width: `${value}%` }} />
+        <div className="h-full bg-white rounded-full" style={{ width: `${value}%` }} />
       </div>
-      <span className="text-zinc-500 text-[10px] font-mono tabular-nums">{value}%</span>
+      <span className="text-zinc-200 text-xs font-mono font-semibold tabular-nums">{value}%</span>
     </div>
   );
 }
@@ -115,7 +115,7 @@ export default function SignalCard({
         )}
       </div>
 
-      <p className="text-zinc-400 text-xs leading-relaxed mb-3">{description}</p>
+      <p className="text-zinc-300 text-xs leading-relaxed mb-3">{description}</p>
 
       {/* Meta row */}
       {(movement || aiScore !== undefined) && (
@@ -123,27 +123,27 @@ export default function SignalCard({
           {movement && (
             <div className="flex items-center gap-1">
               <Arrow direction={direction} />
-              <span className={`text-[10px] font-mono tabular-nums ${movColor}`}>
+              <span className={`text-xs font-mono font-semibold tabular-nums ${movColor}`}>
                 {movement}
               </span>
             </div>
           )}
           {aiScore !== undefined && (
             <div className="flex items-center gap-1.5">
-              <span className="text-zinc-700 text-[9px] font-mono">AI</span>
+              <span className="text-zinc-600 text-[9px] font-mono">AI</span>
               <div className="flex gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <span
                     key={i}
                     className={`w-1 h-2 rounded-sm ${
                       i < Math.round(aiScore / 20)
-                        ? "bg-zinc-300"
+                        ? "bg-white"
                         : "bg-zinc-800"
                     }`}
                   />
                 ))}
               </div>
-              <span className="text-zinc-500 text-[9px] font-mono tabular-nums">{aiScore}</span>
+              <span className="text-zinc-200 text-[10px] font-mono font-semibold tabular-nums">{aiScore}</span>
             </div>
           )}
         </div>

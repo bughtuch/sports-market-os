@@ -337,7 +337,7 @@ function TerminalPreview() {
       <div className="px-4 py-3 border-t border-white/6 bg-blue-400/[0.03]">
         <div className="flex items-start gap-3">
           <span className="text-[8px] font-mono text-blue-400 uppercase tracking-wider shrink-0 mt-0.5">AI Brief</span>
-          <p className="text-[10px] text-zinc-400 leading-relaxed">
+          <p className="text-[10px] text-zinc-200 leading-relaxed">
             Sharp rotation detected across Ascot markets. Queue depth thinning into the 2.40.
             Djokovic volatility compressing — AI flags late-session inflection. NFL spread pressure
             building on Chiefs line. Recommend monitoring exchange flow divergence.
@@ -442,7 +442,7 @@ export default function HomePage() {
             </div>
 
             {/* Subheadline */}
-            <p className="text-zinc-400 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
+            <p className="text-zinc-300 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
               Live market signals, exchange microstructure, AI briefs, volatility alerts,
               creator exports, API infrastructure, and exchange routing — unified into one operating system.
             </p>
@@ -483,7 +483,7 @@ export default function HomePage() {
 
         {/* ─── Terminal Preview ─────────────────────────────────────────────── */}
         <section className="border-b border-white/5 bg-zinc-950/30">
-          <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="max-w-6xl mx-auto px-6 py-20">
             <div className="flex items-end justify-between gap-4 mb-6">
               <div>
                 <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-1">
@@ -506,7 +506,7 @@ export default function HomePage() {
 
         {/* ─── Live Market Pulse ───────────────────────────────────────────── */}
         <section className="border-b border-white/5">
-          <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="max-w-6xl mx-auto px-6 py-20">
             <SectionLabel label="Live Market Pulse" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
               {liveSignals.map((signal) => (
@@ -520,14 +520,14 @@ export default function HomePage() {
                       {signal.label}
                     </div>
                     <div className="text-right">
-                      <p className={`text-sm font-bold tabular-nums font-mono ${signal.accent}`}>{signal.value}</p>
-                      <p className="text-zinc-700 text-[8px] font-mono uppercase">{signal.valueLabel}</p>
+                      <p className={`text-base font-bold tabular-nums font-mono ${signal.accent}`}>{signal.value}</p>
+                      <p className="text-zinc-600 text-[8px] font-mono uppercase">{signal.valueLabel}</p>
                     </div>
                   </div>
-                  <p className="text-zinc-500 text-sm leading-relaxed">{signal.description}</p>
+                  <p className="text-zinc-300 text-sm leading-relaxed">{signal.description}</p>
                   <div className="mt-4 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-zinc-600 text-[10px] font-mono">View feed</span>
-                    <svg className="w-3 h-3 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <span className="text-zinc-500 text-[10px] font-mono">View feed</span>
+                    <svg className="w-3 h-3 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                   </div>
@@ -539,13 +539,13 @@ export default function HomePage() {
 
         {/* ─── Platform Modules ─────────────────────────────────────────────── */}
         <section id="platform" className="border-b border-white/5">
-          <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="max-w-6xl mx-auto px-6 py-20">
             <SectionLabel label="One Platform" />
-            <div className="mb-8 max-w-2xl">
+            <div className="mb-10 max-w-2xl">
               <h2 className="text-white text-2xl font-semibold mb-3">
                 Every layer of sports market intelligence, unified.
               </h2>
-              <p className="text-zinc-500 text-sm leading-relaxed">
+              <p className="text-zinc-300 text-sm leading-relaxed">
                 Terminal. AI briefs. Alerts. Exchange flow. Creator exports. Distribution network.
                 Developer API. Seven systems — one operating layer.
               </p>
@@ -557,17 +557,13 @@ export default function HomePage() {
                   href={mod.href}
                   className={`module-card block bg-zinc-950 border rounded-sm p-5 ${mod.accent}`}
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className={`w-1.5 h-1.5 rounded-full pulse-dot ${mod.dotColor}`} />
-                      <span className={`text-[9px] font-mono uppercase tracking-wider ${mod.statusColor}`}>
-                        {mod.status}
-                      </span>
-                    </div>
+                  {/* Status dot only — no repeated LIVE label */}
+                  <div className="mb-4">
+                    <span className={`w-1.5 h-1.5 rounded-full pulse-dot inline-block ${mod.dotColor}`} />
                   </div>
                   <h3 className="text-white text-sm font-semibold mb-2">{mod.name}</h3>
-                  <p className="text-zinc-500 text-xs leading-relaxed">{mod.description}</p>
-                  <div className="mt-4 text-[9px] font-mono text-zinc-700 group-hover:text-zinc-400 transition-colors">
+                  <p className="text-zinc-300 text-xs leading-relaxed">{mod.description}</p>
+                  <div className="mt-5 text-[9px] font-mono text-zinc-500 transition-colors">
                     Explore →
                   </div>
                 </Link>
@@ -578,13 +574,13 @@ export default function HomePage() {
 
         {/* ─── Sports Hubs ─────────────────────────────────────────────────── */}
         <section id="markets" className="border-b border-white/5">
-          <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="max-w-6xl mx-auto px-6 py-20">
             <SectionLabel label="Sports Intelligence Hubs" />
-            <div className="mb-8 max-w-2xl">
+            <div className="mb-10 max-w-2xl">
               <h2 className="text-white text-2xl font-semibold mb-3">
                 Seven sports. One intelligence layer.
               </h2>
-              <p className="text-zinc-500 text-sm leading-relaxed">
+              <p className="text-zinc-300 text-sm leading-relaxed">
                 Each hub delivers live market data, AI analysis, exchange flow, and structural
                 intelligence specific to that sport's markets and dynamics.
               </p>
@@ -599,14 +595,14 @@ export default function HomePage() {
 
         {/* ─── Exchange Section ─────────────────────────────────────────────── */}
         <section className="border-b border-white/5 bg-emerald-950/10">
-          <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="max-w-6xl mx-auto px-6 py-20">
             <SectionLabel label="Exchange Routing" accent="text-emerald-500" />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-white text-2xl font-semibold mb-4">
                   From intelligence to exchange action.
                 </h2>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6">
+                <p className="text-zinc-300 text-sm leading-relaxed mb-6">
                   Sports Market OS reads the market. You act on it.
                   Signal cards, market pages, and the terminal surface direct routing
                   to the Betfair Exchange — keeping the intelligence and execution layers clean.
@@ -618,17 +614,17 @@ export default function HomePage() {
               </div>
               <div className="space-y-3">
                 {[
-                  { step: "01", label: "AI detects signal",           desc: "Sharp money, liquidity spike, volatility shift",            color: "text-white",          dot: "bg-white" },
-                  { step: "02", label: "Intelligence surfaced",        desc: "Terminal, signal card, market page — structured analysis",  color: "text-zinc-300",       dot: "bg-zinc-300" },
-                  { step: "03", label: "Exchange routing activated",   desc: "One click to Betfair Exchange market",                     color: "text-emerald-400",    dot: "bg-emerald-400" },
-                  { step: "04", label: "Execution on exchange",        desc: "Betfair Exchange handles trade. SMO stays intelligence.",   color: "text-emerald-600",    dot: "bg-emerald-600" },
+                  { step: "01", label: "AI detects signal",           desc: "Sharp money, liquidity spike, volatility shift",            color: "text-white",       dot: "bg-white" },
+                  { step: "02", label: "Intelligence surfaced",        desc: "Terminal, signal card, market page — structured analysis",  color: "text-zinc-200",    dot: "bg-zinc-300" },
+                  { step: "03", label: "Exchange routing activated",   desc: "One click to Betfair Exchange market",                     color: "text-emerald-400", dot: "bg-emerald-400" },
+                  { step: "04", label: "Execution on exchange",        desc: "Betfair Exchange handles trade. SMO stays intelligence.",   color: "text-emerald-400", dot: "bg-emerald-600" },
                 ].map((s) => (
                   <div key={s.step} className="flex items-start gap-4 p-4 border border-white/5 rounded-sm bg-black/40">
-                    <span className="text-zinc-700 text-[10px] font-mono tabular-nums shrink-0 mt-0.5">{s.step}</span>
+                    <span className="text-zinc-600 text-[10px] font-mono tabular-nums shrink-0 mt-0.5">{s.step}</span>
                     <span className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1 ${s.dot}`} />
                     <div>
                       <p className={`text-sm font-medium ${s.color}`}>{s.label}</p>
-                      <p className="text-zinc-600 text-xs mt-0.5">{s.desc}</p>
+                      <p className="text-zinc-400 text-xs mt-0.5">{s.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -639,14 +635,14 @@ export default function HomePage() {
 
         {/* ─── Creator / Distribution ───────────────────────────────────────── */}
         <section className="border-b border-white/5">
-          <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="max-w-6xl mx-auto px-6 py-20">
             <SectionLabel label="Creator Distribution" />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               <div>
                 <h2 className="text-white text-2xl font-semibold mb-4">
                   Intelligence built to distribute.
                 </h2>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-8">
+                <p className="text-zinc-300 text-sm leading-relaxed mb-8">
                   Bloomberg-grade sports market data, formatted for distribution.
                   Branded share cards, partner analytics, referral systems, and API feeds —
                   all driven by the same live intelligence layer.
@@ -666,9 +662,9 @@ export default function HomePage() {
                       <span className={`w-1 h-1 rounded-full shrink-0 ${item.color.replace("text-", "bg-")}`} />
                       <div className="flex-1 min-w-0">
                         <p className={`text-sm font-medium ${item.color}`}>{item.label}</p>
-                        <p className="text-zinc-600 text-xs mt-0.5">{item.desc}</p>
+                        <p className="text-zinc-400 text-xs mt-0.5">{item.desc}</p>
                       </div>
-                      <svg className="w-3 h-3 text-zinc-700 group-hover:text-zinc-400 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <svg className="w-3 h-3 text-zinc-600 group-hover:text-zinc-300 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                       </svg>
                     </Link>
@@ -712,13 +708,13 @@ export default function HomePage() {
 
         {/* ─── Ecosystem Apps ───────────────────────────────────────────────── */}
         <section id="ecosystem" className="border-b border-white/5 bg-zinc-950/20">
-          <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="max-w-6xl mx-auto px-6 py-20">
             <SectionLabel label="Execution Ecosystem" />
-            <div className="mb-8 max-w-xl">
+            <div className="mb-10 max-w-xl">
               <h2 className="text-white text-2xl font-semibold mb-3">
                 Intelligence connects to execution.
               </h2>
-              <p className="text-zinc-500 text-sm leading-relaxed">
+              <p className="text-zinc-300 text-sm leading-relaxed">
                 Sports Market OS is the intelligence layer. Connected execution apps
                 deliver that intelligence directly to trading environments.
               </p>
@@ -735,12 +731,12 @@ export default function HomePage() {
                       {app.status === "Live" && (
                         <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot" />
                       )}
-                      <span className={`text-[10px] font-mono uppercase tracking-wider ${app.statusColor}`}>
+                      <span className={`text-[10px] font-mono ${app.statusColor}`}>
                         {app.status}
                       </span>
                     </div>
                   </div>
-                  <p className="text-zinc-500 text-xs leading-relaxed">{app.description}</p>
+                  <p className="text-zinc-300 text-xs leading-relaxed">{app.description}</p>
                 </div>
               ))}
             </div>
@@ -749,14 +745,14 @@ export default function HomePage() {
 
         {/* ─── Developer API ────────────────────────────────────────────────── */}
         <section className="border-b border-white/5 bg-blue-950/5">
-          <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="max-w-6xl mx-auto px-6 py-20">
             <SectionLabel label="Developer API" accent="text-blue-400" />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-white text-2xl font-semibold mb-4">
                   Structured market intelligence for builders.
                 </h2>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6">
+                <p className="text-zinc-300 text-sm leading-relaxed mb-6">
                   Three authenticated endpoints. Plan-gated access. Rate-limited, versioned,
                   and quota-managed. Integrate Sports Market OS signals into your own product.
                 </p>
@@ -799,8 +795,8 @@ export default function HomePage() {
                     </span>
                   </div>
                 ))}
-                <div className="px-4 py-2.5 text-[9px] font-mono text-zinc-700">
-                  Auth: x-smo-api-key · Quota: 100/1k/10k daily
+                <div className="px-4 py-2.5 text-[9px] font-mono text-zinc-500">
+                  Auth: x-smo-api-key · Quota: 100 / 1k / 10k daily
                 </div>
               </div>
             </div>
@@ -828,7 +824,7 @@ export default function HomePage() {
               Watch the market move.
             </h3>
 
-            <p className="text-zinc-400 text-base mb-10 max-w-lg mx-auto leading-relaxed">
+            <p className="text-zinc-300 text-base mb-10 max-w-lg mx-auto leading-relaxed">
               Live market intelligence, AI analysis, exchange routing, and creator infrastructure —
               all running, right now.
             </p>
