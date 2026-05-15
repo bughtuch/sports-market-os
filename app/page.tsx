@@ -3,7 +3,7 @@ import MarketTicker from "@/components/MarketTicker";
 import SportsHubCard, { type SportsHubData } from "@/components/SportsHubCard";
 import NavAuth from "@/components/NavAuth";
 import Footer from "@/components/Footer";
-import TradeLiveButton from "@/components/TradeLiveButton";
+
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 
@@ -272,12 +272,10 @@ export default function HomePage() {
               >
                 Explore Markets
               </Link>
-              <TradeLiveButton
-                sport="Horse Racing"
-                variant="hero"
-                label="● LIVE ON BETFAIR EXCHANGE"
-                source="hero"
-              />
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 border border-emerald-400/20 bg-emerald-400/5 px-3 py-1.5 rounded-sm">
+                <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot shrink-0" />
+                LIVE ON BETFAIR EXCHANGE
+              </span>
             </div>
           </div>
         </section>
