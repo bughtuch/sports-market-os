@@ -343,10 +343,10 @@ export default function SystemStatusClient({
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {[
-            { label: "Key Issuance",    status: "ACTIVE", color: "text-emerald-400", note: "api_keys table" },
-            { label: "Key Auth",        status: "ACTIVE", color: "text-emerald-400", note: "SHA-256 hash lookup" },
-            { label: "Usage Logging",   status: "ACTIVE", color: "text-emerald-400", note: "api_usage_events" },
-            { label: "v1 Endpoints",    status: "3 LIVE", color: "text-blue-400",    note: "signals · pulse · brief" },
+            { label: "Key Auth",         status: "ACTIVE",    color: "text-emerald-400", note: "SHA-256 hash lookup" },
+            { label: "Plan Enforcement", status: "ACTIVE",    color: "text-emerald-400", note: "free·partner·api tiers" },
+            { label: "Quota Engine",     status: "ACTIVE",    color: "text-emerald-400", note: "100·1k·10k daily" },
+            { label: "v1 Endpoints",     status: "3 LIVE",    color: "text-blue-400",    note: "signals·pulse·brief" },
           ].map(d => (
             <div key={d.label} className="bg-zinc-950 border border-zinc-800/60 rounded-sm px-3 py-2.5">
               <p className="text-zinc-600 text-[8px] font-mono uppercase tracking-wider mb-0.5">{d.label}</p>

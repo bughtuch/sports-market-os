@@ -309,7 +309,7 @@ export default function APIAccessPage() {
           </div>
         </section>
 
-        {/* Auth preview */}
+        {/* Auth */}
         <section className="px-6 py-10 border-b border-zinc-900/80">
           <div className="max-w-4xl mx-auto">
             <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-6">
@@ -317,32 +317,83 @@ export default function APIAccessPage() {
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="border border-zinc-800/60 rounded-sm bg-zinc-950 p-4">
-                <p className="text-zinc-300 text-[11px] font-medium mb-2">API Key (coming)</p>
-                <pre className="text-[9px] font-mono text-zinc-600 bg-zinc-900/60 rounded-sm p-3">
-{`Authorization: Bearer smos_api_••••••••••••
+                <p className="text-zinc-300 text-[11px] font-medium mb-2">API Key</p>
+                <pre className="text-[9px] font-mono text-zinc-400 bg-zinc-900/60 rounded-sm p-3 leading-relaxed">
+{`curl /api/v1/signals \\
+  -H "x-smo-api-key: smo_live_••••••••"
 
-# Headers
-X-Plan: api
-X-Version: 1.0`}
+# Response includes quota headers
+X-SMO-Plan: free
+X-SMO-RateLimit-Limit: 100
+X-SMO-RateLimit-Remaining: 97
+X-SMO-RateLimit-Reset: 2026-05-16T00:00:00Z`}
                 </pre>
-                <PlanBadge plan="soon" />
+                <p className="text-zinc-700 text-[9px] font-mono mt-2">
+                  Generate keys at /developer
+                </p>
               </div>
               <div className="border border-zinc-800/60 rounded-sm bg-zinc-950 p-4">
-                <p className="text-zinc-300 text-[11px] font-medium mb-2">Rate limits</p>
-                <div className="space-y-2">
+                <p className="text-zinc-300 text-[11px] font-medium mb-3">Daily call limits</p>
+                <div className="space-y-3">
                   {[
-                    { plan: "free" as const,    rate: "30s refresh, public endpoints" },
-                    { plan: "partner" as const, rate: "10s refresh, creator endpoints" },
-                    { plan: "api" as const,     rate: "1s refresh, all endpoints" },
+                    { plan: "free"    as const, calls: "100",    note: "3 live endpoints" },
+                    { plan: "partner" as const, calls: "1,000",  note: "partner + creator endpoints" },
+                    { plan: "api"     as const, calls: "10,000", note: "all endpoints + WebSocket-ready" },
                   ].map((r) => (
-                    <div key={r.plan} className="flex items-center gap-2">
+                    <div key={r.plan} className="flex items-center gap-3">
                       <PlanBadge plan={r.plan} />
-                      <span className="text-zinc-500 text-[10px]">{r.rate}</span>
+                      <span className="text-zinc-300 text-[10px] font-mono tabular-nums w-14">{r.calls}/day</span>
+                      <span className="text-zinc-600 text-[9px]">{r.note}</span>
                     </div>
                   ))}
                 </div>
+                <div className="mt-3 pt-3 border-t border-zinc-900/60 space-y-1 text-[9px] font-mono text-zinc-700">
+                  <p>· 429 when quota exceeded + Retry-After header</p>
+                  <p>· 403 on plan restriction + upgrade message</p>
+                  <p>· Resets at UTC midnight daily</p>
+                </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Endpoint availability */}
+        <section className="px-6 py-10 border-b border-zinc-900/80">
+          <div className="max-w-4xl mx-auto">
+            <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-6">
+              Endpoint availability by plan
+            </p>
+            <div className="border border-zinc-800/60 rounded-sm bg-zinc-950 overflow-hidden">
+              <div className="px-4 py-3 border-b border-zinc-900/60 grid grid-cols-[1fr_auto_auto_auto] gap-6 text-[9px] font-mono text-zinc-600 uppercase tracking-wider">
+                <span>Endpoint</span>
+                <span className="text-center">Free</span>
+                <span className="text-center">Partner</span>
+                <span className="text-center">API</span>
+              </div>
+              {[
+                { path: "/api/v1/signals",         req: 0, live: true  },
+                { path: "/api/v1/market-pulse",    req: 0, live: true  },
+                { path: "/api/v1/daily-brief",     req: 0, live: true  },
+                { path: "/api/v1/distribution",    req: 1, live: false },
+                { path: "/api/v1/exchange-flow",   req: 2, live: false },
+                { path: "/api/v1/provider-status", req: 2, live: false },
+              ].map((ep) => (
+                <div key={ep.path} className={`px-4 py-3 border-b border-zinc-900/40 last:border-0 grid grid-cols-[1fr_auto_auto_auto] gap-6 items-center ${!ep.live ? "opacity-50" : ""}`}>
+                  <div className="flex items-center gap-2">
+                    <code className="text-zinc-300 text-[10px] font-mono">{ep.path}</code>
+                    {!ep.live && <span className="text-[8px] font-mono text-zinc-700 border border-zinc-800 px-1 py-0.5 rounded-sm">soon</span>}
+                  </div>
+                  {[0, 1, 2].map((tier) => (
+                    <span key={tier} className="text-center text-[11px]">
+                      {tier >= ep.req ? <span className="text-emerald-600">✓</span> : <span className="text-zinc-800">—</span>}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <p className="text-zinc-700 text-[9px] font-mono mt-3">
+              WebSocket stream planned for a future release on API plan.
+            </p>
           </div>
         </section>
 
