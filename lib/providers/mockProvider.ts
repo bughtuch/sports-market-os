@@ -44,9 +44,9 @@ const BASE_SIGNALS: Omit<MarketSignal, "sparkData" | "timestamp" | "confidence" 
   {
     id: "sig-001",
     sport: "Horse Racing",
-    title: "Sharp Money Detected — Ascot 2.40",
+    title: "Ascot 14:30 · win market",
     description:
-      "Significant unmatched liability appearing on the lay side of the 2.40 at Ascot. Queue structure deteriorating. Pattern consistent with informed positioning ahead of a move.",
+      "Bilateral queue thinning, 14th percentile depth. Pattern last observed Cheltenham Gold Cup Trial, March 2024 — resolved within 18 minutes via stewards' review. Decay window 12 minutes.",
     tag: "Premium",
     type: "Sharp Money",
     movement: "+34.2%",
@@ -57,9 +57,9 @@ const BASE_SIGNALS: Omit<MarketSignal, "sparkData" | "timestamp" | "confidence" 
   {
     id: "sig-002",
     sport: "Tennis",
-    title: "Liquidity Imbalance — Djokovic vs Alcaraz",
+    title: "Djokovic vs Alcaraz · in-play",
     description:
-      "Exchange volume diverging from in-play price movement. Matched volume 34% above 20-day average with price compression suggesting imminent volatility expansion.",
+      "Matched volume 34% above 20-day baseline while price compresses. Configuration last seen Wimbledon SF 2023 — expansion within 9 minutes. Decay window 14 minutes.",
     tag: "Free",
     type: "Liquidity Imbalance",
     movement: "+18.4%",
@@ -70,9 +70,9 @@ const BASE_SIGNALS: Omit<MarketSignal, "sparkData" | "timestamp" | "confidence" 
   {
     id: "sig-003",
     sport: "NBA",
-    title: "AI Market Thesis — Warriors vs Lakers",
+    title: "Warriors vs Lakers · under 224.5",
     description:
-      "Model detects spread value on the under side based on pace-of-play regression and defensive scheme data. Sharp-side consensus aligning with AI projection.",
+      "Pace regression 2.1σ below model expectation. Defensive scheme alignment historically correlates 78% with totals outcomes. Sharp consensus building on under side. Decay window 4 hours.",
     tag: "Premium",
     type: "AI Market Thesis",
     movement: "−6.1%",
@@ -83,9 +83,9 @@ const BASE_SIGNALS: Omit<MarketSignal, "sparkData" | "timestamp" | "confidence" 
   {
     id: "sig-004",
     sport: "NFL",
-    title: "Volatility Compression — Chiefs vs Bills",
+    title: "Chiefs vs Bills · total",
     description:
-      "Implied volatility contracting sharply across the totals market. Three consecutive hours of compression without a triggering event — historically precedes a significant move.",
+      "Implied volatility compressed for three consecutive hours, no triggering catalyst. Pattern last observed Week 14 2024 KC market — resolved with 6.5-point line move within 90 minutes. Decay window 2 hours.",
     tag: "Free",
     type: "Volatility Watch",
     movement: "+4.7%",
@@ -96,9 +96,9 @@ const BASE_SIGNALS: Omit<MarketSignal, "sparkData" | "timestamp" | "confidence" 
   {
     id: "sig-005",
     sport: "Horse Racing",
-    title: "Queue Health Warning — Cheltenham 3.15",
+    title: "Cheltenham 15:15 · win market",
     description:
-      "Betfair queue depth falling below threshold. Liquidity thinning on both sides simultaneously. Not consistent with normal pre-race withdrawal. Monitor for stewards decision.",
+      "Queue depth fell below 14th percentile threshold. Bilateral thinning, not single-sided withdrawal. Configuration historically precedes stewards' decision or non-runner declaration within 22 minutes. Decay window 8 minutes.",
     tag: "API",
     type: "Queue Health",
     movement: "−12.1%",
@@ -108,23 +108,23 @@ const BASE_SIGNALS: Omit<MarketSignal, "sparkData" | "timestamp" | "confidence" 
   },
   {
     id: "sig-006",
-    sport: "Prediction Markets",
-    title: "Creator Signal — US Election Market",
+    sport: "Tennis",
+    title: "Wimbledon men's final · outright",
     description:
-      "AI-generated share card ready. Volume surge detected in the US presidential market. Contract pricing diverging from polling consensus by 6.8 points.",
+      "Sinner odds compressed 12% over 48 hours despite no public injury news on Alcaraz. Volume signature matches Wimbledon QF 2023 pre-withdrawal pattern — confirmed 36 hours later. Decay window 4 hours.",
     tag: "Creator",
     type: "Creator Signal",
-    movement: "+89.2%",
+    movement: "+12.0%",
     direction: "up",
-    exchange: "Polymarket",
-    insight: "Polling delta -6.8pts. Informed capital entry pattern confirmed.",
+    exchange: "Betfair",
+    insight: "Compression without catalyst. Informed flow pattern active.",
   },
   {
     id: "sig-007",
     sport: "UFC",
-    title: "Market News Catalyst — Poirier vs Gaethje",
+    title: "Poirier vs Gaethje · moneyline",
     description:
-      "Weight-cut rumour entering the market. Underdog price shortening without matching public volume. Consistent with informed money responding to non-public information.",
+      "Underdog shortening without public catalyst. Volume signature matches informed-flow pattern from UFC 281 main event, October 2022 — non-public weight-cut information confirmed 47 minutes later. Decay window 25 minutes.",
     tag: "Free",
     type: "News Catalyst",
     movement: "+22.8%",
@@ -135,9 +135,9 @@ const BASE_SIGNALS: Omit<MarketSignal, "sparkData" | "timestamp" | "confidence" 
   {
     id: "sig-008",
     sport: "Football",
-    title: "Exchange Flow Shift — Premier League Markets",
+    title: "Man City vs Arsenal · Asian handicap",
     description:
-      "Cross-market liquidity rotating from Asian handicap into match result markets. Flow pattern matches institutional rebalancing rather than retail activity.",
+      "Cross-market flow rotating from match result into handicap markets. Institutional signature, not retail. Configuration last observed Liverpool vs City April 2024 — handicap moved 0.25 within 35 minutes. Decay window 22 minutes.",
     tag: "Premium",
     type: "Exchange Flow",
     movement: "+8.3%",

@@ -67,7 +67,7 @@ const FOCUS_HINTS: Record<IntelligenceFocus, string> = {
   "creator-signals":    "Export your top signals daily to build audience trust. Consistent cadence outperforms viral bursts.",
   "queue-health":       "Betfair queue health degrades fastest in the 10 minutes before race-off — monitor closely.",
   "market-regimes":     "Regime changes often cluster — a shift in one market predicts adjacent market moves.",
-  "prediction-markets": "Polymarket consensus drifts from Kalshi most during breaking-news windows.",
+  "prediction-markets": "Polymarket volume surges most during breaking-news windows — open interest accumulation precedes price moves.",
 };
 
 // ─── Watchlist seed generator ─────────────────────────────────────────────────

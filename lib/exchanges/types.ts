@@ -17,7 +17,6 @@ export type ExchangeName =
   | "smarkets"
   | "betdaq"
   | "polymarket"
-  | "kalshi"
   | "pinnacle"
   | "mock";
 

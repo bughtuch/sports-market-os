@@ -808,9 +808,9 @@ const SPORT_HUBS: SportHub[] = [
     sport: "Prediction Markets",
     slug: "prediction-markets",
     title: "Prediction Markets",
-    subtitle: "Polymarket, Kalshi and decentralised prediction contract intelligence",
+    subtitle: "Polymarket and decentralised prediction contract intelligence",
     seoDescription:
-      "Real-time prediction market intelligence. AI-powered contract analysis, polling consensus divergence detection, volume surge monitoring and structural signal identification across Polymarket, Kalshi and leading prediction exchanges.",
+      "Real-time prediction market intelligence. AI-powered contract analysis, volume surge monitoring and structural signal identification across Polymarket and leading prediction exchanges.",
     accentColor: "text-purple-400",
     accentBg: "bg-purple-400/10",
     accentBorder: "border-purple-400/20",
@@ -832,7 +832,7 @@ const SPORT_HUBS: SportHub[] = [
     regime: "Expansion",
     confidence: 78,
     topSignal: "Polling Consensus Divergence",
-    exchangeFlow: "Volume surge: Polymarket → Kalshi convergence",
+    exchangeFlow: "Volume surge: Polymarket leading — open interest accumulating",
     creatorAngle: "The prediction market knows something the polls don't.",
     edge: {
       publicReading:
@@ -859,7 +859,7 @@ const SPORT_HUBS: SportHub[] = [
       "Volume: 89% above 30-day average — sustained, not a spike",
       "IV expansion: sustained over 3-hour window",
       "Liquidity: 97th percentile — deepest market in prediction category",
-      "Cross-platform: Polymarket and Kalshi pricing converging",
+      "Cross-platform: Polymarket pricing leading open interest accumulation",
     ],
     creatorView: {
       story:
@@ -875,7 +875,7 @@ const SPORT_HUBS: SportHub[] = [
       "Volume surge: 89% above 30-day average — not a noise event",
       "Contract repricing: sustained IV expansion across the full session",
       "Sentiment mismatch: market pricing vs public narrative significantly diverged",
-      "Cross-platform: Polymarket and Kalshi showing converging price action",
+      "Cross-platform: Polymarket showing structural price action divergence from consensus",
     ],
   },
 ];

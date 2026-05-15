@@ -42,7 +42,7 @@ interface BaseMockMarket {
   marketId: string;
   marketName: string;
   sport: SportType;
-  exchange: "betfair" | "prophetx" | "kalshi" | "mock";
+  exchange: "betfair" | "prophetx" | "polymarket" | "mock";
   baseBack: number;
   baseLay: number;
   baseVolume: number;
@@ -117,10 +117,10 @@ const BASE_MARKETS: BaseMockMarket[] = [
     currency: "GBP", phase: 3.7,
   },
   {
-    marketId: "KL-PM-001",
-    marketName: "2026 US Election — Republican",
-    sport: "Prediction Markets",
-    exchange: "kalshi",
+    marketId: "PX-NFL-001",
+    marketName: "Chiefs vs Eagles — Super Bowl",
+    sport: "NFL",
+    exchange: "prophetx",
     baseBack: 1.82, baseLay: 1.84,
     baseVolume: 1240000, baseLiquidity: 97, baseQueueHealth: 98,
     currency: "USD", phase: 4.3,

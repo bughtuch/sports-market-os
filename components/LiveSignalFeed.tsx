@@ -2,8 +2,6 @@
 
 import { useLiveMarketData } from "@/hooks/useLiveMarketData";
 import SignalCard from "@/components/SignalCard";
-import SaveToWatchlistButton from "@/components/SaveToWatchlistButton";
-import SignalQuickActions from "@/components/SignalQuickActions";
 import type { MarketSignal } from "@/lib/providers/types";
 
 function toSignalCardProps(s: MarketSignal) {
@@ -27,30 +25,18 @@ function toSignalCardProps(s: MarketSignal) {
 
 function SignalCardSkeleton() {
   return (
-    <div className="bg-zinc-950 border border-zinc-800/80 rounded-sm p-4 space-y-3">
-      {/* Top row */}
+    <div className="bg-zinc-950 border border-zinc-900 rounded-[8px] p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="skeleton h-4 w-20 rounded-sm" />
-          <div className="skeleton h-3 w-14 rounded-sm" />
-        </div>
-        <div className="skeleton h-4 w-12 rounded-sm" />
+        <div className="skeleton h-3 w-40 rounded-sm" />
+        <div className="skeleton h-3 w-10 rounded-sm" />
       </div>
-      {/* Title */}
       <div className="skeleton h-4 w-3/4 rounded-sm" />
-      {/* Description lines */}
       <div className="space-y-1.5">
         <div className="skeleton h-3 w-full rounded-sm" />
         <div className="skeleton h-3 w-5/6 rounded-sm" />
         <div className="skeleton h-3 w-2/3 rounded-sm" />
       </div>
-      {/* Confidence bar */}
-      <div className="skeleton h-1.5 w-full rounded-full mt-2" />
-      {/* Footer */}
-      <div className="flex items-center justify-between pt-2 border-t border-zinc-900">
-        <div className="skeleton h-3 w-32 rounded-sm" />
-        <div className="skeleton h-3 w-10 rounded-sm" />
-      </div>
+      <div className="skeleton h-px w-full rounded-full mt-2" />
     </div>
   );
 }
@@ -82,38 +68,16 @@ export default function LiveSignalFeed() {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
         {loading
-          ? Array.from({ length: 4 }).map((_, i) => (
-              <SignalCardSkeleton key={i} />
-            ))
+          ? Array.from({ length: 4 }).map((_, i) => <SignalCardSkeleton key={i} />)
           : signals.map((signal) => (
-              <div key={signal.id} className="relative feed-enter">
+              <div key={signal.id} className="feed-enter">
                 <SignalCard {...toSignalCardProps(signal)} />
-                <div className="absolute bottom-[14px] right-[14px] flex items-center gap-2">
-                  <SignalQuickActions
-                    sport={signal.sport}
-                    title={signal.title}
-                    description={signal.description}
-                    movement={signal.movement}
-                    direction={signal.direction}
-                    confidence={signal.confidence}
-                    exchange={signal.exchange}
-                    type={signal.type}
-                    signalId={signal.id}
-                  />
-                  <SaveToWatchlistButton
-                    sport={signal.sport}
-                    marketName={signal.title}
-                    marketType={signal.type}
-                    source={signal.exchange}
-                  />
-                </div>
               </div>
             ))}
       </div>
 
-      {/* Empty state — when not loading but no signals */}
       {!loading && signals.length === 0 && (
-        <div className="border border-zinc-800/60 rounded-sm p-8 text-center bg-zinc-950">
+        <div className="border border-zinc-900 rounded-[8px] p-8 text-center">
           <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">
             No signals detected
           </p>

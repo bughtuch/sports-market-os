@@ -15,7 +15,7 @@ export const EXCHANGE_NARRATIVES = [
   "Structural repricing detected on prediction market contracts — depth imbalance shifting lay-heavy ahead of scheduled event announcements.",
   "Flow pressure reading 76/100 on horse racing ante-post markets — institutional-type volume pattern detected in morning session.",
   "Order book depth asymmetry: lay-side depth 2.4× back-side on selected NFL moneyline contracts — microstructure divergence from 3-day baseline.",
-  "Kalshi contract pricing showing 6% implied probability divergence from Betfair equivalents — cross-exchange intelligence gap identified.",
+  "Polymarket contract pricing showing 6% implied probability divergence from Betfair equivalents — cross-exchange intelligence gap identified.",
 ];
 
 export const CREATOR_NARRATIVES = [
@@ -33,7 +33,7 @@ export const LIQUIDITY_NARRATIVES = [
   "Matched volume across monitored horse racing markets: £2.3M in last 4-hour window — above 90-day moving average.",
   "NBA game markets: queue health average 68/100 — moderate liquidity conditions with improving depth trend.",
   "Pre-game NFL liquidity depth scores trending from 52 → 71 as kickoff approaches — typical sharp-money window pattern.",
-  "Prediction market depth: Polymarket + Kalshi combined matched volume showing record levels on macro event contracts.",
+  "Prediction market depth: Polymarket matched volume showing elevated levels on featured event contracts.",
   "Tennis in-play liquidity: spread quality deteriorating post-set break — typical volatility window for microstructure intelligence.",
   "Betfair horse racing: best-available back prices within 0.3 ticks of exchange midpoint — tight queue conditions confirmed.",
   "Cross-exchange liquidity aggregation: 4 sources tracked, depth imbalance score -12 (back-heavy) on featured selection.",

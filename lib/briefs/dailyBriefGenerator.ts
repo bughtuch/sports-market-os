@@ -64,7 +64,7 @@ const EXCHANGE_FLOW_NOTES: Record<BriefType, string> = {
   "midday":
     "Asian handicap liquidity rotating into match result markets — Football Premier League. " +
     "Cross-exchange arbitrage window: 0.3% on Chiefs vs Bills totals. " +
-    "Polymarket US election contract diverging +6.8 pts from Kalshi consensus.",
+    "Polymarket event contracts diverging from closing-line consensus — volume surge pattern active.",
   "overnight":
     "Overnight exchange activity muted. Thin liquidity on all UK Horse Racing markets. " +
     "NBA pre-game totals showing minimal institutional movement. " +

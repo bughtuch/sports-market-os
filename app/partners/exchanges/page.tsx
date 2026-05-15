@@ -9,7 +9,7 @@ import { PARTNER_EMAIL } from "@/lib/constants/contact";
 export const metadata: Metadata = {
   title: "Exchange Partnership Programme | Sports Market OS",
   description:
-    "Sports Market OS exchange partnership programme — read-only market data integration for Betfair, ProphetX, Smarkets, Kalshi, and Polymarket. Order book intelligence, no execution.",
+    "Sports Market OS exchange partnership programme — read-only market data integration for Betfair, ProphetX, Smarkets, and Polymarket. Order book intelligence, no execution.",
 };
 
 const EXCHANGES = [
@@ -44,14 +44,6 @@ const EXCHANGES = [
     sports: ["Prediction Markets"],
     method: "CLOB API",
     note: "Decentralised order book — no custody interaction required",
-  },
-  {
-    name: "Kalshi",
-    status: "Planned",
-    statusColor: "text-blue-400 border-blue-400/30",
-    sports: ["Prediction Markets"],
-    method: "REST API",
-    note: "US regulated prediction markets — read-only price feed",
   },
   {
     name: "Pinnacle",

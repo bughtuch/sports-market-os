@@ -86,8 +86,7 @@ const SPORT_KEYWORDS: Array<{ sport: SportType; keywords: string[] }> = [
   },
   {
     sport: "Prediction Markets",
-    keywords: ["prediction market", "polymarket", "kalshi", "election contract",
-               "political betting", "event contract", "yes shares", "no shares"],
+    keywords: ["prediction market", "polymarket", "event contract", "yes shares", "no shares"],
   },
 ];
 

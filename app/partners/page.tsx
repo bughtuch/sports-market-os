@@ -31,7 +31,7 @@ const PARTNER_TRACKS = [
     tagColor: "text-blue-400 border-blue-400/30",
     dotColor: "bg-blue-400",
     description:
-      "Betfair, Smarkets, Kalshi, Polymarket — read-only exchange adapter programme for liquidity and order book intelligence.",
+      "Betfair, Smarkets, Polymarket — read-only exchange adapter programme for liquidity and order book intelligence.",
     cta: "Exchange Partnership →",
   },
   {

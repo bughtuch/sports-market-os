@@ -3,14 +3,10 @@ import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import TerminalClientLayer from "@/components/TerminalClientLayer";
-import AIPanel from "@/components/AIPanel";
 import Watchlist from "@/components/Watchlist";
-import CreatorFeed from "@/components/CreatorFeed";
 import LiveStatusStrip from "@/components/LiveStatusStrip";
 import PulseCard, { type PulseCardData } from "@/components/PulseCard";
 import TerminalRegimeWrapper from "@/components/TerminalRegimeWrapper";
-import AlertRail from "@/components/AlertRail";
-import LiveActivityStrip from "@/components/LiveActivityStrip";
 import LiveSignalFeed from "@/components/LiveSignalFeed";
 import DataModeIndicator from "@/components/DataModeIndicator";
 import SaveWorkspaceButton from "@/components/SaveWorkspaceButton";
@@ -202,54 +198,31 @@ export default function TerminalPage() {
         <TerminalHeader />
       </div>
 
-      {/* Main layout */}
-      <div className="flex flex-1 flex-col md:flex-row md:overflow-hidden">
-        {/* Sidebar — hidden on mobile; hidden in screenshot mode via CSS */}
-        <div className="hidden md:block terminal-sidebar">
+      {/* Main layout — two columns: nav sidebar + scrolling main canvas */}
+      <div className="flex flex-1 min-h-0">
+        {/* Left sidebar — nav only; hidden in screenshot mode via CSS */}
+        <div className="hidden md:block terminal-sidebar shrink-0">
           <Sidebar />
         </div>
 
-        {/* Center column */}
-        <div className="flex flex-1 flex-col md:overflow-hidden">
-          {/* Feed filter bar */}
-          <div className="h-9 shrink-0 border-b border-zinc-800/60 bg-zinc-950 flex items-center justify-between px-4 terminal-filter-bar">
+        {/* Main canvas — single scrolling column */}
+        <div className="flex flex-1 flex-col min-w-0 overflow-y-auto">
+          {/* Filter bar */}
+          <div className="sticky top-0 z-10 h-9 shrink-0 border-b border-zinc-800/60 bg-zinc-950 flex items-center justify-between px-4 terminal-filter-bar">
             <div className="flex items-center gap-3">
               <span className="text-white text-[11px] font-semibold">Live Market Intelligence</span>
               <DataModeIndicator />
             </div>
             <div className="flex items-center gap-3">
-              {["All Sports", "Free", "Premium", "API"].map((f, i) => (
-                <button
-                  key={f}
-                  className={`hidden sm:block text-[9px] font-mono uppercase tracking-wider transition-colors ${
-                    i === 0
-                      ? "text-white border border-zinc-700 px-2 py-0.5 rounded-sm"
-                      : "text-zinc-600 hover:text-white"
-                  }`}
-                >
-                  {f}
-                </button>
-              ))}
               <div className="flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot" />
                 <span className="text-emerald-400 text-[9px] font-mono">LIVE</span>
               </div>
-              <span className="hidden lg:block text-zinc-800 text-[9px] font-mono" title="Toggle screenshot mode">
-                Alt+S
-              </span>
-              {/* Mobile: open panels drawer */}
               <MobilePanelsDrawer />
             </div>
           </div>
 
-          {/* Live system activity strip */}
-          <div className="terminal-activity-strip">
-            <LiveActivityStrip />
-          </div>
-
-          {/* Scrollable center content */}
-          <main className="flex-1 md:overflow-y-auto">
-
+          <main>
             {/* ── Zone 1: Global Pulse ─────────────────────────────────── */}
             <section className="px-6 py-10 border-b border-zinc-900/80">
               <div className="flex items-center gap-2 mb-6">
@@ -259,7 +232,6 @@ export default function TerminalPage() {
                 <SaveWorkspaceButton />
               </div>
 
-              {/* Hero metric */}
               <div className="mb-8">
                 <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">Active Markets</p>
                 <p className="text-6xl md:text-7xl font-bold tabular-nums text-white num-breathe leading-none mb-3">142</p>
@@ -287,11 +259,20 @@ export default function TerminalPage() {
             </section>
 
             {/* ── Zone 3: Signal Feed ──────────────────────────────────── */}
-            <section className="px-4 py-6 border-b border-zinc-900/80">
+            <section className="px-6 py-8 border-b border-zinc-900/80">
               <LiveSignalFeed />
             </section>
 
-            {/* ── Zone 4: Ledger Snapshot ──────────────────────────────── */}
+            {/* ── Zone 4: Watchlist ────────────────────────────────────── */}
+            <section className="border-b border-zinc-900/80">
+              <div className="flex items-center gap-3 px-6 pt-8 mb-4">
+                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest shrink-0">Active Watchlist</span>
+                <div className="flex-1 h-px bg-zinc-900" />
+              </div>
+              <Watchlist />
+            </section>
+
+            {/* ── Zone 5: Ledger Snapshot ──────────────────────────────── */}
             <section className="px-6 py-8 border-b border-zinc-900/80">
               <div className="flex items-center gap-3 mb-6">
                 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest shrink-0">Ledger Snapshot</span>
@@ -319,21 +300,13 @@ export default function TerminalPage() {
                 ))}
               </div>
 
-              <p className="mt-4 text-zinc-700 text-[9px] font-mono">
+              <p className="mt-4 text-zinc-700 text-xs font-mono">
                 Accuracy reflects signals where final outcome was determinable. Historical performance does not guarantee future results.
               </p>
             </section>
 
             <Footer />
           </main>
-        </div>
-
-        {/* Right panel — desktop only; mobile uses MobilePanelsDrawer */}
-        <div className="hidden md:flex flex-col md:w-72 shrink-0 md:border-l border-zinc-800/60 md:overflow-hidden">
-          <AlertRail />
-          <AIPanel />
-          <Watchlist />
-          <CreatorFeed />
         </div>
       </div>
 

@@ -4,13 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const SPORTS_SUBMENU = [
-  { label: "Horse Racing",       href: "/horse-racing" },
-  { label: "Tennis",             href: "/tennis" },
-  { label: "NBA",                href: "/nba" },
-  { label: "NFL",                href: "/nfl" },
-  { label: "UFC",                href: "/ufc" },
-  { label: "Football",           href: "/football" },
-  { label: "Prediction Markets", href: "/prediction-markets" },
+  { label: "Horse Racing", href: "/horse-racing" },
+  { label: "Tennis",       href: "/tennis" },
+  { label: "NBA",          href: "/nba" },
+  { label: "NFL",          href: "/nfl" },
+  { label: "UFC",          href: "/ufc" },
+  { label: "Football",     href: "/football" },
 ];
 
 const mainNav = [
