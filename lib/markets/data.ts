@@ -382,6 +382,57 @@ const SPORT_HUBS: SportHub[] = [
     ],
     aiSummary:
       "Horse racing exchanges are showing elevated structural activity today. Queue deterioration patterns in two flagship markets suggest informed positioning ahead of race-off. AI confidence in directional signals: high.",
+    mainThesis: "Two flagship markets are showing queue deterioration — informed positioning is active.",
+    subThesis:
+      "Unmatched lay liability is 3.4× above the race-class average while price holds. The market is coiling before race-off.",
+    regime: "Volatile",
+    confidence: 87,
+    topSignal: "Queue Deterioration",
+    exchangeFlow: "Betfair → Betdaq rotation detected",
+    creatorAngle: "The horse racing market is moving before the race does.",
+    edge: {
+      publicReading:
+        "Retail flow is tracking the form book and public news. No major news event has triggered the current price action. The crowd sees a normal pre-race market.",
+      sharpReading:
+        "Exchange flow shows unmatched lay liability accumulating at 3.4× the race-class average — sharp-side positioning without a public catalyst. This is informed money entering ahead of a structural move.",
+      aiInterpretation:
+        "Queue health is deteriorating on both sides simultaneously. This bilateral pattern, without a news trigger, historically precedes a significant structural market move within 6 minutes of race-off. AI confidence: 87%.",
+      riskCaveat:
+        "Non-runner declarations or stewards' activity can invalidate structural signals rapidly. Monitor official communications as race-off approaches.",
+      contentAngle:
+        "The market is moving before the race does. That is the story — not the odds, but the structure beneath them. The exchange knows something.",
+    },
+    timeline: [
+      { time: "09:40", event: "Liquidity normal — queue health at 82nd percentile for this race class" },
+      { time: "10:15", event: "Queue depth begins thinning on the lay side — first signal" },
+      { time: "10:42", event: "Price holds despite rising unmatched volume — structural divergence" },
+      { time: "11:05", event: "Sharp-side back concentration detected in top two selections" },
+      { time: "11:18", event: "AI flags queue health deterioration — bilateral thinning confirmed" },
+      { time: "Now", event: "Volatile regime active. Informed positioning confirmed. Race-off approaching.", highlight: true },
+    ],
+    traderView: [
+      "Queue health: 14th percentile — deteriorating rapidly",
+      "Lay liability: 3.4× above race-class average",
+      "Bilateral thinning — not single-side withdrawal",
+      "Sharp-side back volume concentrated in final 12 minutes",
+      "Price compression inconsistent with public news flow",
+    ],
+    creatorView: {
+      story:
+        "The horse racing exchange is showing the signal before the result. The market structure knows something the scoreboard has not shown yet.",
+      hook: "The horse racing market is moving before the race does.",
+      audienceAngle:
+        "Traders, racing fans, and anyone who wants to understand what professional exchange money looks like in action.",
+      visualIdea:
+        "Queue depth chart showing bilateral thinning — two lines converging toward zero as race-off approaches. The visual tension builds.",
+    },
+    sportDepth: [
+      "Queue health falling below 15th percentile — critical threshold for this race class",
+      "Late-money concentration: sharp-side back volume in final 12 minutes",
+      "Unmatched lay liability 3.4× above average — informed positioning signal",
+      "Going and weather stable — no environmental catalyst for this movement",
+      "Race-off liquidity: both sides thinning — structural pre-race configuration confirmed",
+    ],
   },
   {
     sport: "Tennis",
@@ -405,6 +456,57 @@ const SPORT_HUBS: SportHub[] = [
     ],
     aiSummary:
       "Tennis markets are entering a high-volume session. The Wimbledon semi-final is showing volume/price divergence consistent with pre-expansion structural setup. AI models are in active monitoring mode.",
+    mainThesis: "Djokovic vs Alcaraz is entering a pre-expansion volatility window.",
+    subThesis:
+      "Matched volume is rising 34% above the 20-day average while price compresses — a classic setup for delayed repricing.",
+    regime: "Compression",
+    confidence: 74,
+    topSignal: "Volume / Price Divergence",
+    exchangeFlow: "Betfair → Smarkets rotation active",
+    creatorAngle: "The tennis market is moving before the scoreboard does.",
+    edge: {
+      publicReading:
+        "Retail flow is reacting to scoreline pressure and the visible match narrative. Public sentiment is tracking the match as expected — no unusual crowd-side behaviour.",
+      sharpReading:
+        "Exchange flow shows elevated matched volume with price compression — a structural divergence. Sophisticated money is entering without moving price, suggesting coordinated positioning ahead of a repricing event.",
+      aiInterpretation:
+        "Volume/price divergence is widening. When matched volume runs 34% above the 20-day average while price stays flat, the structural model rates this as a pre-expansion coiled-spring setup. AI confidence: 74%.",
+      riskCaveat:
+        "In-play markets are subject to rapid regime change. A single break of serve can invalidate the structural setup within seconds. This is a structural read, not a directional call.",
+      contentAngle:
+        "The market is building pressure while the score stays still. That gap between the market and the narrative — that is the clip.",
+    },
+    timeline: [
+      { time: "13:20", event: "Market opens at 2.10 — normal pre-match liquidity" },
+      { time: "13:45", event: "Matched volume rises 18% above the 20-day average" },
+      { time: "14:02", event: "Price compresses despite continued elevated volume" },
+      { time: "14:15", event: "Buy/sell imbalance tilts 62/38 toward the back side" },
+      { time: "14:29", event: "AI flags volume/price divergence — structural signal confirmed" },
+      { time: "Now", event: "Pre-expansion compression active. Coiled spring setup confirmed.", highlight: true },
+    ],
+    traderView: [
+      "Volume/price divergence: 34% above average volume, price flat",
+      "Buy/sell imbalance: 62/38 toward back side",
+      "Crowd/sharp consensus alignment — rare in this match",
+      "Set momentum: 1–1 — no clean directional read",
+      "Cross-exchange: Betfair → Smarkets rotation in progress",
+    ],
+    creatorView: {
+      story:
+        "The tennis exchange is showing elevated volume while the price stays still. The market is loading before it fires. The score does not show it yet.",
+      hook: "The tennis market is moving before the scoreboard does.",
+      audienceAngle:
+        "Tennis fans, trading content creators, anyone tracking Wimbledon. High-profile matchup with a hidden structural story the mainstream won't cover.",
+      visualIdea:
+        "Side-by-side: price chart (flat) vs volume chart (rising). The visual gap between the two lines is the entire story.",
+    },
+    sportDepth: [
+      "Set momentum: both players at 1–1 — no clean directional momentum to follow",
+      "Serve pressure: Alcaraz first-serve win rate 68% vs average 72% — slight regression",
+      "In-play liquidity: 88th percentile — deep market, signals are structural not noise",
+      "Price compression: holding despite 34% volume premium — coiled spring confirmed",
+      "Scoreboard vs market divergence: the market is not following the score",
+    ],
   },
   {
     sport: "NBA",
@@ -428,6 +530,57 @@ const SPORT_HUBS: SportHub[] = [
     ],
     aiSummary:
       "NBA market intelligence is concentrated on the Western Conference matchup. AI pace regression models are detecting structural value signals diverging from the current consensus line.",
+    mainThesis: "Pace regression models are detecting structural value on the under — sharp money is aligning.",
+    subThesis:
+      "Both teams are deploying low-tempo defensive sets. The current totals line is 4.2 points above the pace-projected total.",
+    regime: "Compression",
+    confidence: 81,
+    topSignal: "Pace Regression / Totals Divergence",
+    exchangeFlow: "Sharp consensus: FanDuel → DraftKings line movement",
+    creatorAngle: "The NBA totals line hasn't caught up to the defensive scheme data.",
+    edge: {
+      publicReading:
+        "Public sentiment is on the over — high-scoring teams, big names, casual fan expectation of an offensive game. Retail is following the narrative, not the data.",
+      sharpReading:
+        "Pace regression across the last 7 games for both teams projects a total 4.2 below the current market line. Sharp money is moving to the under. Consistent across FanDuel and DraftKings.",
+      aiInterpretation:
+        "Defensive scheme analysis confirms both teams are deploying low-tempo sets. When pace regression and scheme data align with sharp-side flow, the AI model rates this as a high-confidence structural value signal. Confidence: 81%.",
+      riskCaveat:
+        "Injury news within 90 minutes of tip-off can rapidly reprice totals markets. Monitor official injury reports from both teams as game time approaches.",
+      contentAngle:
+        "The public sees Warriors vs Lakers and expects fireworks. The data sees two teams in defensive mode. The line has not caught up. That gap is the trade.",
+    },
+    timeline: [
+      { time: "09:00", event: "Line opens at consensus — public sentiment bullish on overs" },
+      { time: "10:30", event: "Pace regression flags both teams in low-tempo defensive sets" },
+      { time: "12:00", event: "Defensive scheme analysis confirms — projection 4.2 below the line" },
+      { time: "13:15", event: "Sharp-side flow begins moving to under across FanDuel and DraftKings" },
+      { time: "14:27", event: "Sharp/crowd divergence reaches +23 points — AI flags structural value" },
+      { time: "Now", event: "Compression regime. Structural value signal confirmed on the under side.", highlight: true },
+    ],
+    traderView: [
+      "Pace regression: total projection 4.2 below current consensus line",
+      "Defensive scheme: both teams confirmed in low-tempo sets",
+      "Sharp/crowd divergence: +23 points toward under",
+      "Line movement: consistent across FanDuel and DraftKings",
+      "AI confidence: 81% for sub-line outcome",
+    ],
+    creatorView: {
+      story:
+        "The public thinks Warriors vs Lakers means points. The data thinks it means defense. The line has not moved yet. The divergence is the story.",
+      hook: "The NBA totals line hasn't caught up to the defensive scheme data.",
+      audienceAngle:
+        "NBA fans, sports analytics followers, anyone interested in sharp vs public split content. High-engagement matchup with a counterintuitive data angle.",
+      visualIdea:
+        "Chart: current line vs pace-projected total. The 4.2-point gap highlighted. Simple, visual, shareable — the gap tells the story.",
+    },
+    sportDepth: [
+      "Injury: no confirmed absences — clean data environment for structural reads",
+      "Spread pressure: public on Lakers +4 — sharp side on Warriors −4",
+      "Totals movement: under volume accelerating across major books",
+      "Sharp/public split: sharp under, public over — +23 point divergence",
+      "Pace model: 7-game rolling regression for both teams confirms low-tempo setup",
+    ],
   },
   {
     sport: "NFL",
@@ -451,6 +604,57 @@ const SPORT_HUBS: SportHub[] = [
     ],
     aiSummary:
       "NFL markets are in a mid-week low-activity phase with isolated structural signals. The Chiefs–Bills totals market is exhibiting a rare IV compression pattern that historically precedes significant price movement.",
+    mainThesis: "Three consecutive hours of IV compression without a triggering event — a rare structural precursor.",
+    subThesis:
+      "Current implied volatility at the 12th percentile for this matchup class. Historical match rate for expansion: 71% within 90 minutes of market open.",
+    regime: "Compression",
+    confidence: 69,
+    topSignal: "IV Compression / No Trigger",
+    exchangeFlow: "Low commitment both sides — collective hesitation pattern",
+    creatorAngle: "The NFL market is compressing before it moves. This is the quiet before.",
+    edge: {
+      publicReading:
+        "Retail is treating this as a standard mid-week market. No breaking news, no injury catalyst. Public participation is low and undirected.",
+      sharpReading:
+        "Sophisticated market participants are not committing. Both crowd and sharp sides are quiet. This collective hesitation in a compressing market is a pre-event positioning pattern — both sides waiting for the trigger.",
+      aiInterpretation:
+        "Three hours of consecutive IV compression at the 12th percentile without a trigger is a statistically rare configuration. In 71% of historical matches, this pattern resolves as a volatility expansion event within 90 minutes of market open.",
+      riskCaveat:
+        "Compression can resolve sideways rather than upward. This signal is directionally agnostic — it indicates movement probability, not movement direction.",
+      contentAngle:
+        "The market is compressing before it moves. Three hours. No trigger. The question is not which way — it is when. That is the story.",
+    },
+    timeline: [
+      { time: "09:00", event: "Market opens — IV at normal pre-week levels" },
+      { time: "10:00", event: "First hour of compression — no trigger event identified" },
+      { time: "11:00", event: "Second consecutive hour of compression — AI monitoring begins" },
+      { time: "12:00", event: "Third consecutive hour — now in rare structural territory" },
+      { time: "14:24", event: "AI flags: IV at 12th percentile, no trigger. Rare pre-expansion configuration." },
+      { time: "Now", event: "Compression regime active. 71% historical rate of expansion within 90min of open.", highlight: true },
+    ],
+    traderView: [
+      "IV: 38 — 12th percentile for this matchup class",
+      "3-hour consecutive compression — no trigger identified",
+      "Both crowd and sharp side quiet — collective hesitation",
+      "Historical expansion rate: 71% within 90min of open",
+      "Weather: stable — no environmental catalyst active",
+    ],
+    creatorView: {
+      story:
+        "The Chiefs vs Bills total is in a rare compression state. Three hours of the market tightening without a reason. Something is coming. The data is watching.",
+      hook: "The NFL market is compressing before it moves. This is the quiet before.",
+      audienceAngle:
+        "NFL fans, analytics traders, anyone tracking line movement in major matchups. The compression story works for both casual and sophisticated audiences.",
+      visualIdea:
+        "IV chart showing three-hour compression trend. A flat line slowly descending. The tension builds visually — then the question: what breaks it?",
+    },
+    sportDepth: [
+      "Weather: stable conditions — no field or weather catalyst identified",
+      "Totals compression: IV at 12th percentile — deepest compression in current session",
+      "Line movement: no significant move yet — market awaiting trigger event",
+      "Injury reports: clean — no late scratches affecting current pricing",
+      "Sharp spread pressure: sharp side uncommitted — waiting for trigger confirmation",
+    ],
   },
   {
     sport: "UFC",
@@ -474,6 +678,57 @@ const SPORT_HUBS: SportHub[] = [
     ],
     aiSummary:
       "UFC market activity is elevated ahead of the main card. A significant non-public information signal has been detected in the lightweight main event — AI confidence in the structural significance is high.",
+    mainThesis: "Weight-cut rumour is entering the market — underdog shortening without matching public volume.",
+    subThesis:
+      "Sharp-only volume is backing the underdog. The lay side is asymmetric. Non-public information may be in this market.",
+    regime: "Volatile",
+    confidence: 65,
+    topSignal: "Non-Public Information Signal",
+    exchangeFlow: "Sharp-only underdog flow — Betfair queue asymmetric",
+    creatorAngle: "UFC markets move on information the public doesn't have yet.",
+    edge: {
+      publicReading:
+        "Public sentiment overwhelmingly favours the favourite. Retail is following the pre-fight narrative, hype, and press conference read. No mainstream catalyst is visible.",
+      sharpReading:
+        "Underdog price is compressing 22% without matching public volume. Sharp-only flow entering underdog back while lay side remains thin. This configuration in UFC markets historically follows access to non-public preparation information.",
+      aiInterpretation:
+        "Price movement decoupled from observable public information flow. Weight-cut rumours in UFC markets historically cause 15–40% price swings. Current movement is at the lower bound — suggesting early-stage information entry. AI confidence: 65%.",
+      riskCaveat:
+        "UFC weight-cut rumours frequently prove false. This is a high-risk, high-information-asymmetry configuration. Structural read only — not a directional call.",
+      contentAngle:
+        "The underdog is shortening. Nobody in the public news feed knows why. The exchange sees it. That asymmetry between public narrative and market action — that is the content.",
+    },
+    timeline: [
+      { time: "12:00", event: "Fight market opens — favourite at 1.45, underdog at 2.80" },
+      { time: "13:15", event: "Weight-cut rumour enters — not yet in public news cycle" },
+      { time: "13:42", event: "Underdog back volume begins accumulating — no lay matching" },
+      { time: "14:00", event: "Underdog price compresses to 2.40 — sharp-only flow confirmed" },
+      { time: "14:15", event: "AI flags: price compression without public catalyst — non-public signal" },
+      { time: "Now", event: "Volatile regime. Underdog at 2.18. Sharp/crowd divergence extreme.", highlight: true },
+    ],
+    traderView: [
+      "Underdog shortening: 2.80 → 2.18 (−22%) without public catalyst",
+      "Queue structure: asymmetric — lay side thin, back side active",
+      "Sharp/crowd divergence: extreme — sharp on underdog, crowd on favourite",
+      "Weight-cut signal: rumour circulating but not yet in public news cycle",
+      "IV: 79 — 91st percentile for UFC lightweight markets",
+    ],
+    creatorView: {
+      story:
+        "The underdog is shortening and nobody in the public news cycle has explained why. The exchange knows something the mainstream hasn't published yet.",
+      hook: "UFC markets move on information the public doesn't have yet.",
+      audienceAngle:
+        "UFC fans, trading content creators, MMA analysts. High-engagement topic with a structural story most audiences will never find on their own.",
+      visualIdea:
+        "Price chart showing the 22% underdog compression vs flat public news volume. The two lines moving in opposite directions is the visual story.",
+    },
+    sportDepth: [
+      "Weight cut: rumour circulating — not confirmed in public feed",
+      "Late money: sharp-only underdog flow — 3.2× above average for this weight class",
+      "Underdog shortening: 22% price compression without public news catalyst",
+      "Public hype vs sharp flow: maximum divergence — opposite sides of the book",
+      "Queue health: asymmetric — lay side one-sided, creating a structurally dangerous configuration",
+    ],
   },
   {
     sport: "Football",
@@ -497,6 +752,57 @@ const SPORT_HUBS: SportHub[] = [
     ],
     aiSummary:
       "Football markets are running at peak volume for the mid-week session. Cross-market institutional flow rotation has been detected in the Premier League flagship fixture — a structural signal consistent with portfolio rebalancing.",
+    mainThesis: "Institutional flow is rotating from Asian handicap into match result — rebalancing event in progress.",
+    subThesis:
+      "The flow pattern is inconsistent with retail behaviour. Volume, timing, and directionality all indicate institutional portfolio adjustment that has not yet registered in the crowd.",
+    regime: "Rotational",
+    confidence: 72,
+    topSignal: "Asian Handicap → Match Result Rotation",
+    exchangeFlow: "Institutional rebalancing — Pinnacle → Betfair flow",
+    creatorAngle: "The institutional money is quietly rotating. The public hasn't noticed yet.",
+    edge: {
+      publicReading:
+        "Retail flow is tracking the match result market normally. No significant news event has caused visible crowd reaction. Public participation is at expected levels for this fixture.",
+      sharpReading:
+        "Cross-market rotation from Asian handicap to match result is a signature institutional rebalancing pattern. Volume, timing, and directionality are inconsistent with retail. This is a considered position adjustment from a large participant.",
+      aiInterpretation:
+        "Asian handicap to match-result rotation at this volume and speed is a structural institutional signal. The rotation is being absorbed efficiently — no queue distortions — confirming depth and intent. AI model confidence: 72%.",
+      riskCaveat:
+        "Lineup news within 75 minutes of kick-off can rapidly invalidate any pre-match structural signal. Monitor official team sheets from both clubs.",
+      contentAngle:
+        "The institutional money is quietly rotating in the Man City vs Arsenal market. The public feed shows nothing. The order book shows everything. That gap is the story.",
+    },
+    timeline: [
+      { time: "10:00", event: "Asian handicap market opens — normal institutional volume levels" },
+      { time: "11:30", event: "First rotation signals detected — AH volume declining" },
+      { time: "12:15", event: "Match result volume rising — rotation pattern emerging" },
+      { time: "13:00", event: "AI confirms rotation: volume, timing, direction all institutional" },
+      { time: "14:11", event: "Rotation confirmed — no crowd-side reaction detected yet" },
+      { time: "Now", event: "Rotational regime active. Institutional flow into match result. Crowd unaware.", highlight: true },
+    ],
+    traderView: [
+      "AH → match result rotation: confirmed institutional pattern",
+      "Liquidity: 94th percentile — deepest market in current session",
+      "Queue: no distortions — rotation absorbed efficiently",
+      "Crowd reaction: none — institutional move not yet on retail radar",
+      "AI classification: portfolio rebalancing with high confidence",
+    ],
+    creatorView: {
+      story:
+        "The biggest football match in the current session has an institutional rotation event happening beneath the surface. The scoreboard story has not started. The market story has.",
+      hook: "The institutional money is quietly rotating. The public hasn't noticed yet.",
+      audienceAngle:
+        "Football traders, analytics followers, Premier League fans who want the behind-the-scenes market story before the mainstream picks it up.",
+      visualIdea:
+        "Two columns: Asian handicap volume (falling) vs match result volume (rising). The crossover point is the story.",
+    },
+    sportDepth: [
+      "Lineup: team sheets not yet released — monitor for surprises affecting market direction",
+      "Asian handicap flow: declining as rotation into match result accelerates",
+      "Match result rotation: institutional volume entering at an abnormal rate",
+      "Totals movement: stable — rotation is directional, not volatility-driven",
+      "Cross-exchange: Pinnacle → Betfair price convergence in progress",
+    ],
   },
   {
     sport: "Prediction Markets",
@@ -520,6 +826,57 @@ const SPORT_HUBS: SportHub[] = [
     ],
     aiSummary:
       "Prediction markets are showing above-average structural activity. The US presidential election contract is exhibiting a sustained polling/market divergence that AI models classify as a significant informational signal.",
+    mainThesis: "The US election contract is pricing 6.8 points above the polling consensus — sustained divergence.",
+    subThesis:
+      "Volume is 89% above the 30-day average. The market has been repricing for three hours without a news trigger. Sophisticated money is moving.",
+    regime: "Expansion",
+    confidence: 78,
+    topSignal: "Polling Consensus Divergence",
+    exchangeFlow: "Volume surge: Polymarket → Kalshi convergence",
+    creatorAngle: "The prediction market knows something the polls don't.",
+    edge: {
+      publicReading:
+        "Polling consensus is tracking expected outcomes. Mainstream media coverage aligns with the current polling picture. Public sentiment follows the headline numbers without questioning the divergence.",
+      sharpReading:
+        "The prediction market is pricing 6.8 points above polling consensus. At 97th percentile liquidity, this is not a noise event. Sophisticated, information-driven participants are driving the divergence — sustained over three hours.",
+      aiInterpretation:
+        "Prediction markets function as distributed information aggregators. A 6.8-point sustained divergence from polling consensus, at this volume level, over a three-hour window, is a statistically significant structural signal. AI confidence: 78%.",
+      riskCaveat:
+        "Prediction markets can exhibit brief extreme divergences driven by large single-actor positions. The sustained nature of this move (3 hours) reduces but does not eliminate this risk.",
+      contentAngle:
+        "The prediction market knows something the polls don't. Or the prediction market is wrong. Either version of that story is the content — and either way, it is more interesting than the polls.",
+    },
+    timeline: [
+      { time: "11:00", event: "Contract trading at normal volume — aligned with polling consensus" },
+      { time: "12:00", event: "Volume begins rising — 30% above average and accelerating" },
+      { time: "13:00", event: "Price diverges from polling consensus by 3 points" },
+      { time: "14:00", event: "Divergence widens to 5.5 points — sustained IV expansion" },
+      { time: "14:18", event: "AI flags: 6.8pt divergence, 89% volume premium, 3-hour window" },
+      { time: "Now", event: "Expansion regime. 6.8pt divergence from polls. Market vs polls story active.", highlight: true },
+    ],
+    traderView: [
+      "Contract price: 6.8 points above polling consensus",
+      "Volume: 89% above 30-day average — sustained, not a spike",
+      "IV expansion: sustained over 3-hour window",
+      "Liquidity: 97th percentile — deepest market in prediction category",
+      "Cross-platform: Polymarket and Kalshi pricing converging",
+    ],
+    creatorView: {
+      story:
+        "The prediction market and the polls are telling different stories. The market has been diverging for three hours. The volume is 89% above average. Something is different.",
+      hook: "The prediction market knows something the polls don't.",
+      audienceAngle:
+        "Political followers, prediction market traders, analytics audiences. The prediction vs polling divergence is universally interesting with both casual and sophisticated appeal.",
+      visualIdea:
+        "Chart: polling consensus line (flat) vs contract price (rising). The 6.8-point gap highlighted at the current timestamp. Clean, simple, shareable.",
+    },
+    sportDepth: [
+      "Polling divergence: 6.8 points above polling consensus — sustained 3-hour trend",
+      "Volume surge: 89% above 30-day average — not a noise event",
+      "Contract repricing: sustained IV expansion across the full session",
+      "Sentiment mismatch: market pricing vs public narrative significantly diverged",
+      "Cross-platform: Polymarket and Kalshi showing converging price action",
+    ],
   },
 ];
 

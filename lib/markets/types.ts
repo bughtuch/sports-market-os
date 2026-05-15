@@ -38,6 +38,27 @@ export interface Market {
   tags: string[];
 }
 
+export interface HubEdge {
+  publicReading: string;
+  sharpReading: string;
+  aiInterpretation: string;
+  riskCaveat: string;
+  contentAngle: string;
+}
+
+export interface HubTimelineEvent {
+  time: string;
+  event: string;
+  highlight?: boolean;
+}
+
+export interface HubCreatorView {
+  story: string;
+  hook: string;
+  audienceAngle: string;
+  visualIdea: string;
+}
+
 export interface SportHub {
   sport: SportType;
   slug: string;
@@ -53,4 +74,17 @@ export interface SportHub {
   marketSlugs: string[];
   highlights: string[];
   aiSummary: string;
+  // Intelligence brief fields
+  mainThesis: string;
+  subThesis: string;
+  regime: string;
+  confidence: number;
+  topSignal: string;
+  exchangeFlow: string;
+  creatorAngle: string;
+  edge: HubEdge;
+  timeline: HubTimelineEvent[];
+  traderView: string[];
+  creatorView: HubCreatorView;
+  sportDepth: string[];
 }
