@@ -6,6 +6,8 @@ import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
+import { getProfile } from "@/lib/db/profile";
+import { normalizePlan } from "@/lib/plans/featureAccess";
 import { getPartnerProfile, getPartnerMetrics } from "@/lib/partners/partnerTracking";
 import { buildReferralDisplay, buildReferralUrl } from "@/lib/partners/referralUtils";
 import { getExportEvents, getDistributionStats } from "@/lib/distribution/distributionDb";
@@ -24,6 +26,10 @@ export default async function PartnerDashboardPage() {
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/signin");
+
+  // Fetch user profile for plan check
+  const userProfile = await getProfile(supabase, user.id);
+  const userPlan    = normalizePlan(userProfile?.plan ?? "free");
 
   // Fetch partner data + distribution analytics in parallel
   const [profile, exportEvents, distStats] = await Promise.all([
@@ -47,6 +53,24 @@ export default async function PartnerDashboardPage() {
         </div>
 
         <main className="flex-1 overflow-y-auto">
+          {/* ─── Partner plan upgrade banner ──────────────────────────── */}
+          {userPlan === "free" && (
+            <div className="px-6 py-3 border-b border-amber-500/20 bg-amber-950/10 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                <p className="text-amber-300 text-[11px]">
+                  Upgrade to Partner for full creator infrastructure, analytics, and commission tracking.
+                </p>
+              </div>
+              <Link
+                href="/pricing#partner"
+                className="shrink-0 text-[10px] font-mono text-black bg-amber-400 px-3 py-1.5 rounded-sm hover:bg-amber-300 transition-colors"
+              >
+                Upgrade →
+              </Link>
+            </div>
+          )}
+
           {/* ─── Header ─────────────────────────────────────────────────── */}
           <section className="px-6 py-5 border-b border-zinc-900 bg-zinc-950/40">
             <div className="flex items-center gap-2 mb-4">

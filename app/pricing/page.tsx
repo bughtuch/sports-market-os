@@ -7,6 +7,7 @@ import TerminalHeader from "@/components/TerminalHeader";
 import PlanBadge from "@/components/PlanBadge";
 import { PLANS } from "@/lib/plans/plans";
 import Footer from "@/components/Footer";
+import type { BillablePlan } from "@/lib/stripe/billingPlans";
 
 // ─── Check icon ───────────────────────────────────────────────────────────────
 
@@ -21,7 +22,31 @@ function Dash() {
 // ─── Pricing page ─────────────────────────────────────────────────────────────
 
 export default function PricingPage() {
-  const [annual, setAnnual] = useState(false);
+  const [annual, setAnnual]       = useState(false);
+  const [checking, setChecking]   = useState<BillablePlan | null>(null);
+
+  async function handleCheckout(plan: BillablePlan) {
+    setChecking(plan);
+    try {
+      const res  = await fetch("/api/billing/checkout", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ plan }),
+      });
+
+      if (res.status === 401) {
+        window.location.href = `/signup?next=/pricing`;
+        return;
+      }
+
+      const json = await res.json() as { url?: string };
+      if (json.url) {
+        window.location.href = json.url;
+      }
+    } finally {
+      setChecking(null);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
@@ -133,18 +158,26 @@ export default function PricingPage() {
                   </div>
 
                   {/* CTA */}
-                  <Link
-                    href={plan.id === "free" ? "/signup" : "/pricing#contact"}
-                    className={`block text-center text-[11px] font-medium py-2.5 rounded-sm border transition-colors mb-6 ${
-                      plan.id === "free"
-                        ? "text-zinc-300 border-zinc-700 hover:border-zinc-500 hover:text-white"
-                        : plan.id === "partner"
-                        ? "text-black bg-amber-400 border-amber-400 hover:bg-amber-300"
-                        : "text-black bg-blue-400 border-blue-400 hover:bg-blue-300"
-                    }`}
-                  >
-                    {plan.ctaLabel}
-                  </Link>
+                  {plan.id === "free" ? (
+                    <Link
+                      href="/signup"
+                      className="block text-center text-[11px] font-medium py-2.5 rounded-sm border transition-colors mb-6 text-zinc-300 border-zinc-700 hover:border-zinc-500 hover:text-white"
+                    >
+                      {plan.ctaLabel}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => void handleCheckout(plan.id as BillablePlan)}
+                      disabled={checking !== null}
+                      className={`w-full text-center text-[11px] font-medium py-2.5 rounded-sm border transition-colors mb-6 disabled:opacity-60 disabled:cursor-wait ${
+                        plan.id === "partner"
+                          ? "text-black bg-amber-400 border-amber-400 hover:bg-amber-300"
+                          : "text-black bg-blue-400 border-blue-400 hover:bg-blue-300"
+                      }`}
+                    >
+                      {checking === plan.id ? "Redirecting…" : plan.ctaLabel}
+                    </button>
+                  )}
 
                   {/* Feature list */}
                   <div className="space-y-2.5 flex-1">

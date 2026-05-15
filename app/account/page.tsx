@@ -15,6 +15,8 @@ import AccountPreferences from "@/components/AccountPreferences";
 import AccountAlertSummary from "@/components/AccountAlertSummary";
 import AccountNotificationStatus from "@/components/AccountNotificationStatus";
 import AccountActivityDashboard from "@/components/AccountActivityDashboard";
+import BillingSection from "@/components/BillingSection";
+import { isStripeConfigured } from "@/lib/stripe/stripeClient";
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -25,6 +27,7 @@ export default async function AccountPage() {
 
   const profile = await getProfile(supabase, user.id);
 
+  const stripeConfigured = isStripeConfigured();
   const rawPlan  = profile?.plan ?? "free";
   const planId   = normalizePlan(rawPlan);
   const planDef  = getPlan(planId);
@@ -251,20 +254,13 @@ export default async function AccountPage() {
           {/* Billing section */}
           <section className="px-6 py-5 border-b border-zinc-900">
             <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">Billing</p>
-            <div className="max-w-xl bg-zinc-950 border border-zinc-800/60 rounded-sm p-5">
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 rounded-full bg-zinc-700 mt-1 shrink-0" />
-                <div>
-                  <p className="text-zinc-300 text-sm font-medium mb-1">
-                    Billing system activates in Sprint 11.
-                  </p>
-                  <p className="text-zinc-500 text-xs leading-relaxed">
-                    Stripe integration is in progress. When billing goes live, you&apos;ll manage
-                    subscriptions, invoices, and usage directly from this section.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <BillingSection
+              plan={planId}
+              subscriptionStatus={profile?.subscription_status ?? "free"}
+              stripeCustomerId={profile?.stripe_customer_id ?? null}
+              currentPeriodEnd={profile?.current_period_end ?? null}
+              stripeConfigured={stripeConfigured}
+            />
           </section>
 
           {/* Today's Brief */}

@@ -7,6 +7,11 @@ export interface Profile {
   creator_handle: string | null;
   created_at: string;
   updated_at: string;
+  // Billing (Sprint 34) — null until billing.sql migration is applied
+  stripe_customer_id:     string | null;
+  stripe_subscription_id: string | null;
+  subscription_status:    string;
+  current_period_end:     string | null;
 }
 
 export interface SavedWatchlist {
