@@ -3,7 +3,6 @@ import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import TerminalClientLayer from "@/components/TerminalClientLayer";
 import Watchlist from "@/components/Watchlist";
-import LiveStatusStrip from "@/components/LiveStatusStrip";
 import TerminalRegimeWrapper from "@/components/TerminalRegimeWrapper";
 import LiveSignalFeed from "@/components/LiveSignalFeed";
 import DataModeIndicator from "@/components/DataModeIndicator";
@@ -215,8 +214,6 @@ export default function TerminalPage() {
         </div>
       </div>
 
-      {/* Status strip */}
-      <LiveStatusStrip />
     </TerminalRegimeWrapper>
   );
 }
