@@ -82,68 +82,69 @@ export default async function MarketPage({
       </div>
 
       {/* Hero */}
-      <section className="px-6 py-8 border-b border-zinc-900/80">
-        <div className="max-w-5xl mx-auto">
+      <section className="relative px-6 py-14 border-b border-zinc-900/80 overflow-hidden">
+        <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
+        <div className="relative max-w-5xl mx-auto">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
                   {market.exchange} · {market.sport}
                 </span>
                 <span
-                  className={`text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-sm border ${sev.text} ${sev.bg} ${sev.border}`}
+                  className={`text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-sm border ${sev.text} ${sev.bg} ${sev.border}`}
                 >
                   {sev.label}
                 </span>
               </div>
-              <h1 className="text-2xl font-bold text-white leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold text-white leading-[1.05] tracking-tight">
                 {market.title}
               </h1>
             </div>
           </div>
 
           {/* Price strip */}
-          <div className="flex flex-wrap gap-6 mt-6 p-4 bg-zinc-950 border border-zinc-800/60 rounded-sm">
+          <div className="flex flex-wrap gap-8 mt-8 p-6 bg-zinc-950 border border-zinc-800/60 rounded-sm">
             <div>
-              <p className="text-zinc-600 text-[8px] font-mono uppercase">Opening</p>
-              <p className="text-zinc-400 text-lg font-bold tabular-nums">
+              <p className="text-zinc-600 text-[9px] font-mono uppercase mb-1">Opening</p>
+              <p className="text-zinc-400 text-2xl md:text-3xl font-bold tabular-nums leading-none">
                 {market.openingPrice.toFixed(2)}
               </p>
             </div>
             <div>
-              <p className="text-zinc-600 text-[8px] font-mono uppercase">Current</p>
-              <p className="text-white text-lg font-bold tabular-nums">
+              <p className="text-zinc-600 text-[9px] font-mono uppercase mb-1">Current</p>
+              <p className="text-white text-2xl md:text-3xl font-bold tabular-nums leading-none">
                 {market.currentPrice.toFixed(2)}
               </p>
             </div>
             <div>
-              <p className="text-zinc-600 text-[8px] font-mono uppercase">Movement</p>
-              <p className={`text-lg font-bold tabular-nums ${dirColor}`}>
+              <p className="text-zinc-600 text-[9px] font-mono uppercase mb-1">Movement</p>
+              <p className={`text-2xl md:text-3xl font-bold tabular-nums leading-none ${dirColor}`}>
                 {market.movement}
               </p>
             </div>
             <div>
-              <p className="text-zinc-600 text-[8px] font-mono uppercase">Volatility</p>
-              <p className="text-zinc-200 text-lg font-bold tabular-nums">
+              <p className="text-zinc-600 text-[9px] font-mono uppercase mb-1">Volatility</p>
+              <p className="text-zinc-200 text-2xl md:text-3xl font-bold tabular-nums leading-none">
                 {market.volatility}
               </p>
             </div>
             <div>
-              <p className="text-zinc-600 text-[8px] font-mono uppercase">Liquidity</p>
-              <p className="text-zinc-200 text-lg font-bold tabular-nums">
+              <p className="text-zinc-600 text-[9px] font-mono uppercase mb-1">Liquidity</p>
+              <p className="text-zinc-200 text-2xl md:text-3xl font-bold tabular-nums leading-none">
                 {market.liquidity}
               </p>
             </div>
             <div>
-              <p className="text-zinc-600 text-[8px] font-mono uppercase">AI Confidence</p>
-              <p className="text-blue-400 text-lg font-bold tabular-nums">
+              <p className="text-zinc-600 text-[9px] font-mono uppercase mb-1">AI Confidence</p>
+              <p className="text-blue-400 text-2xl md:text-3xl font-bold tabular-nums leading-none">
                 {market.confidence}%
               </p>
             </div>
           </div>
 
           {/* Description */}
-          <p className="mt-6 text-zinc-400 text-sm leading-relaxed">
+          <p className="mt-6 text-zinc-300 text-sm leading-relaxed">
             {market.description}
           </p>
 
@@ -152,7 +153,7 @@ export default async function MarketPage({
             {market.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-zinc-700 text-[8px] font-mono px-1.5 py-0.5 border border-zinc-800/60 rounded-sm"
+                className="text-zinc-500 text-[9px] font-mono px-1.5 py-0.5 border border-zinc-800/60 rounded-sm"
               >
                 {tag}
               </span>
@@ -162,21 +163,23 @@ export default async function MarketPage({
       </section>
 
       {/* Pricing Intelligence */}
-      <section className="px-6 py-6 border-b border-zinc-900/80">
+      <section className="px-6 py-10 border-b border-zinc-900/80">
         <div className="max-w-5xl mx-auto">
-          <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">
-            Pricing Intelligence
-          </p>
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest shrink-0">Pricing Intelligence</span>
+            <div className="flex-1 h-px bg-zinc-800/60" />
+          </div>
           <MarketPricingIntelligence sport={market.sport} />
         </div>
       </section>
 
       {/* Exchange Microstructure */}
-      <section className="px-6 py-6 border-b border-zinc-900/80">
+      <section className="px-6 py-10 border-b border-zinc-900/80">
         <div className="max-w-5xl mx-auto">
-          <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">
-            Exchange Microstructure
-          </p>
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest shrink-0">Exchange Microstructure</span>
+            <div className="flex-1 h-px bg-zinc-800/60" />
+          </div>
           <MarketExchangeMicrostructure sport={market.sport} />
         </div>
       </section>
@@ -201,11 +204,12 @@ export default async function MarketPage({
       </section>
 
       {/* AI Intelligence */}
-      <section className="px-6 py-6 border-b border-zinc-900/80">
+      <section className="px-6 py-10 border-b border-zinc-900/80">
         <div className="max-w-5xl mx-auto space-y-3">
-          <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">
-            AI Market Intelligence
-          </p>
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest shrink-0">AI Market Intelligence</span>
+            <div className="flex-1 h-px bg-zinc-800/60" />
+          </div>
           <AIInsightCard
             label="AI Narrative"
             text={market.aiNarrative}
@@ -220,16 +224,17 @@ export default async function MarketPage({
       </section>
 
       {/* Key Catalysts */}
-      <section className="px-6 py-6 border-b border-zinc-900/80">
+      <section className="px-6 py-10 border-b border-zinc-900/80">
         <div className="max-w-5xl mx-auto">
-          <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">
-            Key Catalysts
-          </p>
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest shrink-0">Key Catalysts</span>
+            <div className="flex-1 h-px bg-zinc-800/60" />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
             {market.keyCatalysts.map((c) => (
-              <div key={c} className="flex items-start gap-2 py-2 border-b border-zinc-900/60 last:border-0">
-                <span className="text-zinc-700 text-[9px] font-mono mt-0.5">›</span>
-                <p className="text-zinc-400 text-[11px] leading-relaxed">{c}</p>
+              <div key={c} className="flex items-start gap-2 py-2.5 border-b border-zinc-900/60 last:border-0">
+                <span className="text-zinc-600 text-xs font-mono mt-0.5 shrink-0">›</span>
+                <p className="text-zinc-300 text-xs leading-relaxed">{c}</p>
               </div>
             ))}
           </div>
@@ -238,11 +243,12 @@ export default async function MarketPage({
 
       {/* News Catalysts */}
       {market.catalysts.length > 0 && (
-        <section className="px-6 py-6 border-b border-zinc-900/80">
+        <section className="px-6 py-10 border-b border-zinc-900/80">
           <div className="max-w-5xl mx-auto">
-            <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">
-              Market Catalysts
-            </p>
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest shrink-0">Market Catalysts</span>
+              <div className="flex-1 h-px bg-zinc-800/60" />
+            </div>
             <div>
               {market.catalysts.map((c) => (
                 <NewsCatalystCard key={c.id} catalyst={c} />
@@ -257,7 +263,7 @@ export default async function MarketPage({
 
       {/* Compliance */}
       <div className="px-6 py-3 border-t border-zinc-900/60">
-        <p className="text-zinc-800 text-[9px] font-mono leading-relaxed max-w-5xl mx-auto">
+        <p className="text-zinc-700 text-[9px] font-mono leading-relaxed max-w-5xl mx-auto">
           Sports Market OS provides market intelligence and analytics only. It does not accept wagers, custody funds, or execute trades.
         </p>
       </div>
