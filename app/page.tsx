@@ -1,268 +1,202 @@
 import Link from "next/link";
-import MarketTicker from "@/components/MarketTicker";
 import SportsHubCard, { type SportsHubData } from "@/components/SportsHubCard";
 import NavAuth from "@/components/NavAuth";
-import Footer from "@/components/Footer";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
-const heroTickerItems = [
-  "Ascot 2.40 · Liquidity spike +340% · Sharp rotation detected",
-  "Djokovic v Alcaraz · Volatility expanding · AI confidence 91%",
-  "NFL Week 14 · Spread pressure building · Late sharp money identified",
-  "UFC 305 · Underdog value flagged · Queue depth anomaly",
-  "Prediction market volume accelerating · Divergence from consensus",
-  "Horse Racing · Queue health warning · Exchange flow reversal",
-  "NBA · Line movement: late-side pressure · Liquidity thinning",
-  "Tennis ATP · Serve pattern break detected · AI brief updated",
+const alertItems = [
+  { text: "SHARP · Ascot 2.40 · Unmatched lay liability 3.4× above average", color: "text-cyan-400" },
+  { text: "CRIT · Cheltenham 3.15 · Queue collapse · Bilateral thinning confirmed", color: "text-red-400" },
+  { text: "AI · Djokovic v Alcaraz · Volume/price divergence — expansion pre-signal", color: "text-cyan-400" },
+  { text: "WARN · NFL Chiefs v Bills · IV compression — 3rd consecutive hour", color: "text-amber-400" },
+  { text: "SIGNAL · UFC 305 · Underdog shortening without public catalyst", color: "text-amber-400" },
+  { text: "FLOW · Man City v Arsenal · Institutional AH→match result rotation", color: "text-emerald-400" },
+  { text: "SHARP · Prediction Mkt · Polling consensus divergence 6.8 points", color: "text-cyan-400" },
+  { text: "AI · NBA Warriors v Lakers · Pace regression misalignment — sharp on under", color: "text-cyan-400" },
+  { text: "LIVE · Horse Racing · Queue health warning · 14th percentile", color: "text-amber-400" },
+  { text: "INTEL · Tennis ATP · Serve pattern break · Exchange flow rotating", color: "text-emerald-400" },
 ];
 
-const liveSignals = [
+const activeAnomalies = [
+  { market: "Ascot 2.40",        signal: "Queue collapse — lay side",          sev: "HIGH", color: "text-red-400",   dot: "bg-red-400" },
+  { market: "UFC 305",           signal: "Non-public signal — underdog move",  sev: "HIGH", color: "text-red-400",   dot: "bg-red-400" },
+  { market: "NFL Chiefs",        signal: "IV compression — no trigger 3hr",    sev: "MED",  color: "text-amber-400", dot: "bg-amber-400" },
+  { market: "Djokovic v Alcaraz",signal: "Vol/price divergence — coiled",      sev: "MED",  color: "text-amber-400", dot: "bg-amber-400" },
+  { market: "Prediction Mkt",    signal: "Polling gap 6.8pt — volume +89%",    sev: "MED",  color: "text-amber-400", dot: "bg-amber-400" },
+];
+
+const systemState = [
+  { label: "AI Regime",       value: "VOLATILE",       color: "text-red-400" },
+  { label: "Active Markets",  value: "142",            color: "text-white" },
+  { label: "Signal Rate",     value: "284 / hr",       color: "text-white" },
+  { label: "AI Scans / min",  value: "1,847",          color: "text-white" },
+  { label: "Exchange Flow",   value: "Betfair↔Smkts",  color: "text-cyan-400" },
+  { label: "Sharp Diverge",   value: "+340%",          color: "text-emerald-400" },
+];
+
+const timelineEvents = [
+  { time: "12:41", event: "Queue depth begins thinning on Ascot lay side — first structural signal" },
+  { time: "12:52", event: "Sharp-side liquidity rotation detected across two markets simultaneously" },
+  { time: "13:05", event: "Volatility compression enters its fourth consecutive cycle — no trigger" },
+  { time: "13:18", event: "Public sentiment diverges from exchange flow by 34 standard points" },
+  { time: "13:22", event: "AI engine flags expansion probability spike — confidence elevated to 87%" },
+  { time: "Now",   event: "Structural divergence active across 5 markets. The market has already moved.", highlight: true },
+];
+
+const edgePanels = [
   {
-    id:          "sharp-money",
-    label:       "Sharp Money",
-    description: "Institutional-grade detection of sharp-side movement across exchanges.",
-    accent:      "text-amber-400",
-    dotColor:    "bg-amber-400",
-    value:       "+340%",
-    valueLabel:  "volume surge",
+    label: "Public Sees",
+    color: "text-zinc-400",
+    border: "border-zinc-800/60",
+    bg: "",
+    items: [
+      "The scoreline and the match narrative",
+      "Injury rumours after they are confirmed",
+      "Headlines when they hit mainstream media",
+      "Odds movement without understanding why",
+      "The result — after the market already priced it",
+    ],
   },
   {
-    id:          "liquidity-radar",
-    label:       "Liquidity Radar",
-    description: "Real-time queue depth and exchange flow analysis across all markets.",
-    accent:      "text-blue-400",
-    dotColor:    "bg-blue-400",
-    value:       "18ms",
-    valueLabel:  "avg latency",
+    label: "Sharp Sees",
+    color: "text-amber-400",
+    border: "border-amber-400/20",
+    bg: "bg-amber-400/5",
+    items: [
+      "Queue depth and bilateral thinning patterns",
+      "Unmatched liability accumulating pre-race",
+      "Price compression despite elevated volume",
+      "Liquidity withdrawal without a public trigger",
+      "Exchange flow rotating between venues",
+    ],
   },
   {
-    id:          "ai-brief",
-    label:       "AI Market Brief",
-    description: "Narrative intelligence generated from structural market data.",
-    accent:      "text-emerald-400",
-    dotColor:    "bg-emerald-400",
-    value:       "91%",
-    valueLabel:  "confidence",
-  },
-  {
-    id:          "volatility",
-    label:       "Volatility Watch",
-    description: "Compression and expansion events flagged before they become consensus.",
-    accent:      "text-red-400",
-    dotColor:    "bg-red-400",
-    value:       "HIGH",
-    valueLabel:  "regime",
-  },
-  {
-    id:          "creator-signal",
-    label:       "Creator Signal",
-    description: "Branded market intelligence ready for distribution to any audience.",
-    accent:      "text-purple-400",
-    dotColor:    "bg-purple-400",
-    value:       "3",
-    valueLabel:  "exports ready",
-  },
-  {
-    id:          "exchange-flow",
-    label:       "Exchange Flow",
-    description: "Cross-market liquidity movement and pricing divergence detection.",
-    accent:      "text-zinc-200",
-    dotColor:    "bg-zinc-300",
-    value:       "×2.1",
-    valueLabel:  "flow divergence",
+    label: "AI Sees",
+    color: "text-cyan-400",
+    border: "border-cyan-400/20",
+    bg: "bg-cyan-400/5",
+    items: [
+      "Structural regime changes before they resolve",
+      "The pattern behind the pattern — divergence signals",
+      "Expansion probability spikes in compression windows",
+      "Sharp/public behavioural divergence at scale",
+      "The market moving 12 minutes before the story breaks",
+    ],
   },
 ];
 
-const terminalRows = [
-  { market: "Ascot 2.40",          exchange: "Betfair",   price: "2.44",  move: "+0.18", dir: "up",   ai: "91", status: "LIVE" },
-  { market: "Djokovic v Alcaraz",  exchange: "Betfair",   price: "1.62",  move: "-0.04", dir: "down", ai: "87", status: "LIVE" },
-  { market: "Man City v Arsenal",  exchange: "Betfair",   price: "2.10",  move: "+0.06", dir: "up",   ai: "74", status: "LIVE" },
-  { market: "NFL Week 14 · Chiefs",exchange: "Pinnacle",  price: "-110",  move: "-5",    dir: "down", ai: "82", status: "LIVE" },
-  { market: "UFC 305 · Main Event",exchange: "Betfair",   price: "3.20",  move: "+0.40", dir: "up",   ai: "68", status: "LIVE" },
+const creatorSignals = [
+  {
+    sport: "Horse Racing",
+    hook: "The horse racing market is moving before the race does.",
+    tag: "Sharp Signal",
+    conf: 87,
+    tagColor: "text-amber-400",
+    border: "border-amber-400/20",
+  },
+  {
+    sport: "Tennis",
+    hook: "The tennis market is moving before the scoreboard does.",
+    tag: "AI Brief",
+    conf: 74,
+    tagColor: "text-emerald-400",
+    border: "border-emerald-400/20",
+  },
+  {
+    sport: "Prediction",
+    hook: "The prediction market knows something the polls don't.",
+    tag: "Intelligence",
+    conf: 78,
+    tagColor: "text-cyan-400",
+    border: "border-cyan-400/20",
+  },
 ];
 
-const platformModules = [
+const modulePanels = [
   {
-    id:          "terminal",
-    name:        "Intelligence Terminal",
-    description: "Live market pulse, exchange flow, signals, and AI commentary — unified.",
-    status:      "LIVE",
-    statusColor: "text-emerald-400",
-    dotColor:    "bg-emerald-400",
-    accent:      "border-emerald-400/10 hover:border-emerald-400/25",
-    href:        "/terminal",
+    id: "exchange-flow",
+    label: "Exchange Flow",
+    value: "×2.1",
+    unit: "divergence",
+    desc: "Cross-market liquidity rotation between Betfair and Smarkets. Institutional flow confirmed.",
+    color: "text-cyan-400",
+    border: "border-cyan-400/15",
+    dot: "bg-cyan-400",
   },
   {
-    id:          "ai-briefs",
-    name:        "AI Market Briefs",
-    description: "Morning, midday, and overnight intelligence briefs generated from structural data.",
-    status:      "LIVE",
-    statusColor: "text-blue-400",
-    dotColor:    "bg-blue-400",
-    accent:      "border-blue-400/10 hover:border-blue-400/25",
-    href:        "/daily-brief",
+    id: "volatility",
+    label: "Volatility Engine",
+    value: "HIGH",
+    unit: "regime",
+    desc: "Compression event in 3 markets. Expansion probability elevated. AI confidence 87%.",
+    color: "text-red-400",
+    border: "border-red-400/15",
+    dot: "bg-red-400",
   },
   {
-    id:          "alerts",
-    name:        "Alert Engine",
-    description: "Real-time alerts for liquidity shifts, volatility spikes, and sharp-money flows.",
-    status:      "LIVE",
-    statusColor: "text-amber-400",
-    dotColor:    "bg-amber-400",
-    accent:      "border-amber-400/10 hover:border-amber-400/25",
-    href:        "/alerts",
+    id: "sharp-split",
+    label: "Sharp / Public Split",
+    value: "+340%",
+    unit: "volume surge",
+    desc: "Sharp-side volume 340% above baseline. Public sentiment counter-positioned in 4 markets.",
+    color: "text-amber-400",
+    border: "border-amber-400/15",
+    dot: "bg-amber-400",
   },
   {
-    id:          "exchange-flow",
-    name:        "Exchange Flow",
-    description: "Cross-market liquidity movement, queue depth, and order flow microstructure.",
-    status:      "LIVE",
-    statusColor: "text-emerald-400",
-    dotColor:    "bg-emerald-400",
-    accent:      "border-emerald-400/10 hover:border-emerald-400/25",
-    href:        "/terminal",
+    id: "queue-health",
+    label: "Queue Health",
+    value: "14th",
+    unit: "percentile",
+    desc: "Bilateral thinning confirmed in two horse racing markets. Pre-race anomaly pattern.",
+    color: "text-orange-400",
+    border: "border-orange-400/15",
+    dot: "bg-orange-400",
   },
   {
-    id:          "export-studio",
-    name:        "Export Studio",
-    description: "Branded share cards generated from live market data. Ready to post instantly.",
-    status:      "LIVE",
-    statusColor: "text-purple-400",
-    dotColor:    "bg-purple-400",
-    accent:      "border-purple-400/10 hover:border-purple-400/25",
-    href:        "/export-studio",
+    id: "ai-regime",
+    label: "AI Regime",
+    value: "1,847",
+    unit: "scans / min",
+    desc: "Regime classification running across all active markets. Current: VOLATILE predominant.",
+    color: "text-blue-400",
+    border: "border-blue-400/15",
+    dot: "bg-blue-400",
   },
   {
-    id:          "distribution",
-    name:        "Distribution Network",
-    description: "Partner-grade content infrastructure. Co-branded feeds, reach metrics, referral systems.",
-    status:      "LIVE",
-    statusColor: "text-blue-400",
-    dotColor:    "bg-blue-400",
-    accent:      "border-blue-400/10 hover:border-blue-400/25",
-    href:        "/distribution-center",
-  },
-  {
-    id:          "api",
-    name:        "Developer API",
-    description: "Structured market intelligence endpoints. Signals, odds, narratives, and exchange data.",
-    status:      "LIVE",
-    statusColor: "text-blue-400",
-    dotColor:    "bg-blue-400",
-    accent:      "border-blue-400/10 hover:border-blue-400/25",
-    href:        "/developer",
+    id: "creator-velocity",
+    label: "Creator Velocity",
+    value: "7",
+    unit: "exports ready",
+    desc: "Signal cards, AI briefs, and X posts queued for distribution. Creator queue live.",
+    color: "text-purple-400",
+    border: "border-purple-400/15",
+    dot: "bg-purple-400",
   },
 ];
 
 const sportsHubs: SportsHubData[] = [
-  {
-    name:         "Horse Racing",
-    tagline:      "Queue health, exchange flow, Betfair liquidity, and sharp positioning — the complete racing intelligence layer.",
-    metrics:      "48 markets live",
-    accent:       "text-amber-400",
-    accentBg:     "bg-amber-400/10",
-    accentBorder: "border-amber-400/20",
-    symbol:       "◈",
-  },
-  {
-    name:         "Tennis",
-    tagline:      "In-play momentum, serve pattern analysis, and live volatility across ATP and WTA markets.",
-    metrics:      "24 markets live",
-    accent:       "text-emerald-400",
-    accentBg:     "bg-emerald-400/10",
-    accentBorder: "border-emerald-400/20",
-    symbol:       "◇",
-  },
-  {
-    name:         "NBA",
-    tagline:      "Spread pressure detection, sharp movement tracking, and quarter-by-quarter liquidity analysis.",
-    metrics:      "16 markets live",
-    accent:       "text-blue-400",
-    accentBg:     "bg-blue-400/10",
-    accentBorder: "border-blue-400/20",
-    symbol:       "▣",
-  },
-  {
-    name:         "NFL",
-    tagline:      "Line movement analytics, public vs. sharp divergence, and game-time liquidity shifts.",
-    metrics:      "12 markets live",
-    accent:       "text-red-400",
-    accentBg:     "bg-red-400/10",
-    accentBorder: "border-red-400/20",
-    symbol:       "▲",
-  },
-  {
-    name:         "UFC",
-    tagline:      "Underdog value detection, late-money identification, and fight-week momentum tracking.",
-    metrics:      "8 markets live",
-    accent:       "text-orange-400",
-    accentBg:     "bg-orange-400/10",
-    accentBorder: "border-orange-400/20",
-    symbol:       "◉",
-  },
-  {
-    name:         "Football",
-    tagline:      "European exchange data, value identification across leagues, and sharp money mapping.",
-    metrics:      "64 markets live",
-    accent:       "text-zinc-300",
-    accentBg:     "bg-zinc-300/10",
-    accentBorder: "border-zinc-300/20",
-    symbol:       "○",
-  },
-  {
-    name:         "Prediction Markets",
-    tagline:      "Contract pricing divergence, volume acceleration, and structural edge across prediction platforms.",
-    metrics:      "76 contracts live",
-    accent:       "text-purple-400",
-    accentBg:     "bg-purple-400/10",
-    accentBorder: "border-purple-400/20",
-    symbol:       "◎",
-  },
-];
-
-const ecosystemApps = [
-  {
-    name:        "Horse Racing Trader",
-    description: "The execution layer for the Betfair exchange. Trade, monitor, and act on Sports Market OS intelligence in real time.",
-    status:      "Live",
-    statusColor: "text-emerald-400",
-  },
-  {
-    name:        "Tennis Trader UK",
-    description: "Exchange-native tennis trading for UK markets. Powered by live momentum, volatility, and queue data from the intelligence layer.",
-    status:      "Live",
-    statusColor: "text-emerald-400",
-  },
-  {
-    name:        "Tennis Trader USA",
-    description: "US market tennis intelligence and execution. Connects directly to the Sports Market OS AI feed for real-time signals.",
-    status:      "Live",
-    statusColor: "text-emerald-400",
-  },
-  {
-    name:        "NBA Trading",
-    description: "Coming soon. Exchange-native basketball market intelligence with in-play spread analytics and sharp-side detection.",
-    status:      "Coming Soon",
-    statusColor: "text-zinc-500",
-  },
+  { name: "Horse Racing",     tagline: "Queue health, exchange flow, Betfair liquidity, and sharp positioning — the complete racing intelligence layer.", metrics: "48 markets live", accent: "text-amber-400",   accentBg: "bg-amber-400/10",   accentBorder: "border-amber-400/20",  symbol: "◈" },
+  { name: "Tennis",           tagline: "In-play momentum, serve pattern analysis, and live volatility across ATP and WTA markets.",                        metrics: "24 markets live", accent: "text-emerald-400", accentBg: "bg-emerald-400/10", accentBorder: "border-emerald-400/20", symbol: "◇" },
+  { name: "NBA",              tagline: "Spread pressure detection, sharp movement tracking, and quarter-by-quarter liquidity analysis.",                    metrics: "16 markets live", accent: "text-blue-400",    accentBg: "bg-blue-400/10",    accentBorder: "border-blue-400/20",    symbol: "▣" },
+  { name: "NFL",              tagline: "Line movement analytics, public vs sharp divergence, and game-time liquidity shifts.",                              metrics: "12 markets live", accent: "text-zinc-300",    accentBg: "bg-zinc-300/10",    accentBorder: "border-zinc-300/20",    symbol: "▲" },
+  { name: "UFC",              tagline: "Underdog value detection, late-money identification, and fight-week momentum tracking.",                             metrics: "8 markets live",  accent: "text-orange-400",  accentBg: "bg-orange-400/10",  accentBorder: "border-orange-400/20",  symbol: "◉" },
+  { name: "Football",         tagline: "European exchange data, value identification across leagues, and sharp money mapping.",                              metrics: "64 markets live", accent: "text-zinc-400",    accentBg: "bg-zinc-400/10",    accentBorder: "border-zinc-400/20",    symbol: "○" },
+  { name: "Prediction Markets",tagline: "Contract pricing divergence, volume acceleration, and structural edge across prediction platforms.",               metrics: "76 contracts",    accent: "text-purple-400",  accentBg: "bg-purple-400/10",  accentBorder: "border-purple-400/20",  symbol: "◎" },
 ];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function HeroTicker() {
-  const items = [...heroTickerItems, ...heroTickerItems];
+function AlertStrip() {
+  const items = [...alertItems, ...alertItems];
   return (
-    <div className="overflow-hidden border border-white/6 rounded-sm bg-white/[0.02] py-2.5 mb-10">
-      <div className="ticker-animate">
+    <div className="overflow-hidden border-b border-white/5 bg-black py-2">
+      <div className="alert-animate">
         {items.map((item, i) => (
-          <span
-            key={i}
-            className="inline-flex items-center gap-3 px-6 text-[11px] text-zinc-400 whitespace-nowrap font-mono"
-          >
-            <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot shrink-0" />
-            {item}
-            <span className="text-zinc-800 mx-2">·</span>
+          <span key={i} className="inline-flex items-center gap-2.5 px-8 whitespace-nowrap">
+            <span className={`w-1 h-1 rounded-full shrink-0 pulse-dot ${item.color.replace("text-", "bg-")}`} />
+            <span className={`text-[10px] font-mono ${item.color}`}>{item.text}</span>
+            <span className="text-zinc-800 mx-3">·</span>
           </span>
         ))}
       </div>
@@ -270,99 +204,82 @@ function HeroTicker() {
   );
 }
 
-function SectionLabel({ label, accent }: { label: string; accent?: string }) {
+function IntelPanel() {
   return (
-    <div className="flex items-center gap-4 mb-10">
-      <span className={`text-[10px] font-mono uppercase tracking-widest shrink-0 ${accent ?? "text-zinc-500"}`}>
-        {label}
-      </span>
-      <div className="flex-1 h-px bg-white/5" />
-    </div>
-  );
-}
-
-function TerminalPreview() {
-  return (
-    <div className="relative border border-white/8 rounded-sm bg-black overflow-hidden glow-emerald">
+    <div className="relative border border-cyan-400/15 rounded-sm bg-black overflow-hidden glow-cyan">
       {/* Scan line */}
-      <div className="absolute inset-x-0 h-px bg-emerald-400/20 scan-line" />
+      <div className="absolute inset-x-0 h-px bg-cyan-400/15 scan-line" />
 
-      {/* Panel header */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/6 bg-white/[0.015]">
-        <div className="flex items-center gap-3">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot" />
-          <span className="text-[9px] font-mono text-zinc-400 uppercase tracking-widest">
-            Intelligence Terminal — Live Feed
-          </span>
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/6 bg-white/[0.015]">
+        <div className="flex items-center gap-2.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 pulse-dot" />
+          <span className="text-[9px] font-mono text-cyan-400 uppercase tracking-widest">Live Intelligence · SMO/Active</span>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="text-[9px] font-mono text-zinc-600">SMO/EXCHANGE</span>
-          <span className="text-[9px] font-mono text-emerald-400">●  OPERATIONAL</span>
+        <span className="text-[9px] font-mono text-zinc-600 tabular-nums">142 markets</span>
+      </div>
+
+      {/* Active Anomalies */}
+      <div className="px-4 pt-3 pb-1">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest">Active Anomalies</span>
+          <span className="text-[9px] font-mono text-red-400">{activeAnomalies.length} flagged</span>
+        </div>
+        <div className="space-y-px">
+          {activeAnomalies.map((a) => (
+            <div key={a.market} className="intel-row flex items-center justify-between px-2 py-1.5 rounded-sm">
+              <div className="min-w-0 flex-1">
+                <p className="text-white text-[10px] font-medium truncate">{a.market}</p>
+                <p className="text-zinc-500 text-[9px] font-mono truncate">{a.signal}</p>
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0 ml-3">
+                <span className={`w-1 h-1 rounded-full ${a.dot}`} />
+                <span className={`text-[8px] font-mono ${a.color}`}>{a.sev}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Column headers */}
-      <div className="grid grid-cols-12 gap-0 px-4 py-1.5 border-b border-white/4">
-        {["MARKET", "EXCHANGE", "PRICE", "MOVE", "AI", "STATUS"].map((h, i) => (
-          <span
-            key={h}
-            className={`text-[8px] font-mono text-zinc-600 uppercase tracking-wider col-span-${[4,2,2,1,1,2][i]}`}
-          >
-            {h}
-          </span>
-        ))}
-      </div>
-
-      {/* Data rows */}
-      {terminalRows.map((row) => (
-        <div
-          key={row.market}
-          className="data-row-live grid grid-cols-12 gap-0 px-4 py-2 border-b border-white/[0.03] items-center"
-        >
-          <span className="col-span-4 text-[11px] text-white font-medium truncate pr-2">{row.market}</span>
-          <span className="col-span-2 text-[9px] font-mono text-zinc-500">{row.exchange}</span>
-          <span className="col-span-2 text-[11px] font-mono text-white tabular-nums">{row.price}</span>
-          <span className={`col-span-1 text-[10px] font-mono tabular-nums ${row.dir === "up" ? "text-emerald-400" : "text-red-400"}`}>
-            {row.move}
-          </span>
-          <span className="col-span-1 text-[10px] font-mono text-blue-400 tabular-nums">{row.ai}</span>
-          <span className="col-span-2 flex items-center gap-1.5">
-            <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot shrink-0" />
-            <span className="text-[8px] font-mono text-emerald-400">{row.status}</span>
-          </span>
-        </div>
-      ))}
-
-      {/* AI Brief strip */}
-      <div className="px-4 py-3 border-t border-white/6 bg-blue-400/[0.03]">
-        <div className="flex items-start gap-3">
-          <span className="text-[8px] font-mono text-blue-400 uppercase tracking-wider shrink-0 mt-0.5">AI Brief</span>
-          <p className="text-[10px] text-zinc-200 leading-relaxed">
-            Sharp rotation detected across Ascot markets. Queue depth thinning into the 2.40.
-            Djokovic volatility compressing — AI flags late-session inflection. NFL spread pressure
-            building on Chiefs line. Recommend monitoring exchange flow divergence.
-          </p>
+      {/* System State */}
+      <div className="px-4 py-3 border-t border-white/5">
+        <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest block mb-2">System State</span>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+          {systemState.map((s) => (
+            <div key={s.label} className="flex items-center justify-between gap-2">
+              <span className="text-zinc-600 text-[9px] font-mono truncate">{s.label}</span>
+              <span className={`text-[9px] font-mono font-semibold tabular-nums shrink-0 ${s.color}`}>{s.value}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Alert rail */}
-      <div className="px-4 py-2.5 border-t border-white/4 bg-white/[0.01] overflow-hidden">
+      {/* Creator queue */}
+      <div className="px-4 py-2.5 border-t border-white/5 bg-purple-400/[0.03]">
+        <div className="flex items-center justify-between">
+          <span className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest">Creator Queue</span>
+          <span className="text-purple-400 text-[9px] font-mono font-semibold">7 exports ready</span>
+        </div>
+        <div className="flex items-center justify-between mt-1">
+          <span className="text-zinc-600 text-[9px] font-mono">Last AI Brief</span>
+          <span className="text-zinc-400 text-[9px] font-mono tabular-nums">14:29 UTC</span>
+        </div>
+      </div>
+
+      {/* Scrolling AI brief */}
+      <div className="px-4 py-2.5 border-t border-white/5 bg-cyan-400/[0.02] overflow-hidden">
         <div className="flow-animate">
           {[
-            "⚡ Liquidity spike: Ascot 2.40",
-            "△ Volatility expanding: ATP Wien",
-            "● Sharp money: NFL Chiefs -110",
-            "◈ Queue health: Cheltenham 3.15",
-            "▲ AI alert: UFC underdog value",
-            "⚡ Liquidity spike: Ascot 2.40",
-            "△ Volatility expanding: ATP Wien",
-            "● Sharp money: NFL Chiefs -110",
-            "◈ Queue health: Cheltenham 3.15",
-            "▲ AI alert: UFC underdog value",
-          ].map((a, i) => (
-            <span key={i} className="inline-flex items-center gap-4 px-6 text-[9px] font-mono text-zinc-500 whitespace-nowrap">
-              {a}
-              <span className="text-zinc-800">·</span>
+            "AI: Sharp rotation confirmed across Ascot markets",
+            "AI: Djokovic volatility coiling — expansion signal active",
+            "AI: NFL Chiefs IV compression entering critical window",
+            "AI: Prediction market divergence sustaining — 3hr signal",
+            "AI: UFC underdog compression — non-public information pattern",
+            "AI: Sharp rotation confirmed across Ascot markets",
+            "AI: Djokovic volatility coiling — expansion signal active",
+          ].map((t, i) => (
+            <span key={i} className="inline-flex items-center gap-4 px-6 text-[9px] font-mono text-cyan-600 whitespace-nowrap">
+              {t}<span className="text-zinc-800">·</span>
             </span>
           ))}
         </div>
@@ -376,26 +293,24 @@ function TerminalPreview() {
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-black text-white">
-      <MarketTicker />
 
-      {/* ─── Nav ───────────────────────────────────────────────────────────── */}
+      {/* ─── Alert Strip ──────────────────────────────────────────────────── */}
+      <AlertStrip />
+
+      {/* ─── Nav ──────────────────────────────────────────────────────────── */}
       <header className="border-b border-white/6 px-6 py-3 flex items-center justify-between sticky top-0 bg-black/95 backdrop-blur-sm z-10">
         <Link href="/" className="text-white text-sm font-semibold tracking-tight">
           Sports Market <span className="text-zinc-500">OS</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-500">
-          <Link href="/terminal"   className="hover:text-white transition-colors">Terminal</Link>
-          <Link href="#markets"    className="hover:text-white transition-colors">Markets</Link>
-          <Link href="#platform"   className="hover:text-white transition-colors">Platform</Link>
-          <Link href="#ecosystem"  className="hover:text-white transition-colors">Ecosystem</Link>
-          <Link href="/pricing"    className="hover:text-white transition-colors">Pricing</Link>
-          <Link href="/developer"  className="hover:text-white transition-colors">API</Link>
+          <Link href="/terminal"  className="hover:text-white transition-colors">Terminal</Link>
+          <Link href="/markets"   className="hover:text-white transition-colors">Markets</Link>
+          <Link href="/daily-brief" className="hover:text-white transition-colors">AI Briefs</Link>
+          <Link href="/pricing"   className="hover:text-white transition-colors">Pricing</Link>
+          <Link href="/developer" className="hover:text-white transition-colors">API</Link>
         </nav>
         <div className="flex items-center gap-3">
-          <Link
-            href="/pricing"
-            className="text-xs font-mono text-zinc-400 hover:text-white transition-colors hidden sm:block"
-          >
+          <Link href="/pricing" className="text-xs font-mono text-zinc-400 hover:text-white transition-colors hidden sm:block">
             Pricing
           </Link>
           <NavAuth />
@@ -403,187 +318,438 @@ export default function HomePage() {
       </header>
 
       <main>
-        {/* ─── Hero ────────────────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden border-b border-white/5">
-          {/* Ambient grid */}
-          <div className="absolute inset-0 grid-bg opacity-60 pointer-events-none" />
-          {/* Ambient glow — very subtle */}
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/4 rounded-full blur-3xl hero-ambient pointer-events-none" />
-          <div className="absolute top-20 right-1/4 w-64 h-64 bg-blue-500/3 rounded-full blur-3xl hero-ambient pointer-events-none" style={{ animationDelay: "4s" }} />
 
-          <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-24">
-            {/* Status pills */}
-            <div className="flex flex-wrap items-center gap-2 mb-8">
-              {[
-                { label: "LIVE TERMINAL",    dot: "bg-emerald-400", text: "text-emerald-400", border: "border-emerald-400/20" },
-                { label: "BETFAIR ROUTING",  dot: "bg-emerald-400", text: "text-emerald-400", border: "border-emerald-400/20" },
-                { label: "API READY",        dot: "bg-blue-400",    text: "text-blue-400",    border: "border-blue-400/20" },
-                { label: "CREATOR EXPORTS",  dot: "bg-purple-400",  text: "text-purple-400",  border: "border-purple-400/20" },
-                { label: "DAILY BRIEFS",     dot: "bg-blue-400",    text: "text-zinc-400",    border: "border-white/10" },
-              ].map((pill) => (
-                <span
-                  key={pill.label}
-                  className={`inline-flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-sm border bg-white/[0.02] ${pill.text} ${pill.border}`}
+        {/* ─── Hero ─────────────────────────────────────────────────────────── */}
+        <section className="relative overflow-hidden border-b border-white/5">
+          <div className="absolute inset-0 grid-bg opacity-50 pointer-events-none" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/3 rounded-full blur-3xl hero-ambient pointer-events-none" />
+          <div className="absolute top-20 right-1/4 w-80 h-80 bg-emerald-500/3 rounded-full blur-3xl hero-ambient pointer-events-none" style={{ animationDelay: "5s" }} />
+
+          <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-20">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-16 items-start">
+
+              {/* Left — narrative */}
+              <div>
+                {/* Status pills */}
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {[
+                    { label: "LIVE TERMINAL",  dot: "bg-emerald-400", text: "text-emerald-400", border: "border-emerald-400/20" },
+                    { label: "AI ENGINE",      dot: "bg-cyan-400",    text: "text-cyan-400",    border: "border-cyan-400/20" },
+                    { label: "142 MARKETS",    dot: "bg-white",       text: "text-zinc-300",    border: "border-white/10" },
+                  ].map((p) => (
+                    <span key={p.label} className={`inline-flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-sm border bg-white/[0.02] ${p.text} ${p.border}`}>
+                      <span className={`w-1 h-1 rounded-full shrink-0 pulse-dot ${p.dot}`} />
+                      {p.label}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Headline */}
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.0] tracking-tight text-white mb-5">
+                  The sports<br />
+                  market moves<br />
+                  <span className="text-zinc-500">before the<br />story does.</span>
+                </h1>
+
+                <p className="text-zinc-300 text-base md:text-lg leading-relaxed max-w-xl mb-10">
+                  Sports Market OS monitors exchange flow, volatility regimes, liquidity shifts,
+                  sharp/public divergence, and creator-ready intelligence across global sports markets —
+                  in real time.
+                </p>
+
+                {/* CTAs */}
+                <div className="flex items-center gap-3 flex-wrap mb-10">
+                  <Link href="/terminal" className="inline-flex items-center gap-2 bg-white text-black text-sm font-bold px-7 py-3 rounded-sm hover:bg-zinc-100 transition-colors">
+                    Open Terminal
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                  <Link href="/markets" className="inline-flex items-center gap-2 border border-cyan-400/30 text-cyan-400 text-sm font-medium px-7 py-3 rounded-sm hover:border-cyan-400/60 hover:bg-cyan-400/5 transition-colors">
+                    Explore Markets
+                  </Link>
+                  <Link href="/signup" className="inline-flex items-center gap-2 border border-white/12 text-zinc-300 text-sm font-medium px-7 py-3 rounded-sm hover:border-white/25 hover:bg-white/5 transition-colors">
+                    Start Free
+                  </Link>
+                </div>
+
+                {/* Stat row */}
+                <div className="flex flex-wrap gap-8 pt-8 border-t border-white/5">
+                  {[
+                    { value: "142",   label: "Active markets" },
+                    { value: "284",   label: "Signals / hour" },
+                    { value: "1,847", label: "AI scans / min" },
+                    { value: "7",     label: "Sport hubs live" },
+                  ].map((s) => (
+                    <div key={s.label}>
+                      <p className="text-2xl md:text-3xl font-bold tabular-nums text-white leading-none num-breathe">{s.value}</p>
+                      <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest mt-1">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right — live intelligence panel */}
+              <div className="lg:pt-2">
+                <IntelPanel />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── The Market Is Already Moving ────────────────────────────────── */}
+        <section className="relative overflow-hidden border-b border-white/5 bg-zinc-950/40">
+          <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
+          <div className="max-w-7xl mx-auto px-6 py-24 relative">
+
+            <div className="max-w-2xl mb-14">
+              <p className="text-cyan-400 text-[9px] font-mono uppercase tracking-widest mb-3">Market Movement Story</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.05]">
+                The market is<br />
+                <span className="text-zinc-500">already moving.</span>
+              </h2>
+              <p className="text-zinc-400 text-base mt-4 leading-relaxed">
+                A forensic account of how a structural signal forms — before the public narrative catches up.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+              {/* Timeline */}
+              <div className="space-y-0">
+                {timelineEvents.map((ev, i) => (
+                  <div
+                    key={i}
+                    className={`flex items-start gap-6 py-5 border-b border-zinc-900/60 last:border-0 ${ev.highlight ? "bg-cyan-400/[0.04] -mx-4 px-4 rounded-sm" : ""}`}
+                  >
+                    <div className="shrink-0 w-12 text-right">
+                      <span className={`text-xs font-mono tabular-nums ${ev.highlight ? "text-cyan-400 font-bold" : "text-zinc-600"}`}>
+                        {ev.time}
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className={`mt-1.5 shrink-0 ${ev.highlight ? "w-2 h-2 rounded-full bg-cyan-400 pulse-dot" : "w-px h-4 bg-zinc-800"}`} />
+                      <p className={`text-sm leading-relaxed ${ev.highlight ? "text-white font-semibold" : "text-zinc-300"}`}>
+                        {ev.event}
+                      </p>
+                    </div>
+                    {ev.highlight && (
+                      <span className="text-[9px] font-mono text-cyan-400 border border-cyan-400/30 bg-cyan-400/5 px-2 py-0.5 rounded-sm shrink-0">
+                        NOW
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Narrative frame */}
+              <div className="space-y-6">
+                <div className="p-6 border border-cyan-400/15 rounded-sm bg-cyan-400/[0.03]">
+                  <p className="text-cyan-400 text-[9px] font-mono uppercase tracking-widest mb-3">What this means</p>
+                  <p className="text-white text-lg font-semibold leading-snug mb-3">
+                    The structure tells you before the story does.
+                  </p>
+                  <p className="text-zinc-300 text-sm leading-relaxed">
+                    Queue deterioration, volume divergence, and sharp-side flow rotate through
+                    the exchange order book 8–22 minutes before the public narrative forms.
+                    Sports Market OS reads those structural signals and surfaces them in real time.
+                  </p>
+                </div>
+
+                <div className="p-6 border border-white/6 rounded-sm bg-black/40">
+                  <p className="text-zinc-500 text-[9px] font-mono uppercase tracking-widest mb-3">Currently monitoring</p>
+                  <div className="space-y-2">
+                    {[
+                      { label: "Ascot 2.40",          val: "Queue collapse",          color: "text-red-400" },
+                      { label: "Djokovic v Alcaraz",  val: "Compression → Expansion", color: "text-amber-400" },
+                      { label: "NFL Chiefs",           val: "IV compression — 3hr",    color: "text-amber-400" },
+                      { label: "Prediction Mkt",       val: "Polling +6.8pt gap",      color: "text-cyan-400" },
+                    ].map((r) => (
+                      <div key={r.label} className="flex items-center justify-between">
+                        <span className="text-zinc-400 text-xs">{r.label}</span>
+                        <span className={`text-xs font-mono ${r.color}`}>{r.val}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Link
+                  href="/terminal"
+                  className="flex items-center justify-between p-4 border border-white/8 rounded-sm hover:border-white/15 hover:bg-white/[0.02] transition-colors group"
                 >
-                  <span className={`w-1 h-1 rounded-full shrink-0 pulse-dot ${pill.dot}`} />
-                  {pill.label}
-                </span>
+                  <span className="text-zinc-300 text-sm group-hover:text-white transition-colors">Watch it live in the terminal</span>
+                  <svg className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── The Edge ─────────────────────────────────────────────────────── */}
+        <section className="border-b border-white/5 bg-black">
+          <div className="max-w-7xl mx-auto px-6 py-24">
+            <div className="max-w-2xl mb-14">
+              <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest mb-3">What the market is missing</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.05]">
+                The Edge
+              </h2>
+              <p className="text-zinc-400 text-base mt-4 leading-relaxed">
+                Three layers of market intelligence. Only one of them reaches most people.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+              {edgePanels.map((panel) => (
+                <div key={panel.label} className={`p-7 border rounded-sm ${panel.border} ${panel.bg}`}>
+                  <p className={`text-[9px] font-mono uppercase tracking-widest mb-5 ${panel.color}`}>{panel.label}</p>
+                  <ul className="space-y-3">
+                    {panel.items.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span className={`text-xs font-mono mt-0.5 shrink-0 ${panel.color}`}>›</span>
+                        <p className="text-zinc-300 text-sm leading-relaxed">{item}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
             </div>
 
-            {/* Headline */}
-            <div className="max-w-4xl mb-6">
-              <h1 className="text-5xl md:text-7xl font-semibold leading-[1.02] tracking-tight text-white mb-3">
-                Sports Market OS
-              </h1>
-              <h2 className="text-3xl md:text-5xl font-semibold leading-[1.05] tracking-tight text-zinc-500">
-                The Intelligence Layer<br className="hidden md:block" /> for Sports Markets.
-              </h2>
-            </div>
-
-            {/* Subheadline */}
-            <p className="text-zinc-300 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
-              Live market signals, exchange microstructure, AI briefs, volatility alerts,
-              creator exports, API infrastructure, and exchange routing — unified into one operating system.
-            </p>
-
-            {/* Live ticker */}
-            <HeroTicker />
-
-            {/* CTAs */}
-            <div className="flex items-center gap-3 flex-wrap">
-              <Link
-                href="/terminal"
-                className="inline-flex items-center gap-2 bg-white text-black text-sm font-semibold px-7 py-3 rounded-sm hover:bg-zinc-100 transition-colors"
-              >
-                Open Terminal
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-              <Link
-                href="/signup"
-                className="inline-flex items-center gap-2 border border-white/15 text-white text-sm font-medium px-7 py-3 rounded-sm hover:border-white/30 hover:bg-white/5 transition-colors"
-              >
-                Start Free
-              </Link>
-              <Link
-                href="/developer"
-                className="inline-flex items-center gap-2 border border-blue-400/25 text-blue-400 text-sm font-medium px-7 py-3 rounded-sm hover:border-blue-400/50 hover:bg-blue-400/5 transition-colors"
-              >
-                View API
-              </Link>
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 border border-emerald-400/20 bg-emerald-400/5 px-3 py-1.5 rounded-sm ml-1">
-                <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot shrink-0" />
-                LIVE ON BETFAIR EXCHANGE
-              </span>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Terminal Preview ─────────────────────────────────────────────── */}
-        <section className="border-b border-white/5 bg-zinc-950/30">
-          <div className="max-w-6xl mx-auto px-6 py-20">
-            <div className="flex items-end justify-between gap-4 mb-6">
-              <div>
-                <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-1">
-                  Live Intelligence Feed
-                </p>
-                <h2 className="text-white text-xl font-semibold">
-                  The terminal is always running.
-                </h2>
-              </div>
-              <Link
-                href="/terminal"
-                className="text-[10px] font-mono text-zinc-500 hover:text-white transition-colors shrink-0"
-              >
-                Open full terminal →
-              </Link>
-            </div>
-            <TerminalPreview />
-          </div>
-        </section>
-
-        {/* ─── Live Market Pulse ───────────────────────────────────────────── */}
-        <section className="border-b border-white/5">
-          <div className="max-w-6xl mx-auto px-6 py-20">
-            <SectionLabel label="Live Market Pulse" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
-              {liveSignals.map((signal) => (
-                <div
-                  key={signal.id}
-                  className="bg-black p-6 hover:bg-zinc-950 transition-colors group cursor-pointer relative"
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className={`flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest ${signal.accent}`}>
-                      <span className={`w-1 h-1 rounded-full shrink-0 pulse-dot ${signal.dotColor}`} />
-                      {signal.label}
-                    </div>
-                    <div className="text-right">
-                      <p className={`text-base font-bold tabular-nums font-mono ${signal.accent}`}>{signal.value}</p>
-                      <p className="text-zinc-600 text-[8px] font-mono uppercase">{signal.valueLabel}</p>
-                    </div>
-                  </div>
-                  <p className="text-zinc-300 text-sm leading-relaxed">{signal.description}</p>
-                  <div className="mt-4 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-zinc-500 text-[10px] font-mono">View feed</span>
-                    <svg className="w-3 h-3 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
+            {/* Three killer lines */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 border-t border-white/5">
+              {[
+                { public_: "Public sees the scoreline.", market: "The exchange saw the liquidity withdrawal 14 minutes ago." },
+                { public_: "Public sees injury rumours.", market: "Sharp flow saw the repricing before the confirmation." },
+                { public_: "Public sees the headline.", market: "The market already moved 12 minutes before it published." },
+              ].map((line, i) => (
+                <div key={i} className="space-y-2">
+                  <p className="text-zinc-600 text-sm">{line.public_}</p>
+                  <p className="text-white text-sm font-semibold">{line.market}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ─── Platform Modules ─────────────────────────────────────────────── */}
-        <section id="platform" className="border-b border-white/5">
-          <div className="max-w-6xl mx-auto px-6 py-20">
-            <SectionLabel label="One Platform" />
-            <div className="mb-10 max-w-2xl">
-              <h2 className="text-white text-2xl font-semibold mb-3">
-                Every layer of sports market intelligence, unified.
-              </h2>
-              <p className="text-zinc-300 text-sm leading-relaxed">
-                Terminal. AI briefs. Alerts. Exchange flow. Creator exports. Distribution network.
-                Developer API. Seven systems — one operating layer.
-              </p>
+        {/* ─── Creator Intelligence Network ─────────────────────────────────── */}
+        <section className="border-b border-white/5 bg-zinc-950/30">
+          <div className="max-w-7xl mx-auto px-6 py-24">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+              <div>
+                <p className="text-purple-400 text-[9px] font-mono uppercase tracking-widest mb-3">Creator Intelligence Network</p>
+                <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.05] mb-5">
+                  Turn live market<br />
+                  intelligence into<br />
+                  <span className="text-purple-400">content.</span>
+                </h2>
+                <p className="text-zinc-300 text-base leading-relaxed mb-8">
+                  Every structural signal is a story. Every AI brief is a thread.
+                  Every market anomaly is a short. Sports Market OS generates
+                  creator-ready intelligence from live exchange data — in seconds.
+                </p>
+
+                <div className="space-y-3 mb-8">
+                  {[
+                    { label: "Export Studio",         desc: "Branded share cards from live market data",           color: "text-purple-400", href: "/export-studio" },
+                    { label: "Creator Studio",        desc: "X posts, threads, shorts — generated from signals",   color: "text-pink-400",   href: "/creator-studio" },
+                    { label: "Distribution Network",  desc: "Co-branded feeds distributed to your audience",       color: "text-blue-400",   href: "/distribution-center" },
+                    { label: "Daily Brief",           desc: "Morning intelligence brief — AI-generated, daily",     color: "text-cyan-400",   href: "/daily-brief" },
+                  ].map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="flex items-center gap-4 p-4 border border-white/5 rounded-sm bg-black/40 hover:border-white/10 hover:bg-white/[0.02] transition-colors group"
+                    >
+                      <span className={`w-1 h-1 rounded-full shrink-0 ${item.color.replace("text-", "bg-")}`} />
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm font-semibold ${item.color}`}>{item.label}</p>
+                        <p className="text-zinc-500 text-xs mt-0.5">{item.desc}</p>
+                      </div>
+                      <svg className="w-3 h-3 text-zinc-700 group-hover:text-zinc-300 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Reach stats */}
+                <div className="flex flex-wrap gap-8 pt-8 border-t border-white/5">
+                  {[
+                    { value: "3.2M",  label: "Creator reach" },
+                    { value: "284",   label: "Signals / hr" },
+                    { value: "7",     label: "Export ready" },
+                  ].map((s) => (
+                    <div key={s.label}>
+                      <p className="text-2xl font-bold tabular-nums text-white">{s.value}</p>
+                      <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest mt-1">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Signal cards preview */}
+              <div className="space-y-4">
+                {/* Export queue panel */}
+                <div className="border border-purple-400/15 rounded-sm overflow-hidden bg-black">
+                  <div className="px-4 py-3 border-b border-white/6 bg-purple-400/[0.03] flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="w-1 h-1 rounded-full bg-purple-400 pulse-dot" />
+                      <span className="text-[9px] font-mono text-purple-400 uppercase tracking-widest">Creator Export Queue</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-purple-400">7 ready</span>
+                  </div>
+                  {creatorSignals.map((s) => (
+                    <div key={s.sport} className={`px-4 py-4 border-b border-white/4 last:border-0`}>
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className="text-zinc-600 text-[8px] font-mono uppercase">{s.sport}</span>
+                            <span className={`text-[8px] font-mono border px-1.5 py-0.5 rounded-sm ${s.tagColor} ${s.border} ${s.tagColor.replace("text-", "bg-").replace("-400", "-400/10")}`}>
+                              {s.tag}
+                            </span>
+                          </div>
+                          <p className="text-white text-sm font-semibold italic">&ldquo;{s.hook}&rdquo;</p>
+                        </div>
+                        <div className="shrink-0 text-right">
+                          <p className="text-lg font-bold tabular-nums text-blue-400">{s.conf}%</p>
+                          <p className="text-[8px] font-mono text-zinc-700 uppercase">confidence</p>
+                        </div>
+                      </div>
+                      <div className="mt-3 flex gap-2">
+                        <span className="text-[9px] font-mono text-zinc-600 border border-zinc-800 px-2 py-0.5 rounded-sm hover:text-zinc-400 cursor-pointer transition-colors">X Post</span>
+                        <span className="text-[9px] font-mono text-zinc-600 border border-zinc-800 px-2 py-0.5 rounded-sm hover:text-zinc-400 cursor-pointer transition-colors">Short</span>
+                        <span className="text-[9px] font-mono text-zinc-600 border border-zinc-800 px-2 py-0.5 rounded-sm hover:text-zinc-400 cursor-pointer transition-colors">Card</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="p-5 border border-white/5 rounded-sm bg-black/40 text-center">
+                  <p className="text-zinc-500 text-xs mb-3">Every market signal. Creator-ready in seconds.</p>
+                  <Link href="/creator-studio" className="inline-flex items-center gap-2 border border-purple-400/30 text-purple-400 text-sm font-medium px-5 py-2 rounded-sm hover:border-purple-400/60 hover:bg-purple-400/5 transition-colors">
+                    Open Creator Studio →
+                  </Link>
+                </div>
+              </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-              {platformModules.map((mod) => (
-                <Link
-                  key={mod.id}
-                  href={mod.href}
-                  className={`module-card block bg-zinc-950 border rounded-sm p-5 ${mod.accent}`}
-                >
-                  {/* Status dot only — no repeated LIVE label */}
-                  <div className="mb-4">
-                    <span className={`w-1.5 h-1.5 rounded-full pulse-dot inline-block ${mod.dotColor}`} />
+          </div>
+        </section>
+
+        {/* ─── Market Intelligence Modules ──────────────────────────────────── */}
+        <section className="border-b border-white/5 bg-black">
+          <div className="max-w-7xl mx-auto px-6 py-24">
+            <div className="max-w-2xl mb-14">
+              <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest mb-3">Intelligence Layer</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.05]">
+                Six systems.<br />
+                <span className="text-zinc-500">One operating layer.</span>
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {modulePanels.map((mod) => (
+                <div key={mod.id} className={`module-card p-7 border rounded-sm bg-zinc-950 ${mod.border}`}>
+                  <div className="flex items-center gap-2 mb-5">
+                    <span className={`w-1.5 h-1.5 rounded-full pulse-dot ${mod.dot}`} />
+                    <span className={`text-[9px] font-mono uppercase tracking-widest ${mod.color}`}>{mod.label}</span>
                   </div>
-                  <h3 className="text-white text-sm font-semibold mb-2">{mod.name}</h3>
-                  <p className="text-zinc-300 text-xs leading-relaxed">{mod.description}</p>
-                  <div className="mt-5 text-[9px] font-mono text-zinc-500 transition-colors">
-                    Explore →
-                  </div>
-                </Link>
+                  <p className={`text-4xl font-bold tabular-nums leading-none mb-1 ${mod.color}`}>{mod.value}</p>
+                  <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-wider mb-4">{mod.unit}</p>
+                  <p className="text-zinc-300 text-sm leading-relaxed">{mod.desc}</p>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ─── Sports Hubs ─────────────────────────────────────────────────── */}
-        <section id="markets" className="border-b border-white/5">
-          <div className="max-w-6xl mx-auto px-6 py-20">
-            <SectionLabel label="Sports Intelligence Hubs" />
-            <div className="mb-10 max-w-2xl">
-              <h2 className="text-white text-2xl font-semibold mb-3">
-                Seven sports. One intelligence layer.
-              </h2>
-              <p className="text-zinc-300 text-sm leading-relaxed">
-                Each hub delivers live market data, AI analysis, exchange flow, and structural
-                intelligence specific to that sport's markets and dynamics.
-              </p>
+        {/* ─── Tennis Trader AI ─────────────────────────────────────────────── */}
+        <section className="border-b border-white/5 bg-emerald-950/10">
+          <div className="max-w-7xl mx-auto px-6 py-24">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div>
+                <div className="flex items-center gap-2.5 mb-6">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 pulse-dot" />
+                  <span className="text-emerald-400 text-[9px] font-mono uppercase tracking-widest">Execution Layer</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.05] mb-5">
+                  Tennis Trader AI
+                </h2>
+                <p className="text-zinc-300 text-base leading-relaxed mb-8">
+                  The browser-native AI trading system built for Betfair Exchange.
+                  The execution layer connected to the intelligence layer.
+                </p>
+                <ul className="space-y-3 mb-10">
+                  {[
+                    "Live Betfair ladder — real-time order book",
+                    "Paper trading free — no risk onboarding",
+                    "AI Guardian — automated risk management",
+                    "One-tap green up across all positions",
+                    "Mac · iPhone · iPad · Windows · Android",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-3">
+                      <span className="w-1 h-1 rounded-full bg-emerald-400 shrink-0" />
+                      <span className="text-zinc-300 text-sm">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex items-center gap-3">
+                  <a
+                    href="https://www.tennistraderai.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-emerald-400 text-black text-sm font-bold px-6 py-3 rounded-sm hover:bg-emerald-300 transition-colors"
+                  >
+                    Open Tennis Trader AI →
+                  </a>
+                  <span className="text-zinc-600 text-xs font-mono">Execution on Betfair Exchange</span>
+                </div>
+              </div>
+
+              {/* Panel preview */}
+              <div className="border border-emerald-400/20 rounded-sm bg-black overflow-hidden glow-emerald">
+                <div className="px-4 py-3 border-b border-white/6 bg-emerald-400/[0.03] flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot" />
+                    <span className="text-[9px] font-mono text-emerald-400 uppercase tracking-widest">Tennis Trader AI — Live</span>
+                  </div>
+                  <span className="text-[9px] font-mono text-zinc-600">Betfair Exchange</span>
+                </div>
+                <div className="p-6 space-y-4">
+                  {[
+                    { label: "Betfair Ladder",   value: "Live",      color: "text-emerald-400" },
+                    { label: "AI Guardian",       value: "Active",    color: "text-emerald-400" },
+                    { label: "Paper Trading",     value: "Free",      color: "text-emerald-400" },
+                    { label: "Green Up",          value: "1-tap",     color: "text-white" },
+                    { label: "Platform support",  value: "All",       color: "text-white" },
+                    { label: "Intelligence feed", value: "SMO / Live", color: "text-cyan-400" },
+                  ].map((row) => (
+                    <div key={row.label} className="flex items-center justify-between py-2.5 border-b border-zinc-900/60 last:border-0">
+                      <span className="text-zinc-500 text-xs font-mono">{row.label}</span>
+                      <span className={`text-sm font-bold ${row.color}`}>{row.value}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="px-4 py-3 border-t border-white/5 bg-black/40">
+                  <p className="text-zinc-600 text-[9px] font-mono">Intelligence layer: Sports Market OS · Execution: Betfair Exchange</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── Sports Hubs ──────────────────────────────────────────────────── */}
+        <section className="border-b border-white/5 bg-zinc-950/20">
+          <div className="max-w-7xl mx-auto px-6 py-24">
+            <div className="flex items-end justify-between gap-4 mb-12">
+              <div>
+                <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest mb-2">Sports Intelligence</p>
+                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                  Seven sports. One intelligence layer.
+                </h2>
+              </div>
+              <Link href="/markets" className="text-[10px] font-mono text-zinc-500 hover:text-white transition-colors shrink-0 hidden md:block">
+                All markets →
+              </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {sportsHubs.map((hub) => (
@@ -593,249 +759,39 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── Exchange Section ─────────────────────────────────────────────── */}
-        <section className="border-b border-white/5 bg-emerald-950/10">
-          <div className="max-w-6xl mx-auto px-6 py-20">
-            <SectionLabel label="Exchange Routing" accent="text-emerald-500" />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-white text-2xl font-semibold mb-4">
-                  From intelligence to exchange action.
-                </h2>
-                <p className="text-zinc-300 text-sm leading-relaxed mb-6">
-                  Sports Market OS reads the market. You act on it.
-                  Signal cards, market pages, and the terminal surface direct routing
-                  to the Betfair Exchange — keeping the intelligence and execution layers clean.
-                </p>
-                <p className="text-zinc-600 text-[10px] font-mono leading-relaxed">
-                  Execution occurs on Betfair Exchange. Sports Market OS provides intelligence only —
-                  no wager execution, no custody.
-                </p>
-              </div>
-              <div className="space-y-3">
-                {[
-                  { step: "01", label: "AI detects signal",           desc: "Sharp money, liquidity spike, volatility shift",            color: "text-white",       dot: "bg-white" },
-                  { step: "02", label: "Intelligence surfaced",        desc: "Terminal, signal card, market page — structured analysis",  color: "text-zinc-200",    dot: "bg-zinc-300" },
-                  { step: "03", label: "Exchange routing activated",   desc: "One click to Betfair Exchange market",                     color: "text-emerald-400", dot: "bg-emerald-400" },
-                  { step: "04", label: "Execution on exchange",        desc: "Betfair Exchange handles trade. SMO stays intelligence.",   color: "text-emerald-400", dot: "bg-emerald-600" },
-                ].map((s) => (
-                  <div key={s.step} className="flex items-start gap-4 p-4 border border-white/5 rounded-sm bg-black/40">
-                    <span className="text-zinc-600 text-[10px] font-mono tabular-nums shrink-0 mt-0.5">{s.step}</span>
-                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1 ${s.dot}`} />
-                    <div>
-                      <p className={`text-sm font-medium ${s.color}`}>{s.label}</p>
-                      <p className="text-zinc-400 text-xs mt-0.5">{s.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Creator / Distribution ───────────────────────────────────────── */}
-        <section className="border-b border-white/5">
-          <div className="max-w-6xl mx-auto px-6 py-20">
-            <SectionLabel label="Creator Distribution" />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-              <div>
-                <h2 className="text-white text-2xl font-semibold mb-4">
-                  Intelligence built to distribute.
-                </h2>
-                <p className="text-zinc-300 text-sm leading-relaxed mb-8">
-                  Bloomberg-grade sports market data, formatted for distribution.
-                  Branded share cards, partner analytics, referral systems, and API feeds —
-                  all driven by the same live intelligence layer.
-                </p>
-                <div className="space-y-3">
-                  {[
-                    { label: "Export Studio",          desc: "Branded share cards from live data. Ready to post.",        color: "text-purple-400",  href: "/export-studio" },
-                    { label: "Partner Analytics",      desc: "Reach metrics, engagement data, audience intelligence.",    color: "text-blue-400",    href: "/partner-dashboard" },
-                    { label: "Distribution Network",   desc: "Co-branded feeds distributed to your audience.",           color: "text-blue-400",    href: "/distribution-center" },
-                    { label: "Referral Engine",        desc: "Commission tracking and affiliate routing infrastructure.", color: "text-amber-400",   href: "/partner-program" },
-                  ].map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      className="flex items-center gap-3 p-4 border border-white/5 rounded-sm bg-black/40 hover:border-white/10 hover:bg-white/[0.02] transition-colors group"
-                    >
-                      <span className={`w-1 h-1 rounded-full shrink-0 ${item.color.replace("text-", "bg-")}`} />
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-medium ${item.color}`}>{item.label}</p>
-                        <p className="text-zinc-400 text-xs mt-0.5">{item.desc}</p>
-                      </div>
-                      <svg className="w-3 h-3 text-zinc-600 group-hover:text-zinc-300 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* Mock export card preview */}
-              <div className="border border-white/8 rounded-sm overflow-hidden bg-black/60">
-                <div className="px-4 py-2.5 border-b border-white/6 bg-white/[0.02] flex items-center justify-between">
-                  <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider">Export Queue</span>
-                  <span className="text-[9px] font-mono text-purple-400">3 ready</span>
-                </div>
-                {[
-                  { sport: "Horse Racing",  title: "Ascot 2.40 · Sharp Rotation",         conf: 91, tag: "Creator" },
-                  { sport: "Tennis",        title: "Djokovic AI Brief · Volatility Alert", conf: 87, tag: "Premium" },
-                  { sport: "NFL",           title: "Chiefs Spread · Late Money",           conf: 74, tag: "API" },
-                ].map((card) => (
-                  <div key={card.title} className="px-4 py-3 border-b border-white/4 flex items-start justify-between gap-3">
-                    <div>
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <span className="text-[8px] font-mono text-zinc-600 uppercase">{card.sport}</span>
-                        <span className="text-[8px] font-mono text-purple-400 border border-purple-400/20 px-1">{card.tag}</span>
-                      </div>
-                      <p className="text-[11px] text-white font-medium">{card.title}</p>
-                    </div>
-                    <div className="shrink-0 text-right">
-                      <p className="text-[10px] font-mono text-blue-400 tabular-nums">{card.conf}%</p>
-                      <p className="text-[8px] font-mono text-zinc-700">confidence</p>
-                    </div>
-                  </div>
-                ))}
-                <div className="px-4 py-3 flex items-center justify-between">
-                  <span className="text-[9px] font-mono text-zinc-700">Powered by Sports Market OS</span>
-                  <span className="text-[9px] font-mono text-zinc-600 border border-zinc-800 px-2 py-0.5">Export all →</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Ecosystem Apps ───────────────────────────────────────────────── */}
-        <section id="ecosystem" className="border-b border-white/5 bg-zinc-950/20">
-          <div className="max-w-6xl mx-auto px-6 py-20">
-            <SectionLabel label="Execution Ecosystem" />
-            <div className="mb-10 max-w-xl">
-              <h2 className="text-white text-2xl font-semibold mb-3">
-                Intelligence connects to execution.
-              </h2>
-              <p className="text-zinc-300 text-sm leading-relaxed">
-                Sports Market OS is the intelligence layer. Connected execution apps
-                deliver that intelligence directly to trading environments.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {ecosystemApps.map((app) => (
-                <div
-                  key={app.name}
-                  className="module-card bg-black border border-white/6 rounded-sm p-5"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-white text-sm font-semibold">{app.name}</h3>
-                    <div className="flex items-center gap-1.5">
-                      {app.status === "Live" && (
-                        <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot" />
-                      )}
-                      <span className={`text-[10px] font-mono ${app.statusColor}`}>
-                        {app.status}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-zinc-300 text-xs leading-relaxed">{app.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Developer API ────────────────────────────────────────────────── */}
-        <section className="border-b border-white/5 bg-blue-950/5">
-          <div className="max-w-6xl mx-auto px-6 py-20">
-            <SectionLabel label="Developer API" accent="text-blue-400" />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-white text-2xl font-semibold mb-4">
-                  Structured market intelligence for builders.
-                </h2>
-                <p className="text-zinc-300 text-sm leading-relaxed mb-6">
-                  Three authenticated endpoints. Plan-gated access. Rate-limited, versioned,
-                  and quota-managed. Integrate Sports Market OS signals into your own product.
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    href="/developer"
-                    className="inline-flex items-center gap-2 border border-blue-400/30 text-blue-400 text-sm font-medium px-5 py-2.5 rounded-sm hover:border-blue-400/60 hover:bg-blue-400/5 transition-colors"
-                  >
-                    Developer Docs
-                  </Link>
-                  <Link
-                    href="/pricing"
-                    className="inline-flex items-center gap-2 border border-white/10 text-zinc-300 text-sm font-medium px-5 py-2.5 rounded-sm hover:border-white/20 transition-colors"
-                  >
-                    View Pricing
-                  </Link>
-                </div>
-              </div>
-              <div className="border border-white/8 rounded-sm bg-black overflow-hidden glow-blue">
-                <div className="px-4 py-2.5 border-b border-white/6 bg-white/[0.015] flex items-center justify-between">
-                  <span className="text-[9px] font-mono text-zinc-500">API — v1 endpoints</span>
-                  <span className="text-[9px] font-mono text-blue-400">● ACTIVE</span>
-                </div>
-                {[
-                  { method: "GET", path: "/api/v1/signals",      plan: "Free",    note: "Live market signals" },
-                  { method: "GET", path: "/api/v1/market-pulse", plan: "Free",    note: "Exchange pulse data" },
-                  { method: "GET", path: "/api/v1/daily-brief",  plan: "Free",    note: "AI narrative brief" },
-                  { method: "GET", path: "/api/v1/distribution", plan: "Partner", note: "Distribution feed" },
-                  { method: "GET", path: "/api/v1/exchange-flow",plan: "API",     note: "Exchange microstructure" },
-                ].map((ep) => (
-                  <div key={ep.path} className="px-4 py-2.5 border-b border-white/4 flex items-center gap-3">
-                    <span className="text-[9px] font-mono text-emerald-500 w-8 shrink-0">{ep.method}</span>
-                    <code className="text-[10px] font-mono text-zinc-300 flex-1">{ep.path}</code>
-                    <span className={`text-[8px] font-mono px-1.5 py-0.5 rounded-sm border shrink-0 ${
-                      ep.plan === "Free"    ? "text-zinc-400 border-zinc-700 bg-zinc-900" :
-                      ep.plan === "Partner" ? "text-amber-400 border-amber-400/25 bg-amber-400/5" :
-                                             "text-blue-400 border-blue-400/25 bg-blue-400/5"
-                    }`}>
-                      {ep.plan}
-                    </span>
-                  </div>
-                ))}
-                <div className="px-4 py-2.5 text-[9px] font-mono text-zinc-500">
-                  Auth: x-smo-api-key · Quota: 100 / 1k / 10k daily
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* ─── Final CTA ────────────────────────────────────────────────────── */}
         <section className="relative overflow-hidden">
           <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/4 rounded-full blur-3xl hero-ambient pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/3 rounded-full blur-3xl hero-ambient pointer-events-none" />
 
-          <div className="relative max-w-6xl mx-auto px-6 py-24 text-center">
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 pulse-dot" />
-              <span className="text-emerald-400 text-[10px] font-mono uppercase tracking-widest">
-                Terminal Ready — Operational
+          <div className="relative max-w-5xl mx-auto px-6 py-28 text-center">
+            <div className="flex items-center justify-center gap-2 mb-8">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 pulse-dot" />
+              <span className="text-cyan-400 text-[10px] font-mono uppercase tracking-widest">
+                Intelligence Terminal — Operational
               </span>
             </div>
 
-            <h2 className="text-4xl md:text-6xl font-semibold tracking-tight text-white mb-3">
+            <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-[1.0] mb-3">
               Open the terminal.
             </h2>
-            <h3 className="text-4xl md:text-6xl font-semibold tracking-tight text-zinc-500 mb-8">
+            <h3 className="text-5xl md:text-7xl font-bold tracking-tight text-zinc-600 mb-10">
               Watch the market move.
             </h3>
 
-            <p className="text-zinc-300 text-base mb-10 max-w-lg mx-auto leading-relaxed">
-              Live market intelligence, AI analysis, exchange routing, and creator infrastructure —
-              all running, right now.
+            <p className="text-zinc-300 text-base mb-12 max-w-lg mx-auto leading-relaxed">
+              Live market intelligence, AI analysis, exchange routing,
+              and creator infrastructure — all running, right now.
             </p>
 
-            {/* Live activity strip */}
-            <div className="overflow-hidden border border-white/6 rounded-sm bg-white/[0.015] py-2 mb-10 max-w-2xl mx-auto">
-              <div className="flow-animate">
-                {[...heroTickerItems, ...heroTickerItems].map((item, i) => (
-                  <span key={i} className="inline-flex items-center gap-3 px-6 text-[10px] font-mono text-zinc-500 whitespace-nowrap">
-                    <span className="w-1 h-1 rounded-full bg-emerald-500/60 shrink-0" />
-                    {item}
+            {/* Live alert strip */}
+            <div className="overflow-hidden border border-white/6 rounded-sm bg-white/[0.015] py-2.5 mb-12 max-w-3xl mx-auto">
+              <div className="alert-animate">
+                {[...alertItems, ...alertItems].map((item, i) => (
+                  <span key={i} className="inline-flex items-center gap-2.5 px-6 whitespace-nowrap">
+                    <span className={`w-1 h-1 rounded-full shrink-0 ${item.color.replace("text-", "bg-")}/60`} />
+                    <span className="text-[9px] font-mono text-zinc-600">{item.text}</span>
                     <span className="text-zinc-800 mx-2">·</span>
                   </span>
                 ))}
@@ -843,37 +799,48 @@ export default function HomePage() {
             </div>
 
             <div className="flex items-center justify-center gap-3 flex-wrap">
-              <Link
-                href="/terminal"
-                className="inline-flex items-center gap-2 bg-white text-black text-sm font-semibold px-8 py-3.5 rounded-sm hover:bg-zinc-100 transition-colors"
-              >
+              <Link href="/terminal" className="inline-flex items-center gap-2 bg-white text-black text-sm font-bold px-8 py-3.5 rounded-sm hover:bg-zinc-100 transition-colors">
                 Open Terminal
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
-              <Link
-                href="/signup"
-                className="inline-flex items-center gap-2 border border-white/15 text-white text-sm font-medium px-8 py-3.5 rounded-sm hover:border-white/30 hover:bg-white/5 transition-colors"
-              >
+              <Link href="/signup" className="inline-flex items-center gap-2 border border-white/15 text-white text-sm font-medium px-8 py-3.5 rounded-sm hover:border-white/30 hover:bg-white/5 transition-colors">
                 Create Free Account
               </Link>
-              <Link
-                href="/pricing"
-                className="inline-flex items-center gap-2 border border-white/8 text-zinc-400 text-sm font-medium px-8 py-3.5 rounded-sm hover:border-white/15 hover:text-white transition-colors"
+              <a
+                href="https://www.tennistraderai.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border border-emerald-400/25 text-emerald-400 text-sm font-medium px-8 py-3.5 rounded-sm hover:border-emerald-400/50 hover:bg-emerald-400/5 transition-colors"
               >
-                View Pricing
-              </Link>
+                Tennis Trader AI →
+              </a>
             </div>
 
-            <p className="text-zinc-800 text-[9px] font-mono mt-10">
+            <p className="text-zinc-800 text-[9px] font-mono mt-12">
               Sports Market OS · Intelligence layer · Not financial advice · Execution on Betfair Exchange
             </p>
           </div>
         </section>
-      </main>
 
-      <Footer />
+        {/* ─── Footer minimal ───────────────────────────────────────────────── */}
+        <footer className="border-t border-white/5 px-6 py-6">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="text-zinc-600 text-[9px] font-mono">
+              Sports Market OS · Market intelligence · Not financial advice
+            </span>
+            <div className="flex items-center gap-5 text-[9px] font-mono text-zinc-700">
+              <Link href="/pricing"    className="hover:text-zinc-400 transition-colors">Pricing</Link>
+              <Link href="/developer"  className="hover:text-zinc-400 transition-colors">API</Link>
+              <Link href="/terms"      className="hover:text-zinc-400 transition-colors">Terms</Link>
+              <Link href="/privacy"    className="hover:text-zinc-400 transition-colors">Privacy</Link>
+              <Link href="/contact"    className="hover:text-zinc-400 transition-colors">Contact</Link>
+            </div>
+          </div>
+        </footer>
+
+      </main>
     </div>
   );
 }

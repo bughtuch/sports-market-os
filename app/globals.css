@@ -249,6 +249,40 @@ body[data-screenshot="1"] .terminal-activity-strip {
   white-space: nowrap;
 }
 
+/* Cyan / turquoise intelligence glow */
+@keyframes glow-cyan {
+  0%, 100% { box-shadow: 0 0 0px rgba(34,211,238,0); border-color: rgba(34,211,238,0.10); }
+  50%      { box-shadow: 0 0 32px rgba(34,211,238,0.07); border-color: rgba(34,211,238,0.28); }
+}
+.glow-cyan {
+  animation: glow-cyan 4s ease-in-out infinite;
+}
+
+/* Fast alert strip — 18s cycle */
+.alert-animate {
+  animation: flow-left 18s linear infinite;
+  display: flex;
+  white-space: nowrap;
+}
+
+/* Intelligence panel row flash — offset variants */
+@keyframes intel-row {
+  0%, 100% { background-color: transparent; }
+  50%      { background-color: rgba(34,211,238,0.025); }
+}
+.intel-row { animation: intel-row 4s ease-in-out infinite; }
+.intel-row:nth-child(2) { animation-delay: 0.8s; }
+.intel-row:nth-child(3) { animation-delay: 1.6s; }
+.intel-row:nth-child(4) { animation-delay: 2.4s; }
+.intel-row:nth-child(5) { animation-delay: 3.2s; }
+
+/* Large number counter emphasis */
+@keyframes num-breathe {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.75; }
+}
+.num-breathe { animation: num-breathe 3s ease-in-out infinite; }
+
 /* ─── Scrollbar styling ──────────────────────────────────────────────────────── */
 /* Scrollbar styling */
 ::-webkit-scrollbar {
