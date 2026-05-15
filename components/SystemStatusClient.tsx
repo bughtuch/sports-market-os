@@ -334,6 +334,29 @@ export default function SystemStatusClient({
         </div>
       </div>
 
+      {/* ─── API Gateway ───────────────────────────────────────────── */}
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <p className="text-zinc-700 text-[9px] font-mono uppercase tracking-widest">API Gateway</p>
+          <div className="flex-1 h-px bg-zinc-900" />
+          <span className="text-emerald-400 text-[9px] font-mono">ACTIVE</span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {[
+            { label: "Key Issuance",    status: "ACTIVE", color: "text-emerald-400", note: "api_keys table" },
+            { label: "Key Auth",        status: "ACTIVE", color: "text-emerald-400", note: "SHA-256 hash lookup" },
+            { label: "Usage Logging",   status: "ACTIVE", color: "text-emerald-400", note: "api_usage_events" },
+            { label: "v1 Endpoints",    status: "3 LIVE", color: "text-blue-400",    note: "signals · pulse · brief" },
+          ].map(d => (
+            <div key={d.label} className="bg-zinc-950 border border-zinc-800/60 rounded-sm px-3 py-2.5">
+              <p className="text-zinc-600 text-[8px] font-mono uppercase tracking-wider mb-0.5">{d.label}</p>
+              <p className={`text-[10px] font-mono font-medium ${d.color}`}>{d.status}</p>
+              <p className="text-zinc-700 text-[9px]">{d.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ─── Footer ────────────────────────────────────────────────── */}
       <div className="border-t border-zinc-900/60 pt-4 flex items-center justify-between">
         <p className="text-zinc-700 text-[9px] font-mono">

@@ -211,13 +211,13 @@ export default function APIAccessPage() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/pricing#api"
+                href="/developer"
                 className="inline-block text-[11px] font-mono text-black bg-white px-4 py-2 rounded-sm hover:bg-zinc-200 transition-colors"
               >
-                Unlock API Access →
+                Developer Dashboard →
               </Link>
               <Link
-                href="/pricing"
+                href="/pricing#api"
                 className="inline-block text-[11px] font-mono text-zinc-400 border border-zinc-700 px-4 py-2 rounded-sm hover:border-zinc-500 hover:text-white transition-colors"
               >
                 View pricing
@@ -395,10 +395,10 @@ X-Version: 1.0`}
               early access and dedicated onboarding.
             </p>
             <Link
-              href="/pricing#api"
+              href="/developer"
               className="inline-block text-sm font-medium text-black bg-white px-6 py-2.5 rounded-sm hover:bg-zinc-200 transition-colors"
             >
-              Unlock API access →
+              Open Developer Dashboard →
             </Link>
           </div>
         </section>

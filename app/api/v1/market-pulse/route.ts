@@ -1,0 +1,54 @@
+/**
+ * GET /api/v1/market-pulse
+ * Authenticated market pulse feed.
+ * Requires: x-smo-api-key header with an active API key.
+ */
+
+import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+import { requireApiKey } from "@/lib/apiKeys/apiAccessControl";
+import { recordUsageEvent } from "@/lib/apiKeys/apiUsage";
+import { routeMarketPulse } from "@/lib/providers/providerRouter";
+
+export const dynamic = "force-dynamic";
+
+export async function GET(request: Request) {
+  const start    = Date.now();
+  const supabase = await createClient();
+  if (!supabase) return NextResponse.json({ error: "DB unavailable" }, { status: 503 });
+
+  const auth = await requireApiKey(supabase, request);
+  if (!auth.ok) return auth.response;
+
+  try {
+    const data = await routeMarketPulse();
+
+    void recordUsageEvent(supabase, {
+      userId:     auth.userId,
+      apiKeyId:   auth.keyId,
+      endpoint:   "/api/v1/market-pulse",
+      method:     "GET",
+      statusCode: 200,
+      latencyMs:  Date.now() - start,
+    });
+
+    return NextResponse.json(
+      { ...data, _v: 1 },
+      { headers: { "Cache-Control": "no-store, max-age=0" } },
+    );
+  } catch {
+    void recordUsageEvent(supabase, {
+      userId:     auth.userId,
+      apiKeyId:   auth.keyId,
+      endpoint:   "/api/v1/market-pulse",
+      method:     "GET",
+      statusCode: 503,
+      latencyMs:  Date.now() - start,
+    });
+
+    return NextResponse.json(
+      { error: "Market pulse unavailable", items: [], meta: null },
+      { status: 503 },
+    );
+  }
+}

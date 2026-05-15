@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { label: "Email Monitoring",    href: "#email",          dot: "bg-cyan-400" },
   { label: "Brief Engine",        href: "#briefs",         dot: "bg-emerald-400" },
   { label: "Retention",           href: "#retention",      dot: "bg-blue-400" },
+  { label: "API Monitoring",      href: "#api",            dot: "bg-blue-400" },
 ];
 
 export default function AdminConsoleNav() {
