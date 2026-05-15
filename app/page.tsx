@@ -211,77 +211,94 @@ function IntelPanel() {
       <div className="absolute inset-x-0 h-px bg-cyan-400/15 scan-line" />
 
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/6 bg-white/[0.015]">
+      <div className="flex items-center justify-between px-5 py-3 border-b border-white/6 bg-white/[0.015]">
         <div className="flex items-center gap-2.5">
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 pulse-dot" />
           <span className="text-[9px] font-mono text-cyan-400 uppercase tracking-widest">Live Intelligence · SMO/Active</span>
         </div>
-        <span className="text-[9px] font-mono text-zinc-600 tabular-nums">142 markets</span>
+        <div className="flex items-center gap-4">
+          <span className="text-[9px] font-mono text-zinc-600 tabular-nums">142 markets</span>
+          <span className="text-[9px] font-mono text-emerald-500">● OPERATIONAL</span>
+        </div>
       </div>
 
-      {/* Active Anomalies */}
-      <div className="px-4 pt-3 pb-1">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest">Active Anomalies</span>
-          <span className="text-[9px] font-mono text-red-400">{activeAnomalies.length} flagged</span>
-        </div>
-        <div className="space-y-px">
-          {activeAnomalies.map((a) => (
-            <div key={a.market} className="intel-row flex items-center justify-between px-2 py-1.5 rounded-sm">
-              <div className="min-w-0 flex-1">
-                <p className="text-white text-[10px] font-medium truncate">{a.market}</p>
-                <p className="text-zinc-500 text-[9px] font-mono truncate">{a.signal}</p>
+      {/* Three-column body */}
+      <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/5">
+
+        {/* Col 1 — Active Anomalies */}
+        <div className="px-5 py-4">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest">Active Anomalies</span>
+            <span className="text-[9px] font-mono text-red-400">{activeAnomalies.length} flagged</span>
+          </div>
+          <div className="space-y-px">
+            {activeAnomalies.map((a) => (
+              <div key={a.market} className="intel-row flex items-center justify-between px-2 py-2 rounded-sm">
+                <div className="min-w-0 flex-1">
+                  <p className="text-white text-[10px] font-medium truncate">{a.market}</p>
+                  <p className="text-zinc-500 text-[9px] font-mono truncate">{a.signal}</p>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0 ml-3">
+                  <span className={`w-1 h-1 rounded-full ${a.dot}`} />
+                  <span className={`text-[8px] font-mono ${a.color}`}>{a.sev}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5 shrink-0 ml-3">
-                <span className={`w-1 h-1 rounded-full ${a.dot}`} />
-                <span className={`text-[8px] font-mono ${a.color}`}>{a.sev}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* Col 2 — System State */}
+        <div className="px-5 py-4">
+          <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest block mb-3">System State</span>
+          <div className="space-y-2">
+            {systemState.map((s) => (
+              <div key={s.label} className="flex items-center justify-between gap-3">
+                <span className="text-zinc-600 text-[9px] font-mono">{s.label}</span>
+                <span className={`text-[10px] font-mono font-semibold tabular-nums ${s.color}`}>{s.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Col 3 — Creator + AI brief */}
+        <div className="px-5 py-4 flex flex-col gap-4">
+          <div>
+            <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest block mb-3">Creator Queue</span>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-500 text-[9px] font-mono">Exports ready</span>
+                <span className="text-purple-400 text-[10px] font-mono font-semibold">7</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-500 text-[9px] font-mono">Last AI Brief</span>
+                <span className="text-zinc-300 text-[10px] font-mono tabular-nums">14:29 UTC</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-500 text-[9px] font-mono">Signal rate</span>
+                <span className="text-cyan-400 text-[10px] font-mono font-semibold">284 / hr</span>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* System State */}
-      <div className="px-4 py-3 border-t border-white/5">
-        <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest block mb-2">System State</span>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-          {systemState.map((s) => (
-            <div key={s.label} className="flex items-center justify-between gap-2">
-              <span className="text-zinc-600 text-[9px] font-mono truncate">{s.label}</span>
-              <span className={`text-[9px] font-mono font-semibold tabular-nums shrink-0 ${s.color}`}>{s.value}</span>
+          </div>
+          <div className="flex-1 overflow-hidden border-t border-white/5 pt-3">
+            <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest block mb-2">AI Feed</span>
+            <div className="overflow-hidden">
+              <div className="flow-animate">
+                {[
+                  "Sharp rotation: Ascot markets",
+                  "Djokovic: expansion pre-signal",
+                  "NFL Chiefs: IV compression",
+                  "Prediction: polling gap 6.8pt",
+                  "UFC 305: non-public signal",
+                  "Sharp rotation: Ascot markets",
+                  "Djokovic: expansion pre-signal",
+                ].map((t, i) => (
+                  <span key={i} className="inline-flex items-center gap-3 px-4 text-[9px] font-mono text-cyan-700 whitespace-nowrap">
+                    › {t}<span className="text-zinc-800">·</span>
+                  </span>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Creator queue */}
-      <div className="px-4 py-2.5 border-t border-white/5 bg-purple-400/[0.03]">
-        <div className="flex items-center justify-between">
-          <span className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest">Creator Queue</span>
-          <span className="text-purple-400 text-[9px] font-mono font-semibold">7 exports ready</span>
-        </div>
-        <div className="flex items-center justify-between mt-1">
-          <span className="text-zinc-600 text-[9px] font-mono">Last AI Brief</span>
-          <span className="text-zinc-400 text-[9px] font-mono tabular-nums">14:29 UTC</span>
-        </div>
-      </div>
-
-      {/* Scrolling AI brief */}
-      <div className="px-4 py-2.5 border-t border-white/5 bg-cyan-400/[0.02] overflow-hidden">
-        <div className="flow-animate">
-          {[
-            "AI: Sharp rotation confirmed across Ascot markets",
-            "AI: Djokovic volatility coiling — expansion signal active",
-            "AI: NFL Chiefs IV compression entering critical window",
-            "AI: Prediction market divergence sustaining — 3hr signal",
-            "AI: UFC underdog compression — non-public information pattern",
-            "AI: Sharp rotation confirmed across Ascot markets",
-            "AI: Djokovic volatility coiling — expansion signal active",
-          ].map((t, i) => (
-            <span key={i} className="inline-flex items-center gap-4 px-6 text-[9px] font-mono text-cyan-600 whitespace-nowrap">
-              {t}<span className="text-zinc-800">·</span>
-            </span>
-          ))}
+          </div>
         </div>
       </div>
     </div>
@@ -310,9 +327,6 @@ export default function HomePage() {
           <Link href="/developer" className="hover:text-white transition-colors">API</Link>
         </nav>
         <div className="flex items-center gap-3">
-          <Link href="/pricing" className="text-xs font-mono text-zinc-400 hover:text-white transition-colors hidden sm:block">
-            Pricing
-          </Link>
           <NavAuth />
         </div>
       </header>
@@ -326,74 +340,66 @@ export default function HomePage() {
           <div className="absolute top-20 right-1/4 w-80 h-80 bg-emerald-500/3 rounded-full blur-3xl hero-ambient pointer-events-none" style={{ animationDelay: "5s" }} />
 
           <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-20">
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-16 items-start">
 
-              {/* Left — narrative */}
-              <div>
-                {/* Status pills */}
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {[
-                    { label: "LIVE TERMINAL",  dot: "bg-emerald-400", text: "text-emerald-400", border: "border-emerald-400/20" },
-                    { label: "AI ENGINE",      dot: "bg-cyan-400",    text: "text-cyan-400",    border: "border-cyan-400/20" },
-                    { label: "142 MARKETS",    dot: "bg-white",       text: "text-zinc-300",    border: "border-white/10" },
-                  ].map((p) => (
-                    <span key={p.label} className={`inline-flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-sm border bg-white/[0.02] ${p.text} ${p.border}`}>
-                      <span className={`w-1 h-1 rounded-full shrink-0 pulse-dot ${p.dot}`} />
-                      {p.label}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Headline */}
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.0] tracking-tight text-white mb-5">
-                  The sports<br />
-                  market moves<br />
-                  <span className="text-zinc-500">before the<br />story does.</span>
-                </h1>
-
-                <p className="text-zinc-300 text-base md:text-lg leading-relaxed max-w-xl mb-10">
-                  Sports Market OS monitors exchange flow, volatility regimes, liquidity shifts,
-                  sharp/public divergence, and creator-ready intelligence across global sports markets —
-                  in real time.
-                </p>
-
-                {/* CTAs */}
-                <div className="flex items-center gap-3 flex-wrap mb-10">
-                  <Link href="/terminal" className="inline-flex items-center gap-2 bg-white text-black text-sm font-bold px-7 py-3 rounded-sm hover:bg-zinc-100 transition-colors">
-                    Open Terminal
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
-                  <Link href="/markets" className="inline-flex items-center gap-2 border border-cyan-400/30 text-cyan-400 text-sm font-medium px-7 py-3 rounded-sm hover:border-cyan-400/60 hover:bg-cyan-400/5 transition-colors">
-                    Explore Markets
-                  </Link>
-                  <Link href="/signup" className="inline-flex items-center gap-2 border border-white/12 text-zinc-300 text-sm font-medium px-7 py-3 rounded-sm hover:border-white/25 hover:bg-white/5 transition-colors">
-                    Start Free
-                  </Link>
-                </div>
-
-                {/* Stat row */}
-                <div className="flex flex-wrap gap-8 pt-8 border-t border-white/5">
-                  {[
-                    { value: "142",   label: "Active markets" },
-                    { value: "284",   label: "Signals / hour" },
-                    { value: "1,847", label: "AI scans / min" },
-                    { value: "7",     label: "Sport hubs live" },
-                  ].map((s) => (
-                    <div key={s.label}>
-                      <p className="text-2xl md:text-3xl font-bold tabular-nums text-white leading-none num-breathe">{s.value}</p>
-                      <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest mt-1">{s.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right — live intelligence panel */}
-              <div className="lg:pt-2">
-                <IntelPanel />
-              </div>
+            {/* Status pills */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {[
+                { label: "LIVE TERMINAL",  dot: "bg-emerald-400", text: "text-emerald-400", border: "border-emerald-400/20" },
+                { label: "AI ENGINE",      dot: "bg-cyan-400",    text: "text-cyan-400",    border: "border-cyan-400/20" },
+                { label: "142 MARKETS",    dot: "bg-white",       text: "text-zinc-300",    border: "border-white/10" },
+              ].map((p) => (
+                <span key={p.label} className={`inline-flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-sm border bg-white/[0.02] ${p.text} ${p.border}`}>
+                  <span className={`w-1 h-1 rounded-full shrink-0 pulse-dot ${p.dot}`} />
+                  {p.label}
+                </span>
+              ))}
             </div>
+
+            {/* Headline */}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.0] tracking-tight text-white mb-6 max-w-4xl">
+              The sports market moves<br />
+              <span className="text-zinc-500">before the story does.</span>
+            </h1>
+
+            <p className="text-zinc-300 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
+              Sports Market OS monitors exchange flow, volatility regimes, liquidity shifts,
+              sharp/public divergence, and creator-ready intelligence across global sports markets —
+              in real time.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex items-center gap-3 flex-wrap mb-10">
+              <Link href="/terminal" className="inline-flex items-center gap-2 bg-white text-black text-sm font-bold px-7 py-3 rounded-sm hover:bg-zinc-100 transition-colors">
+                Open Terminal
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+              <Link href="/markets" className="inline-flex items-center gap-2 border border-cyan-400/30 text-cyan-400 text-sm font-medium px-7 py-3 rounded-sm hover:border-cyan-400/60 hover:bg-cyan-400/5 transition-colors">
+                Explore Markets
+              </Link>
+              <Link href="/signup" className="inline-flex items-center gap-2 border border-white/12 text-zinc-300 text-sm font-medium px-7 py-3 rounded-sm hover:border-white/25 hover:bg-white/5 transition-colors">
+                Start Free
+              </Link>
+            </div>
+
+            {/* Stat row */}
+            <div className="flex flex-wrap gap-10 pb-12 border-b border-white/5 mb-12">
+              {[
+                { value: "142",   label: "Active markets" },
+                { value: "284",   label: "Signals / hour" },
+                { value: "1,847", label: "AI scans / min" },
+                { value: "7",     label: "Sport hubs live" },
+              ].map((s) => (
+                <div key={s.label}>
+                  <p className="text-3xl md:text-4xl font-bold tabular-nums text-white leading-none num-breathe">{s.value}</p>
+                  <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest mt-1.5">{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Full-width intelligence panel */}
+            <IntelPanel />
           </div>
         </section>
 
