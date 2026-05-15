@@ -14,6 +14,7 @@ import DailyBriefWidget from "@/components/DailyBriefWidget";
 import AccountPreferences from "@/components/AccountPreferences";
 import AccountAlertSummary from "@/components/AccountAlertSummary";
 import AccountNotificationStatus from "@/components/AccountNotificationStatus";
+import AccountActivityDashboard from "@/components/AccountActivityDashboard";
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -329,6 +330,14 @@ export default async function AccountPage() {
               </Link>
             </div>
             <AccountNotificationStatus />
+          </section>
+
+          {/* Activity & Retention */}
+          <section className="px-6 py-5 border-b border-zinc-900">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">Activity & Intelligence Habit</p>
+            </div>
+            <AccountActivityDashboard />
           </section>
 
           {/* Quick links */}

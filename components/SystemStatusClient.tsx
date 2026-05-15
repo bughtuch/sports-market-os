@@ -311,6 +311,29 @@ export default function SystemStatusClient({
         </div>
       </div>
 
+      {/* ─── Activity Tracking ─────────────────────────────────────── */}
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <p className="text-zinc-700 text-[9px] font-mono uppercase tracking-widest">Activity Tracking</p>
+          <div className="flex-1 h-px bg-zinc-900" />
+          <span className="text-emerald-400 text-[9px] font-mono">ACTIVE</span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {[
+            { label: "Event Tracking",    status: "ACTIVE",  color: "text-emerald-400", note: "user_activity_events" },
+            { label: "Daily Rollup",      status: "ACTIVE",  color: "text-emerald-400", note: "user_activity_daily" },
+            { label: "Retention Scoring", status: "ACTIVE",  color: "text-emerald-400", note: "retentionScoring.ts" },
+            { label: "Route Tracker",     status: "ACTIVE",  color: "text-emerald-400", note: "ActivityTracker.tsx" },
+          ].map(d => (
+            <div key={d.label} className="bg-zinc-950 border border-zinc-800/60 rounded-sm px-3 py-2.5">
+              <p className="text-zinc-600 text-[8px] font-mono uppercase tracking-wider mb-0.5">{d.label}</p>
+              <p className={`text-[10px] font-mono font-medium ${d.color}`}>{d.status}</p>
+              <p className="text-zinc-700 text-[9px]">{d.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ─── Footer ────────────────────────────────────────────────── */}
       <div className="border-t border-zinc-900/60 pt-4 flex items-center justify-between">
         <p className="text-zinc-700 text-[9px] font-mono">

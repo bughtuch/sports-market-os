@@ -27,6 +27,7 @@ import AdminAlertMonitoring from "@/components/admin/AdminAlertMonitoring";
 import AdminNotificationMonitoring from "@/components/admin/AdminNotificationMonitoring";
 import AdminEmailMonitoring from "@/components/admin/AdminEmailMonitoring";
 import AdminBriefMonitoring from "@/components/admin/AdminBriefMonitoring";
+import AdminRetentionDashboard from "@/components/admin/AdminRetentionDashboard";
 
 export const metadata: Metadata = {
   title: "Admin Console | Sports Market OS",
@@ -143,6 +144,12 @@ export default async function AdminPage() {
           <section id="briefs">
             <SectionHeader label="Daily Brief Engine" />
             <AdminBriefMonitoring />
+          </section>
+
+          {/* ─── Retention Intelligence ───────────────────────────────────── */}
+          <section id="retention">
+            <SectionHeader label="Retention Intelligence" />
+            <AdminRetentionDashboard />
           </section>
 
           {/* ─── Admin footer ────────────────────────────────────────────── */}

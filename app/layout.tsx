@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/providers/AuthProvider";
 import ReferralCapture from "@/components/ReferralCapture";
+import ActivityTracker from "@/components/ActivityTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-black text-white">
         <AuthProvider>
           <ReferralCapture />
+          <ActivityTracker />
           {children}
         </AuthProvider>
       </body>
