@@ -1,3 +1,4 @@
+import { createClient } from "@supabase/supabase-js";
 import TerminalHeader from "@/components/TerminalHeader";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
@@ -9,103 +10,122 @@ import DataModeIndicator from "@/components/DataModeIndicator";
 import DailyBriefWidget from "@/components/DailyBriefWidget";
 import MobilePanelsDrawer from "@/components/MobilePanelsDrawer";
 
-// ─── Signal feed reference data ───────────────────────────────────────────────
-// Live data served by LiveSignalFeed via /api/live/signals — this is fallback copy.
+export const revalidate = 300; // 5-minute server-side cache
 
-const feedCards = [
-  {
-    sport: "Horse Racing",
-    timestamp: "14:32",
-    title: "Ascot 14:30 · win market",
-    description:
-      "Bilateral queue thinning, 14th percentile depth. Pattern last observed Cheltenham Gold Cup Trial, March 2024 — resolved within 18 minutes via stewards' review. Decay window 12 minutes.",
-    confidence: 87,
-    tag: "Premium",
-    type: "Sharp Money",
-    exchange: "Betfair",
-  },
-  {
-    sport: "Tennis",
-    timestamp: "14:29",
-    title: "Djokovic vs Alcaraz · in-play",
-    description:
-      "Matched volume 34% above 20-day baseline while price compresses. Configuration last seen Wimbledon SF 2023 — expansion within 9 minutes. Decay window 14 minutes.",
-    confidence: 74,
-    tag: "Free",
-    type: "Liquidity Imbalance",
-    exchange: "Smarkets",
-  },
-  {
-    sport: "NBA",
-    timestamp: "14:27",
-    title: "Warriors vs Lakers · under 224.5",
-    description:
-      "Pace regression 2.1σ below model expectation. Defensive scheme alignment historically correlates 78% with totals outcomes. Sharp consensus building on under side. Decay window 4 hours.",
-    confidence: 81,
-    tag: "Premium",
-    type: "AI Market Thesis",
-    exchange: "FanDuel",
-  },
-  {
-    sport: "NFL",
-    timestamp: "14:24",
-    title: "Chiefs vs Bills · total",
-    description:
-      "Implied volatility compressed for three consecutive hours, no triggering catalyst. Pattern last observed Week 14 2024 KC market — resolved with 6.5-point line move within 90 minutes. Decay window 2 hours.",
-    confidence: 69,
-    tag: "Free",
-    type: "Volatility Watch",
-    exchange: "DraftKings",
-  },
-  {
-    sport: "Horse Racing",
-    timestamp: "14:21",
-    title: "Cheltenham 15:15 · win market",
-    description:
-      "Queue depth fell below 14th percentile threshold. Bilateral thinning, not single-sided withdrawal. Configuration historically precedes stewards' decision or non-runner declaration within 22 minutes. Decay window 8 minutes.",
-    confidence: 92,
-    tag: "API",
-    type: "Queue Health",
-    exchange: "Betfair",
-  },
-  {
-    sport: "Prediction Markets",
-    timestamp: "14:18",
-    title: "US presidential · YES contract",
-    description:
-      "Volume surge 89% above 24-hour baseline. Contract pricing diverged from prevailing polling consensus by 6.8 points. Open interest accumulation precedes catalyst window historically by 14–40 minutes. Decay window 35 minutes.",
-    confidence: 78,
-    tag: "Creator",
-    type: "Creator Signal",
-    exchange: "Polymarket",
-  },
-  {
-    sport: "UFC",
-    timestamp: "14:15",
-    title: "Poirier vs Gaethje · moneyline",
-    description:
-      "Underdog shortening without public catalyst. Volume signature matches informed-flow pattern from UFC 281 main event, October 2022 — non-public weight-cut information confirmed 47 minutes later. Decay window 25 minutes.",
-    confidence: 65,
-    tag: "Free",
-    type: "News Catalyst",
-    exchange: "Betfair",
-  },
-  {
-    sport: "Football",
-    timestamp: "14:11",
-    title: "Man City vs Arsenal · Asian handicap",
-    description:
-      "Cross-market flow rotating from match result into handicap markets. Institutional signature, not retail. Configuration last observed Liverpool vs City April 2024 — handicap moved 0.25 within 35 minutes. Decay window 22 minutes.",
-    confidence: 72,
-    tag: "Premium",
-    type: "Exchange Flow",
-    exchange: "Pinnacle",
-  },
-];
+// ─── Supabase ─────────────────────────────────────────────────────────────────
+
+function adminClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatSportLabel(sport: string): string {
+  return sport
+    .split("_")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+function buildRegimeSentence(sportCounts: Record<string, number>, totalSignals: number): string {
+  const sorted = Object.entries(sportCounts)
+    .filter(([, c]) => c > 0)
+    .sort((a, b) => b[1] - a[1]);
+
+  if (sorted.length === 0) {
+    return "Markets are quiet — no signals above threshold in the last 4 hours. The engine is running and watching.";
+  }
+
+  const topSports = sorted.slice(0, 3).map(([s]) => formatSportLabel(s).toLowerCase());
+  const marketWord = totalSignals === 1 ? "signal" : "signals";
+
+  if (topSports.length === 1) {
+    return `Signal activity concentrated in ${topSports[0]}. ${totalSignals} ${marketWord} above threshold — the engine is watching for expansion across connected markets.`;
+  }
+
+  const last = topSports[topSports.length - 1];
+  const rest = topSports.slice(0, -1);
+  return `Sharp-side flow building across ${rest.join(", ")} and ${last}. ${totalSignals} ${marketWord} above threshold in the last 4 hours — the market is positioning before a catalyst the public hasn\u2019t seen yet.`;
+}
 
 // ─── Terminal page ────────────────────────────────────────────────────────────
 
-export default function TerminalPage() {
+export default async function TerminalPage() {
+  const db = adminClient();
+  const since4h = new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString();
+  const since7d = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  // Parallel fetches: 4h signals (for regime sentence) + 7d stats (for ledger snapshot)
+  const [recentSignalsRes, weekSignalsRes, weekResolutionsRes] = await Promise.all([
+    db.from("signals").select("sport").gte("generated_at", since4h),
+    db.from("signals")
+      .select("id, confidence, generated_at")
+      .gte("generated_at", since7d),
+    db.from("signal_resolutions")
+      .select("outcome, signal_id")
+      .gte("resolved_at", since7d),
+  ]);
+
+  // ── Regime sentence ───────────────────────────────────────────────────────
+  const recentSignals = recentSignalsRes.data ?? [];
+  const sportCounts: Record<string, number> = {};
+  for (const s of recentSignals) {
+    sportCounts[s.sport] = (sportCounts[s.sport] ?? 0) + 1;
+  }
+  const regimeSentence = buildRegimeSentence(sportCounts, recentSignals.length);
+
+  // ── Ledger snapshot ───────────────────────────────────────────────────────
+  const weekSignals = weekSignalsRes.data ?? [];
+  const weekResolutions = weekResolutionsRes.data ?? [];
+
+  const signalsIssuedThisWeek = weekSignals.length;
+
+  const avgConfidence =
+    weekSignals.length > 0
+      ? Math.round(weekSignals.reduce((s, x) => s + x.confidence, 0) / weekSignals.length)
+      : null;
+
+  const highConfCalls = weekSignals.filter((s) => s.confidence >= 85).length;
+
+  // 7-day accuracy: resolutions that belong to signals from this week
+  const weekSignalIds = new Set(weekSignals.map((s) => s.id));
+  const weekResolved = weekResolutions.filter((r) => weekSignalIds.has(r.signal_id));
+  const weekCorrect = weekResolved.filter((r) => r.outcome === "correct").length;
+  const weekAccuracy =
+    weekResolved.length > 0
+      ? Math.round((weekCorrect / weekResolved.length) * 100)
+      : null;
+
+  const ledgerStats = [
+    {
+      label: "Signal Accuracy",
+      value: weekAccuracy != null ? `${weekAccuracy}%` : "—",
+      sub: weekResolved.length > 0 ? `${weekResolved.length} resolved` : "No resolved signals",
+      accent: weekAccuracy != null,
+    },
+    {
+      label: "Signals Issued",
+      value: signalsIssuedThisWeek.toLocaleString(),
+      sub: "This week",
+      accent: false,
+    },
+    {
+      label: "Avg Confidence",
+      value: avgConfidence != null ? `${avgConfidence}%` : "—",
+      sub: "Weighted mean",
+      accent: false,
+    },
+    {
+      label: "High-conf Calls",
+      value: highConfCalls.toLocaleString(),
+      sub: "≥ 85% confidence",
+      accent: false,
+    },
+  ];
+
   return (
     <TerminalRegimeWrapper>
       {/* Client-side layer: welcome overlay + keyboard shortcuts */}
@@ -144,12 +164,14 @@ export default function TerminalPage() {
             {/* ── Zone 1: Global Pulse ─────────────────────────────────── */}
             <section className="px-6 py-14 border-b border-zinc-900/80">
               <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-4">Active Markets</p>
-              <p className="text-[96px] font-bold tabular-nums text-white num-breathe leading-none mb-4">142</p>
-              <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-6">regime · volatile</p>
+              <p className="text-[96px] font-bold tabular-nums text-white num-breathe leading-none mb-4">
+                {signalsIssuedThisWeek > 0 ? signalsIssuedThisWeek : "—"}
+              </p>
+              <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-6">
+                signals · last 7 days
+              </p>
               <p className="font-serif text-lg text-white max-w-2xl leading-[1.65]">
-                AI reads sharp-side flow accumulating across horse racing and tennis, with compression
-                building in tennis and NFL totals. The market is positioning before a catalyst the
-                public hasn&apos;t seen yet.
+                {regimeSentence}
               </p>
             </section>
 
@@ -185,12 +207,7 @@ export default function TerminalPage() {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {[
-                  { label: "Signal Accuracy", value: "76%", sub: "Last 7 days", accent: true },
-                  { label: "Signals Issued",  value: "284",  sub: "This week" },
-                  { label: "Avg Confidence",  value: "79%",  sub: "Weighted mean" },
-                  { label: "High-conf Calls", value: "41",   sub: "≥ 85% confidence" },
-                ].map((stat) => (
+                {ledgerStats.map((stat) => (
                   <div key={stat.label} className="border border-zinc-900 rounded-[8px] p-4">
                     <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">{stat.label}</p>
                     <p

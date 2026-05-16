@@ -65,7 +65,8 @@ export default function SignalCard({
       <div className="flex justify-end">
         <Link
           href={`/export-studio?sport=${encodeURIComponent(sport)}&title=${encodeURIComponent(title)}&confidence=${confidence}&exchange=${encodeURIComponent(exchange ?? "")}&type=${encodeURIComponent(type)}`}
-          className="text-[9px] font-mono text-zinc-700 hover:text-white transition-colors duration-[200ms]"
+          className="text-[9px] font-mono hover:underline transition-colors duration-[200ms]"
+          style={{ color: "var(--accent)" }}
         >
           evidence →
         </Link>
