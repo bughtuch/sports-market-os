@@ -13,6 +13,8 @@ import type {
   DataMode,
   ProviderStatusType,
   MarketSignal,
+  SportType,
+  Direction,
   NewsItem,
   OddsSnapshot,
   MarketPulseItem,
@@ -23,6 +25,7 @@ import type {
   OddsResponse,
   MarketPulseResponse,
   ProviderStatusResponse,
+  GeneratedSignal,
 } from "./types";
 import { MockProvider } from "./mockProvider";
 import { getNewsWithMode } from "./newsProvider";
@@ -30,6 +33,77 @@ import { getNewsMode } from "./newsApiProvider";
 import { getOddsWithMode, getOddsMode } from "./oddsProvider";
 import { isBetfairConfigured } from "../exchanges/betfairReadOnlyAdapter";
 import { isProphetXConfigured } from "../exchanges/prophetxReadOnlyAdapter";
+import { fetchPublishedSignals } from "../signals/persistence";
+
+// ─── GeneratedSignal → MarketSignal mapping ───────────────────────────────────
+
+const SPORT_MAP: Record<string, SportType> = {
+  horse_racing: "Horse Racing",
+  tennis:       "Tennis",
+  nba:          "NBA",
+  nfl:          "NFL",
+  ufc:          "UFC",
+  football:     "Football",
+  mlb:          "Football",
+  nhl:          "Football",
+  golf:         "Football",
+  f1:           "Football",
+};
+
+const DIR_MAP: Record<string, Direction> = {
+  up:     "up",
+  down:   "down",
+  over:   "up",
+  under:  "down",
+  narrow: "flat",
+  widen:  "flat",
+};
+
+const SOURCE_LABEL: Record<string, string> = {
+  polymarket:   "Polymarket",
+  the_odds_api: "The Odds API",
+  betfair:      "Betfair",
+  mock:         "Simulated",
+};
+
+function signalTypeLabel(t: string): string {
+  return t.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+}
+
+function sparkFromId(id: string): number[] {
+  const seed = id.split("").reduce((s, c) => s + c.charCodeAt(0), 0);
+  return Array.from({ length: 7 }, (_, i) =>
+    Math.max(10, Math.min(90, Math.round(50 + Math.sin((seed + i * 137) / 13) * 25)))
+  );
+}
+
+function mapToMarketSignal(s: GeneratedSignal): MarketSignal {
+  const ts = new Date(s.generated_at);
+  const timestamp = `${ts.getUTCHours().toString().padStart(2, "0")}:${ts.getUTCMinutes().toString().padStart(2, "0")}`;
+  const mag = s.predicted_magnitude != null ? Math.round(s.predicted_magnitude) : null;
+  const movementSuffix = ["narrow", "widen"].includes(s.predicted_direction) ? "bp" : "%";
+  const movement = mag != null ? `${s.predicted_direction} ${mag}${movementSuffix}` : s.predicted_direction;
+
+  return {
+    id: s.id,
+    sport: SPORT_MAP[s.sport] ?? "Football",
+    timestamp,
+    title: s.event_title,
+    description: s.narrative?.trim() ||
+      `${signalTypeLabel(s.signal_type)} detected. Confidence ${Math.round(s.confidence)}%. Decay window ${s.decay_window_minutes} min.`,
+    confidence: Math.round(s.confidence),
+    tag: "Free",
+    type: signalTypeLabel(s.signal_type),
+    movement,
+    direction: DIR_MAP[s.predicted_direction] ?? "flat",
+    aiScore: Math.round(s.confidence),
+    exchange: SOURCE_LABEL[s.source] ?? s.source,
+    sparkData: sparkFromId(s.id),
+    insight: s.signal_type === "cross_source_divergence"
+      ? "Cross-source divergence — markets typically converge."
+      : undefined,
+  };
+}
 
 // ─── Active provider selection ────────────────────────────────────────────────
 
@@ -53,9 +127,17 @@ function makeMeta(provider: IProvider, count: number): ResponseMeta {
 // ─── Router functions ─────────────────────────────────────────────────────────
 
 export async function routeSignals(): Promise<SignalsResponse> {
-  const provider = getActiveProvider();
-  const signals = await provider.getSignals();
-  return { signals, meta: makeMeta(provider, signals.length) };
+  // Live path: read from Supabase signals table
+  // Empty state is real — do NOT fall back to mock when the table is empty.
+  const generated = await fetchPublishedSignals(8);
+  const signals: MarketSignal[] = generated.map(mapToMarketSignal);
+  const meta: ResponseMeta = {
+    mode: "live",
+    provider: "Supabase/signals",
+    timestamp: new Date().toISOString(),
+    count: signals.length,
+  };
+  return { signals, meta };
 }
 
 export async function routeNews(): Promise<NewsResponse> {

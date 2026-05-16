@@ -77,12 +77,12 @@ export default function LiveSignalFeed() {
       </div>
 
       {!loading && signals.length === 0 && (
-        <div className="border border-zinc-900 rounded-[8px] p-8 text-center">
+        <div className="bg-zinc-950 border border-zinc-900 rounded-[8px] p-8 text-center">
           <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">
-            No signals detected
+            NO SIGNALS · MARKETS QUIET
           </p>
-          <p className="text-zinc-700 text-xs leading-relaxed max-w-xs mx-auto">
-            Market intelligence feeds are initialising. Signal data will appear as market structure events are detected.
+          <p className="text-zinc-500 text-xs leading-relaxed max-w-xs mx-auto">
+            No signals at &gt;70% confidence in the last 4 hours. The engine is running. Check back in 15 minutes.
           </p>
         </div>
       )}
