@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import NavAuth from "@/components/NavAuth";
 
 interface QuotaState {
   remaining: number | null;
@@ -72,6 +73,11 @@ export default function TerminalHeader() {
           </span>
         </>
       )}
+
+      {/* Auth — push to far right */}
+      <div className="ml-auto shrink-0">
+        <NavAuth />
+      </div>
     </div>
   );
 }
