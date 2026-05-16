@@ -86,6 +86,7 @@ export async function detectOpenInterestShift(
         price_range_1h: priceRange != null ? Math.round(priceRange * 10_000) / 10_000 : null,
         yes_price: yesEntry?.price,
         current_prices: event.current_prices,
+        event_slug: event.event_slug,
       },
       is_published: true,
     });

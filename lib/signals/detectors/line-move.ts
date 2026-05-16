@@ -101,6 +101,7 @@ export async function detectLineMove(
         move_pct: Math.round(priceMoveAbsPct * 100) / 100,
         selection: oldest.selection,
         window_minutes: 60,
+        event_slug: event.event_slug,
       },
       is_published: true,
     });

@@ -19,6 +19,13 @@ function toSignalCardProps(s: MarketSignal) {
     aiScore: s.aiScore,
     exchange: s.exchange,
     sparkData: s.sparkData,
+    // Sprint 3N — signal actions
+    source:        s.source,
+    event_id:      s.event_id,
+    event_title:   s.event_title,
+    signal_type:   s.signal_type,
+    narrative:     s.narrative,
+    polymarketSlug: s.polymarketSlug,
   };
 }
 

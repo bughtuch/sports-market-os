@@ -141,6 +141,7 @@ export async function detectCrossSourceDivergence(
           polymarket_event_id: polyEvent.event_id,
           polymarket_event_title: polyEvent.event_title,
           polymarket_prob_pct: Math.round(polyProbPct * 100) / 100,
+          event_slug: polyEvent.event_slug,
           odds_api_event_id: oddsEvent.event_id,
           odds_api_event_title: oddsEvent.event_title,
           odds_api_prob_pct: Math.round(oddsProbPct * 100) / 100,

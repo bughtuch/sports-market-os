@@ -84,6 +84,12 @@ function mapToMarketSignal(s: GeneratedSignal): MarketSignal {
   const movementSuffix = ["narrow", "widen"].includes(s.predicted_direction) ? "bp" : "%";
   const movement = mag != null ? `${s.predicted_direction} ${mag}${movementSuffix}` : s.predicted_direction;
 
+  // Extract Polymarket event slug from raw_inputs (written by detectors from Sprint 3N)
+  const ri = s.raw_inputs as Record<string, unknown> | null | undefined;
+  const polymarketSlug = s.source === "polymarket"
+    ? (ri?.event_slug as string | undefined)
+    : undefined;
+
   return {
     id: s.id,
     sport: SPORT_MAP[s.sport] ?? "Football",
@@ -102,6 +108,13 @@ function mapToMarketSignal(s: GeneratedSignal): MarketSignal {
     insight: s.signal_type === "cross_source_divergence"
       ? "Cross-source divergence — markets typically converge."
       : undefined,
+    // Sprint 3N — signal actions passthrough
+    source:        s.source,
+    event_id:      s.event_id,
+    event_title:   s.event_title,
+    signal_type:   s.signal_type,
+    narrative:     s.narrative ?? undefined,
+    polymarketSlug,
   };
 }
 

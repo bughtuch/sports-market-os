@@ -70,6 +70,7 @@ export async function detectSpreadCompression(
         depth_score: event.orderbook.depth_score,
         bid_levels: bids.length,
         ask_levels: asks.length,
+        event_slug: event.event_slug,
       },
       is_published: true,
     });

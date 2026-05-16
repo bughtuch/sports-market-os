@@ -72,6 +72,7 @@ export async function detectVolumeSurge(
         synthetic_baseline: vol24h * 0.6,
         z_score: Math.round(z * 100) / 100,
         current_prices: event.current_prices,
+        event_slug: event.event_slug,
       },
       is_published: true,
     });

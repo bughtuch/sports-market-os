@@ -116,6 +116,7 @@ export async function normalizeGammaEvent(
     source: 'polymarket',
     sport,
     market_type: 'outright',
+    event_slug: raw.slug,
     event_title: raw.title,
     commence_time: raw.startDate ?? new Date().toISOString(),
     is_live: raw.active && !raw.closed,

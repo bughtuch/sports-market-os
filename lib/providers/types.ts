@@ -33,6 +33,13 @@ export interface MarketSignal {
   exchange: string;
   sparkData: number[];
   insight?: string;
+  // Sprint 3N — signal actions
+  source?: string;
+  event_id?: string;
+  event_title?: string;
+  signal_type?: string;
+  narrative?: string;
+  polymarketSlug?: string;
 }
 
 // ─── Market Event ─────────────────────────────────────────────────────────────
@@ -201,6 +208,8 @@ export interface NormalizedMarketEvent {
   external_id: string;
   source: DataSource;
   sport: Sport;
+  /** Polymarket event slug — populated by Gamma adapter, used for deeplinks */
+  event_slug?: string;
   market_type: string;
   event_title: string;
   commence_time: string;
