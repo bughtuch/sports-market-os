@@ -23,27 +23,31 @@ const instrumentSerif = Instrument_Serif({
   weight: "400",
 });
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sportsmarketos.com";
-
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://sportsmarketos.com"),
   title: "Sports Market OS — AI Intelligence Terminal for Sports Markets",
   description:
     "Live market intelligence, sharp money detection, liquidity analysis, AI commentary, and creator-ready sports market content — built for the next era of exchange-native sports trading.",
   openGraph: {
-    title: "Sports Market OS — AI Intelligence Terminal for Sports Markets",
-    description:
-      "Live market intelligence, sharp money detection, liquidity analysis, AI commentary, and creator-ready sports market content.",
-    url: BASE_URL,
+    title: "Sports Market OS",
+    description: "Intelligence layer for sports markets.",
+    url: "/",
     siteName: "Sports Market OS",
-    images: [{ url: `${BASE_URL}/opengraph-image.png`, width: 1200, height: 630 }],
     type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Sports Market OS — Intelligence layer for sports markets",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sports Market OS — AI Intelligence Terminal",
-    description:
-      "Live market intelligence, sharp money detection, liquidity analysis, and creator-ready sports market content.",
-    images: [`${BASE_URL}/opengraph-image.png`],
+    title: "Sports Market OS",
+    description: "Intelligence layer for sports markets.",
+    images: ["/opengraph-image"],
   },
 };
 
