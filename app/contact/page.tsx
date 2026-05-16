@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import MarketTicker from "@/components/MarketTicker";
-import TerminalHeader from "@/components/TerminalHeader";
+import PublicNavBar from "@/components/PublicNavBar";
+
+
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import { SUPPORT_EMAIL, API_EMAIL, PARTNER_EMAIL } from "@/lib/constants/contact";
@@ -46,8 +47,7 @@ const INFO_CARDS = [
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <MarketTicker />
-      <TerminalHeader />
+      <PublicNavBar />
 
       <main className="flex-1">
         {/* Hero */}

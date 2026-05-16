@@ -1,7 +1,8 @@
 import Link from "next/link";
+import PublicNavBar from "@/components/PublicNavBar";
 import type { Metadata } from "next";
-import MarketTicker from "@/components/MarketTicker";
-import TerminalHeader from "@/components/TerminalHeader";
+
+
 import Footer from "@/components/Footer";
 import PartnerMetricsPanel from "@/components/PartnerMetricsPanel";
 import PartnerTerminalEmbed from "@/components/PartnerTerminalEmbed";
@@ -96,8 +97,7 @@ const CONTENT_TYPES = [
 export default function CreatorPartnersPage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <MarketTicker />
-      <TerminalHeader />
+      <PublicNavBar />
 
       <main className="flex-1">
         {/* Hero */}

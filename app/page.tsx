@@ -1,6 +1,6 @@
 import Link from "next/link";
 import SportsHubCard, { type SportsHubData } from "@/components/SportsHubCard";
-import NavAuth from "@/components/NavAuth";
+import PublicNavBar from "@/components/PublicNavBar";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -315,21 +315,7 @@ export default function HomePage() {
       <AlertStrip />
 
       {/* ─── Nav ──────────────────────────────────────────────────────────── */}
-      <header className="border-b border-white/6 px-6 py-3 flex items-center justify-between sticky top-0 bg-black/95 backdrop-blur-sm z-10">
-        <Link href="/" className="text-white text-sm font-semibold tracking-tight">
-          Sports Market <span className="text-zinc-500">OS</span>
-        </Link>
-        <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-500">
-          <Link href="/terminal"  className="hover:text-white transition-colors">Terminal</Link>
-          <Link href="/markets"   className="hover:text-white transition-colors">Markets</Link>
-          <Link href="/daily-brief" className="hover:text-white transition-colors">AI Briefs</Link>
-          <Link href="/pricing"   className="hover:text-white transition-colors">Pricing</Link>
-          <Link href="/developer" className="hover:text-white transition-colors">API</Link>
-        </nav>
-        <div className="flex items-center gap-3">
-          <NavAuth />
-        </div>
-      </header>
+      <PublicNavBar />
 
       <main>
 

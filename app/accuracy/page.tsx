@@ -1,9 +1,10 @@
 import Link from "next/link";
+import PublicNavBar from "@/components/PublicNavBar";
 import type { Metadata } from "next";
 import { createClient } from "@supabase/supabase-js";
-import TerminalHeader from "@/components/TerminalHeader";
+
 import Footer from "@/components/Footer";
-import MarketTicker from "@/components/MarketTicker";
+
 import CalibrationChart from "@/components/CalibrationChart";
 import type { CalibrationBucket } from "@/components/CalibrationChart";
 
@@ -146,8 +147,7 @@ export default async function AccuracyPage({
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <MarketTicker />
-      <TerminalHeader />
+      <PublicNavBar />
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-12 space-y-12">
 

@@ -1,5 +1,4 @@
-import MarketTicker from "@/components/MarketTicker";
-import TerminalHeader from "@/components/TerminalHeader";
+import PublicNavBar from "@/components/PublicNavBar";
 import Footer from "@/components/Footer";
 
 export default function MarketsLayout({
@@ -9,8 +8,7 @@ export default function MarketsLayout({
 }) {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <MarketTicker />
-      <TerminalHeader />
+      <PublicNavBar />
       <main className="flex-1">{children}</main>
       <Footer />
     </div>

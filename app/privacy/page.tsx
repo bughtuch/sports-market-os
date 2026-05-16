@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import MarketTicker from "@/components/MarketTicker";
-import TerminalHeader from "@/components/TerminalHeader";
+import PublicNavBar from "@/components/PublicNavBar";
+
+
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -14,8 +15,7 @@ const EFFECTIVE_DATE = "1 January 2026";
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <MarketTicker />
-      <TerminalHeader />
+      <PublicNavBar />
 
       <main className="flex-1">
         <div className="max-w-2xl mx-auto px-6 py-16">

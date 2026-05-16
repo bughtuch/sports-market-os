@@ -1,7 +1,8 @@
 import Link from "next/link";
+import PublicNavBar from "@/components/PublicNavBar";
 import type { Metadata } from "next";
-import MarketTicker from "@/components/MarketTicker";
-import TerminalHeader from "@/components/TerminalHeader";
+
+
 import PlanBadge from "@/components/PlanBadge";
 import Footer from "@/components/Footer";
 import { API_EMAIL } from "@/lib/constants/contact";
@@ -191,8 +192,7 @@ const METHOD_STYLE: Record<string, string> = {
 export default function APIAccessPage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <MarketTicker />
-      <TerminalHeader />
+      <PublicNavBar />
 
       <main className="flex-1">
         {/* Hero */}

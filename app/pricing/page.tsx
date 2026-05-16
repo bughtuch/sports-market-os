@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import MarketTicker from "@/components/MarketTicker";
-import TerminalHeader from "@/components/TerminalHeader";
+import PublicNavBar from "@/components/PublicNavBar";
+
+
 import PlanBadge from "@/components/PlanBadge";
 import { PLANS } from "@/lib/plans/plans";
 import Footer from "@/components/Footer";
@@ -50,8 +51,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <MarketTicker />
-      <TerminalHeader />
+      <PublicNavBar />
 
       <main className="flex-1">
         {/* Hero */}

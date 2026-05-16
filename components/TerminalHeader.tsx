@@ -54,15 +54,6 @@ export default function TerminalHeader() {
       <span className="text-zinc-600 text-[10px] font-mono tabular-nums">
         {utcTime || "--:--"} UTC
       </span>
-      <span className="text-zinc-800 text-[10px]">·</span>
-      <span className="text-zinc-600 text-[10px] font-mono">248 markets</span>
-      <span className="text-zinc-800 text-[10px]">·</span>
-      <span className="text-zinc-600 text-[10px] font-mono">
-        regime{" "}
-        <span className="font-semibold" style={{ color: "var(--accent)" }}>volatile</span>
-      </span>
-      <span className="text-zinc-800 text-[10px]">·</span>
-      <span className="text-zinc-600 text-[10px] font-mono">3 anomalies</span>
 
       {IS_DEV && quota && quota.remaining !== null && (
         <>
