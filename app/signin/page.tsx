@@ -79,6 +79,11 @@ function SignInForm() {
                 placeholder="••••••••"
                 className="w-full bg-zinc-950 border border-zinc-800 text-white text-sm font-mono px-3 py-2.5 rounded-sm placeholder:text-zinc-700 focus:outline-none focus:border-zinc-600 transition-colors"
               />
+              <div className="mt-1.5 flex justify-end">
+                <Link href="/forgot-password" className="text-zinc-600 text-[11px] font-mono hover:text-zinc-400 transition-colors">
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
             {error && (

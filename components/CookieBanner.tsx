@@ -48,6 +48,13 @@ export default function CookieBanner() {
       <p className="text-zinc-400 text-[11px] leading-relaxed flex-1 min-w-0">
         We use cookies to keep you signed in and measure anonymous usage.{" "}
         <Link
+          href="/cookies"
+          className="text-zinc-300 hover:text-white underline underline-offset-2 transition-colors"
+        >
+          Cookie Policy
+        </Link>
+        {" · "}
+        <Link
           href="/privacy"
           className="text-zinc-300 hover:text-white underline underline-offset-2 transition-colors"
         >
