@@ -327,7 +327,7 @@ export default async function AccuracyPage({
                 {page > 1 && (
                   <Link
                     href={`/accuracy?page=${page - 1}`}
-                    className="text-[10px] font-mono text-zinc-500 border border-zinc-800 px-3 py-1 rounded-sm hover:border-zinc-600 transition-colors"
+                    className="text-[10px] font-mono text-zinc-300 border border-zinc-700 px-3 py-1 rounded-sm hover:border-zinc-500 hover:text-white transition-colors"
                   >
                     ← Prev
                   </Link>
@@ -335,7 +335,7 @@ export default async function AccuracyPage({
                 {page < totalPages && (
                   <Link
                     href={`/accuracy?page=${page + 1}`}
-                    className="text-[10px] font-mono text-zinc-500 border border-zinc-800 px-3 py-1 rounded-sm hover:border-zinc-600 transition-colors"
+                    className="text-[10px] font-mono text-zinc-300 border border-zinc-700 px-3 py-1 rounded-sm hover:border-zinc-500 hover:text-white transition-colors"
                   >
                     Next →
                   </Link>
@@ -349,7 +349,8 @@ export default async function AccuracyPage({
         <section className="flex justify-end">
           <a
             href="/api/ledger/csv"
-            className="text-[10px] font-mono text-zinc-500 border border-zinc-800 px-4 py-2 rounded-sm hover:border-zinc-600 hover:text-white transition-colors"
+            className="text-[10px] font-mono font-semibold text-black px-4 py-2 rounded-sm hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: "var(--accent)" }}
           >
             Download full ledger as CSV ↓
           </a>

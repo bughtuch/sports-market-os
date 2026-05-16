@@ -3,6 +3,7 @@ import Link from "next/link";
 export type SignalTag = "Free" | "Premium" | "Creator" | "API";
 
 export interface SignalCardData {
+  id?: string;
   sport: string;
   timestamp: string;
   title: string;
@@ -19,6 +20,7 @@ export interface SignalCardData {
 }
 
 export default function SignalCard({
+  id,
   sport,
   timestamp,
   title,
@@ -64,7 +66,7 @@ export default function SignalCard({
       {/* Footer — evidence link only */}
       <div className="flex justify-end">
         <Link
-          href={`/export-studio?sport=${encodeURIComponent(sport)}&title=${encodeURIComponent(title)}&confidence=${confidence}&exchange=${encodeURIComponent(exchange ?? "")}&type=${encodeURIComponent(type)}`}
+          href={`/export-studio?sport=${encodeURIComponent(sport)}&title=${encodeURIComponent(title)}&confidence=${confidence}&exchange=${encodeURIComponent(exchange ?? "")}&type=${encodeURIComponent(type)}${id ? `&id=${encodeURIComponent(id)}` : ""}`}
           className="text-[9px] font-mono hover:underline transition-colors duration-[200ms]"
           style={{ color: "var(--accent)" }}
         >

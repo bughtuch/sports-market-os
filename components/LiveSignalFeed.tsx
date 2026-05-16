@@ -6,6 +6,7 @@ import type { MarketSignal } from "@/lib/providers/types";
 
 function toSignalCardProps(s: MarketSignal) {
   return {
+    id: s.id,
     sport: s.sport,
     timestamp: s.timestamp,
     title: s.title,

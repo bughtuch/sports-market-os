@@ -1,12 +1,16 @@
 /**
- * Export Studio — Sprint 19.
+ * Export Studio
  *
  * Reads ?sport, ?title, ?description, ?movement, ?direction, ?confidence,
- * ?exchange, ?type from URL params and pre-fills the export builder.
+ * ?exchange, ?type, ?id from URL params and pre-fills the export builder.
+ *
+ * If ?id is present, fetches the real AI narrative from Supabase and uses
+ * it as the card description — overriding the URL fallback text.
  *
  * Server component — passes initial signal to SignalExportStudio client component.
  */
 
+import { createClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
 import SignalExportStudio from "@/components/SignalExportStudio";
 import type { ExportSignal } from "@/lib/export/exportTypes";
@@ -17,6 +21,8 @@ export const metadata: Metadata = {
   description: "Create shareable market intelligence images for X, Telegram, Shorts, and more.",
   robots: { index: false, follow: false },
 };
+
+export const dynamic = "force-dynamic";
 
 // Sport → accent hex (matches SignalCard sport colour palette)
 const SPORT_ACCENT: Record<string, string> = {
@@ -41,16 +47,36 @@ export default async function ExportStudioPage({ searchParams }: PageProps) {
     return typeof v === "string" ? v : fallback;
   }
 
-  const sport     = str("sport", "Football");
-  const rawDir    = str("direction", "flat");
-  const direction = (rawDir === "up" || rawDir === "down" ? rawDir : "flat") as "up" | "down" | "flat";
-  const rawConf   = parseInt(str("confidence", "72"), 10);
+  const sport      = str("sport", "Football");
+  const rawDir     = str("direction", "flat");
+  const direction  = (rawDir === "up" || rawDir === "down" ? rawDir : "flat") as "up" | "down" | "flat";
+  const rawConf    = parseInt(str("confidence", "72"), 10);
   const confidence = isNaN(rawConf) ? 72 : Math.max(0, Math.min(100, rawConf));
+  const signalId   = str("id");
+
+  // Fetch real AI narrative from Supabase if signal id is present
+  let narrative = "";
+  if (signalId) {
+    try {
+      const db = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
+      const { data } = await db
+        .from("signals")
+        .select("narrative")
+        .eq("id", signalId)
+        .single();
+      narrative = data?.narrative ?? "";
+    } catch {
+      // Non-fatal — fall through to URL param fallback
+    }
+  }
 
   const signal: ExportSignal = {
     sport,
     title:       str("title",       "Market Signal"),
-    description: str("description", "AI-detected market structure event across major exchanges."),
+    description: narrative || str("description", "AI-detected market structure event across major exchanges."),
     movement:    str("movement",    "—"),
     direction,
     confidence,
@@ -66,14 +92,14 @@ export default async function ExportStudioPage({ searchParams }: PageProps) {
       <div className="mb-6 flex items-start justify-between">
         <div>
           <h1 className="text-white text-sm font-semibold mb-1">Export Studio</h1>
-          <p className="text-zinc-500 text-xs leading-relaxed max-w-md">
+          <p className="text-zinc-400 text-xs leading-relaxed max-w-md">
             Design shareable market intelligence images. Download as PNG or copy to clipboard.
             No social API posting — images only.
           </p>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          <span className="text-emerald-600 text-[9px] font-mono uppercase tracking-wider">Client Render</span>
+          <span className="text-emerald-500 text-[9px] font-mono uppercase tracking-wider">Client Render</span>
         </div>
       </div>
 

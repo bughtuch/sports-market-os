@@ -18,8 +18,14 @@ export function buildWatermarkUrl(partnerCode?: string): string {
   return "sportsmarketos.com";
 }
 
-/** Returns the compliance line used in all exports. */
-export const COMPLIANCE_LINE = "Market intelligence only · Sports Market OS";
+/** URL shown in export watermarks. */
+export const WATERMARK_URL = "SportsMarketOS.com";
+
+/** CTA tagline shown alongside the URL. */
+export const WATERMARK_CTA = "free intelligence, no signup";
+
+/** @deprecated Use WATERMARK_URL + WATERMARK_CTA instead. Kept for any legacy references. */
+export const COMPLIANCE_LINE = "SportsMarketOS.com · free intelligence, no signup";
 
 /** Formats a timestamp for export display. */
 export function exportTimestamp(iso?: string): string {

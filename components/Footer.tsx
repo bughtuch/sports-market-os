@@ -43,7 +43,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-zinc-500 text-[11px] hover:text-white transition-colors"
+                    className="text-zinc-400 text-[11px] hover:text-white transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -60,7 +60,7 @@ export default function Footer() {
             <p className="text-zinc-400 text-[11px] font-medium mb-1">Bug Hutch Ltd</p>
             <a
               href="mailto:support@sportsmarketos.com"
-              className="text-zinc-500 text-[11px] hover:text-white transition-colors"
+              className="text-zinc-400 text-[11px] hover:text-white transition-colors"
             >
               support@sportsmarketos.com
             </a>
@@ -77,7 +77,7 @@ export default function Footer() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-zinc-700 text-[10px] hover:text-zinc-400 transition-colors"
+                className="text-zinc-500 text-[10px] hover:text-white transition-colors"
               >
                 {link.label}
               </Link>

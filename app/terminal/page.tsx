@@ -23,11 +23,16 @@ function adminClient() {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+const SPORT_DISPLAY: Record<string, string> = {
+  nba: "NBA", nfl: "NFL", nhl: "NHL", mlb: "MLB", ufc: "UFC",
+  mma: "MMA", tennis: "Tennis", soccer: "Football",
+  horse_racing: "Horse Racing", cricket: "Cricket",
+  golf: "Golf", rugby: "Rugby",
+};
+
 function formatSportLabel(sport: string): string {
-  return sport
-    .split("_")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
+  return SPORT_DISPLAY[sport] ??
+    sport.split("_").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 }
 
 function buildRegimeSentence(sportCounts: Record<string, number>, totalSignals: number): string {
@@ -36,19 +41,17 @@ function buildRegimeSentence(sportCounts: Record<string, number>, totalSignals: 
     .sort((a, b) => b[1] - a[1]);
 
   if (sorted.length === 0) {
-    return "Markets are quiet — no signals above threshold in the last 4 hours. The engine is running and watching.";
+    return "Markets quiet across covered sports. Engine running, ledger compounding.";
   }
 
-  const topSports = sorted.slice(0, 3).map(([s]) => formatSportLabel(s).toLowerCase());
-  const marketWord = totalSignals === 1 ? "signal" : "signals";
+  const topSports = sorted.slice(0, 3).map(([s]) => formatSportLabel(s));
 
-  if (topSports.length === 1) {
-    return `Signal activity concentrated in ${topSports[0]}. ${totalSignals} ${marketWord} above threshold — the engine is watching for expansion across connected markets.`;
+  if (topSports.length >= 3) {
+    return `Signal density in ${topSports[0]}, ${topSports[1]}, ${topSports[2]} over the last 4 hours. ${totalSignals} signal${totalSignals === 1 ? "" : "s"} at >70% confidence.`;
   }
 
-  const last = topSports[topSports.length - 1];
-  const rest = topSports.slice(0, -1);
-  return `Sharp-side flow building across ${rest.join(", ")} and ${last}. ${totalSignals} ${marketWord} above threshold in the last 4 hours — the market is positioning before a catalyst the public hasn\u2019t seen yet.`;
+  const sportList = topSports.length === 1 ? topSports[0] : `${topSports[0]} and ${topSports[1]}`;
+  return `Signal activity concentrated in ${sportList}. ${totalSignals} signal${totalSignals === 1 ? "" : "s"} at >70% confidence in the last 4 hours.`;
 }
 
 // ─── Terminal page ────────────────────────────────────────────────────────────

@@ -13,7 +13,7 @@
 import type { ExportSignal, ExportOptions, ExportTheme, ExportLayout } from "@/lib/export/exportTypes";
 import { EXPORT_THEMES } from "@/lib/export/exportThemes";
 import { EXPORT_LAYOUTS } from "@/lib/export/exportLayouts";
-import { buildWatermarkUrl, COMPLIANCE_LINE } from "@/lib/export/exportWatermarks";
+import { buildWatermarkUrl, WATERMARK_URL, WATERMARK_CTA } from "@/lib/export/exportWatermarks";
 
 interface Props {
   signal: ExportSignal;
@@ -124,19 +124,26 @@ function LandscapeCard({ signal, options, theme, layout }: Props & {
       {options.includeWatermark && (
         <div style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: options.includeCreatorHandle && options.creatorHandle ? "space-between" : "center",
           alignItems: "center",
           padding: `12px ${p}px ${p}px`,
           borderTop: `1px solid ${theme.border}`,
           marginTop: 16,
           position: "relative",
         }}>
-          <div style={{ color: theme.accentDim, fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-            {options.includeCreatorHandle && options.creatorHandle
-              ? options.creatorHandle
-              : COMPLIANCE_LINE}
-          </div>
-          <div style={{ color: theme.muted, fontSize: 9 }}>{watermarkUrl}</div>
+          {options.includeCreatorHandle && options.creatorHandle ? (
+            <>
+              <div style={{ color: theme.accentDim, fontSize: 9, letterSpacing: "0.1em" }}>
+                {options.creatorHandle}
+              </div>
+              <div style={{ color: theme.muted, fontSize: 9 }}>{watermarkUrl}</div>
+            </>
+          ) : (
+            <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 10, letterSpacing: "0.04em" }}>
+              <span style={{ color: theme.text }}>{WATERMARK_URL}</span>
+              <span style={{ color: theme.muted }}> · {WATERMARK_CTA}</span>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -219,15 +226,24 @@ function VerticalCard({ signal, options, theme, layout }: Props & {
           left: 64,
           right: 64,
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: options.includeCreatorHandle && options.creatorHandle ? "space-between" : "center",
           alignItems: "center",
           borderTop: `1px solid ${theme.border}`,
           paddingTop: 24,
         }}>
-          <div style={{ color: theme.accentDim, fontSize: 14, letterSpacing: "0.1em" }}>
-            {options.includeCreatorHandle && options.creatorHandle ? options.creatorHandle : COMPLIANCE_LINE}
-          </div>
-          <div style={{ color: theme.muted, fontSize: 14 }}>{watermarkUrl}</div>
+          {options.includeCreatorHandle && options.creatorHandle ? (
+            <>
+              <div style={{ color: theme.accentDim, fontSize: 14, letterSpacing: "0.1em" }}>
+                {options.creatorHandle}
+              </div>
+              <div style={{ color: theme.muted, fontSize: 14 }}>{watermarkUrl}</div>
+            </>
+          ) : (
+            <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 13 }}>
+              <span style={{ color: theme.text }}>{WATERMARK_URL}</span>
+              <span style={{ color: theme.muted }}> · {WATERMARK_CTA}</span>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -286,11 +302,26 @@ function SquareCard({ signal, options, theme, layout }: Props & {
 
       {/* Watermark */}
       {options.includeWatermark && (
-        <div style={{ display: "flex", justifyContent: "space-between", borderTop: `1px solid ${theme.border}`, paddingTop: 16, position: "relative" }}>
-          <div style={{ color: theme.accentDim, fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-            {options.includeCreatorHandle && options.creatorHandle ? options.creatorHandle : COMPLIANCE_LINE}
-          </div>
-          <div style={{ color: theme.muted, fontSize: 10 }}>{watermarkUrl}</div>
+        <div style={{
+          display: "flex",
+          justifyContent: options.includeCreatorHandle && options.creatorHandle ? "space-between" : "center",
+          borderTop: `1px solid ${theme.border}`,
+          paddingTop: 16,
+          position: "relative",
+        }}>
+          {options.includeCreatorHandle && options.creatorHandle ? (
+            <>
+              <div style={{ color: theme.accentDim, fontSize: 10, letterSpacing: "0.1em" }}>
+                {options.creatorHandle}
+              </div>
+              <div style={{ color: theme.muted, fontSize: 10 }}>{watermarkUrl}</div>
+            </>
+          ) : (
+            <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 10 }}>
+              <span style={{ color: theme.text }}>{WATERMARK_URL}</span>
+              <span style={{ color: theme.muted }}> · {WATERMARK_CTA}</span>
+            </div>
+          )}
         </div>
       )}
     </div>

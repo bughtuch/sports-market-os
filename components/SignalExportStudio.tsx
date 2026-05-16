@@ -405,7 +405,8 @@ export default function SignalExportStudio({ initialSignal }: Props) {
           <button
             onClick={handleDownload}
             disabled={downloading}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-black text-[11px] font-mono rounded-sm hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 text-black text-[11px] font-mono font-semibold rounded-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
+            style={{ backgroundColor: "var(--accent)" }}
           >
             {downloading ? (
               <>
@@ -419,7 +420,8 @@ export default function SignalExportStudio({ initialSignal }: Props) {
           <button
             onClick={handleCopy}
             disabled={copying}
-            className="flex items-center gap-2 px-4 py-2 border border-zinc-700 text-zinc-300 text-[11px] font-mono rounded-sm hover:border-zinc-500 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 text-[11px] font-mono rounded-sm border transition-opacity disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
+            style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
           >
             {copyDone ? "✓ Copied!" : copying ? "Copying…" : "Copy to Clipboard"}
           </button>
