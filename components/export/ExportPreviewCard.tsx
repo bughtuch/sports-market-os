@@ -80,13 +80,30 @@ const SCALES: Record<string, Scale> = {
   },
 };
 
-// X/Twitter landscape is only 628px tall — truncate long narratives
-// so they don't overflow the flex container.
+// X/Twitter landscape is only 628px tall — truncate long narratives.
+// Prefers a sentence-boundary end (within max+40 chars), then falls
+// back to the last word boundary before max chars.
 const X_NARRATIVE_MAX_CHARS = 280;
+
+function truncateAtWordBoundary(text: string, max: number): string {
+  if (text.length <= max) return text;
+  // Sentence-boundary preference: if a sentence end falls within max+40,
+  // finish there cleanly (no ellipsis needed — it's a real sentence end).
+  const window = text.slice(0, max + 40);
+  const sentenceMatch = window.match(/^[\s\S]*?[.?!](?=\s|$)/);
+  if (sentenceMatch && sentenceMatch[0].length >= max * 0.6) {
+    return sentenceMatch[0].trimEnd();
+  }
+  // Word-boundary fallback — never cut mid-word.
+  const sliced = text.slice(0, max);
+  const lastSpace = sliced.lastIndexOf(" ");
+  const cutAt = lastSpace > max * 0.8 ? lastSpace : max;
+  return sliced.slice(0, cutAt).replace(/[.,;:\-—]+$/, "").trimEnd() + "…";
+}
+
 function truncateForLandscape(text: string, layoutId: string): string {
   if (layoutId !== "x-landscape") return text;
-  if (text.length <= X_NARRATIVE_MAX_CHARS) return text;
-  return text.slice(0, X_NARRATIVE_MAX_CHARS).trimEnd() + "…";
+  return truncateAtWordBoundary(text, X_NARRATIVE_MAX_CHARS);
 }
 
 function scale(layoutId: ExportLayoutId): Scale {
@@ -136,8 +153,7 @@ function WatermarkRow({
 
 // ─── Landscape layout (X / Telegram) ─────────────────────────────────────────
 function LandscapeCard({ signal, options, theme, layout }: Props & { theme: ExportTheme; layout: ExportLayout }) {
-  const s         = scale(layout.id);
-  const movColor  = dirColor(signal.direction, theme);
+  const s            = scale(layout.id);
   const watermarkUrl = buildWatermarkUrl(options.partnerCode || undefined);
   const bodyFont  = theme.serifBody ? SERIF : MONO;
 
@@ -166,23 +182,18 @@ function LandscapeCard({ signal, options, theme, layout }: Props & { theme: Expo
             {signal.title}
           </div>
         </div>
-        {/* Movement + timestamp */}
+        {/* Timestamp */}
         <div style={{ textAlign: "right", flexShrink: 0 }}>
-          <div style={{ color: movColor, fontSize: s.movement, fontWeight: 700, fontFamily: MONO, lineHeight: 1 }}>
-            {dirArrow(signal.direction)} {signal.movement}
-          </div>
-          <div style={{ color: theme.muted, fontSize: s.timestamp, marginTop: 8, fontFamily: MONO }}>{signal.timestamp}</div>
+          <div style={{ color: theme.muted, fontSize: s.timestamp, fontFamily: MONO }}>{signal.timestamp}</div>
         </div>
       </div>
 
-      {/* Type label */}
+      {/* Type label — freestanding mono caps, no box */}
       <div style={{ padding: `${Math.round(s.pad * 0.5)}px ${s.pad}px 0`, position: "relative" }}>
         <span style={{
           color: signal.accentHex,
-          border: `1px solid ${signal.accentHex}40`,
-          backgroundColor: `${signal.accentHex}12`,
-          fontSize: s.typeBadge, padding: `${Math.round(s.typeBadge * 0.25)}px ${Math.round(s.typeBadge * 0.6)}px`,
-          borderRadius: 4, letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: MONO,
+          fontSize: s.typeBadge, fontWeight: 700,
+          letterSpacing: "0.15em", textTransform: "uppercase", fontFamily: MONO,
         }}>
           {signal.type}
         </span>
