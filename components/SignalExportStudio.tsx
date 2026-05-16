@@ -405,8 +405,8 @@ export default function SignalExportStudio({ initialSignal }: Props) {
           <button
             onClick={handleDownload}
             disabled={downloading}
-            className="flex items-center gap-2 px-4 py-2 text-black text-[11px] font-mono font-semibold rounded-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
-            style={{ backgroundColor: "var(--accent)" }}
+            className="flex items-center gap-2 text-[14px] font-mono font-semibold rounded-lg transition-opacity disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
+            style={{ backgroundColor: "var(--accent)", color: "var(--bg-canvas)", padding: "12px 24px" }}
           >
             {downloading ? (
               <>
@@ -420,8 +420,8 @@ export default function SignalExportStudio({ initialSignal }: Props) {
           <button
             onClick={handleCopy}
             disabled={copying}
-            className="flex items-center gap-2 px-4 py-2 text-[11px] font-mono rounded-sm border transition-opacity disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
-            style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
+            className="flex items-center gap-2 text-[14px] font-mono rounded-lg border transition-opacity disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
+            style={{ borderColor: "var(--accent)", color: "var(--accent)", padding: "12px 24px" }}
           >
             {copyDone ? "✓ Copied!" : copying ? "Copying…" : "Copy to Clipboard"}
           </button>
@@ -432,22 +432,24 @@ export default function SignalExportStudio({ initialSignal }: Props) {
           <button
             onClick={handleQueuePost}
             disabled={!!queueAction}
-            className="px-3 py-1.5 border border-zinc-800 text-zinc-600 text-[10px] font-mono rounded-sm hover:border-zinc-600 hover:text-zinc-300 transition-colors disabled:opacity-40"
+            className="px-3 py-1.5 border text-[10px] font-mono rounded-md transition-opacity disabled:opacity-40 hover:opacity-80"
+            style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
           >
             {queueDone === "queue" ? "✓ Queued" : "Queue Post"}
           </button>
           <button
             onClick={handleSaveDraft}
             disabled={!!queueAction}
-            className="px-3 py-1.5 border border-zinc-800 text-zinc-600 text-[10px] font-mono rounded-sm hover:border-zinc-600 hover:text-zinc-300 transition-colors disabled:opacity-40"
+            className="px-3 py-1.5 border text-[10px] font-mono rounded-md transition-opacity disabled:opacity-40 hover:opacity-80"
+            style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
           >
             {queueDone === "draft" ? "✓ Draft Saved" : "Save Draft"}
           </button>
         </div>
 
         {/* Compliance */}
-        <p className="text-zinc-800 text-[9px] font-mono mt-3">
-          Market intelligence only · Not financial advice
+        <p className="text-zinc-700 text-[9px] font-mono mt-3">
+          Not financial advice
         </p>
       </div>
     </div>
