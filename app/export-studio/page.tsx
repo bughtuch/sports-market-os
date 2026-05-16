@@ -54,22 +54,32 @@ export default async function ExportStudioPage({ searchParams }: PageProps) {
   const confidence = isNaN(rawConf) ? 72 : Math.max(0, Math.min(100, rawConf));
   const signalId   = str("id");
 
-  // Fetch real AI narrative from Supabase if signal id is present
+  // Fetch real AI narrative from Supabase if signal id is present.
+  // Uses anon key — RLS policy allows SELECT on is_published=true rows.
   let narrative = "";
   if (signalId) {
-    try {
-      const db = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-      );
-      const { data } = await db
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error("[ExportStudio] Missing Supabase env vars — cannot fetch narrative");
+    } else {
+      const db = createClient(supabaseUrl, supabaseAnonKey);
+      console.log("[ExportStudio] Fetching signal by id:", signalId);
+
+      const { data, error } = await db
         .from("signals")
         .select("narrative")
         .eq("id", signalId)
-        .single();
-      narrative = data?.narrative ?? "";
-    } catch {
-      // Non-fatal — fall through to URL param fallback
+        .maybeSingle();
+
+      console.log("[ExportStudio] Supabase result:", { data, error: error?.message ?? null });
+
+      if (error) {
+        console.error("[ExportStudio] Supabase error:", error.message, error.code);
+      } else {
+        narrative = (data as { narrative?: string | null } | null)?.narrative ?? "";
+      }
     }
   }
 
