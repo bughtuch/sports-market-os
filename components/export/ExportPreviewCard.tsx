@@ -54,31 +54,40 @@ interface Scale {
 
 const SCALES: Record<string, Scale> = {
   "x-landscape": {
-    pad: 48, sportHeader: 18, title: 36, timestamp: 16,
-    typeBadge: 17, narrative: 22, confLabel: 16, confValue: 36,
-    movement: 44, watermark: 18, barH: 4, accentBorder: 6,
+    pad: 56, sportHeader: 22, title: 45, timestamp: 20,
+    typeBadge: 21, narrative: 25, confLabel: 20, confValue: 45,
+    movement: 55, watermark: 22, barH: 5, accentBorder: 7,
   },
   "telegram-card": {
-    pad: 32, sportHeader: 13, title: 25, timestamp: 11,
-    typeBadge: 12, narrative: 15, confLabel: 11, confValue: 26,
-    movement: 30, watermark: 13, barH: 3, accentBorder: 4,
+    pad: 40, sportHeader: 16, title: 31, timestamp: 14,
+    typeBadge: 15, narrative: 19, confLabel: 14, confValue: 33,
+    movement: 38, watermark: 16, barH: 4, accentBorder: 5,
   },
   "square-post": {
-    pad: 64, sportHeader: 20, title: 44, timestamp: 18,
-    typeBadge: 18, narrative: 26, confLabel: 18, confValue: 48,
-    movement: 64, watermark: 20, barH: 5, accentBorder: 8,
+    pad: 80, sportHeader: 25, title: 55, timestamp: 22,
+    typeBadge: 22, narrative: 32, confLabel: 22, confValue: 60,
+    movement: 80, watermark: 25, barH: 6, accentBorder: 10,
   },
   "vertical-shorts": {
-    pad: 64, sportHeader: 26, title: 56, timestamp: 20,
-    typeBadge: 22, narrative: 36, confLabel: 20, confValue: 64,
-    movement: 96, watermark: 28, barH: 6, accentBorder: 0,
+    pad: 80, sportHeader: 32, title: 70, timestamp: 25,
+    typeBadge: 27, narrative: 45, confLabel: 25, confValue: 80,
+    movement: 120, watermark: 35, barH: 8, accentBorder: 0,
   },
   "instagram-story": {
-    pad: 64, sportHeader: 26, title: 56, timestamp: 20,
-    typeBadge: 22, narrative: 36, confLabel: 20, confValue: 64,
-    movement: 96, watermark: 28, barH: 6, accentBorder: 0,
+    pad: 80, sportHeader: 32, title: 70, timestamp: 25,
+    typeBadge: 27, narrative: 45, confLabel: 25, confValue: 80,
+    movement: 120, watermark: 35, barH: 8, accentBorder: 0,
   },
 };
+
+// X/Twitter landscape is only 628px tall — truncate long narratives
+// so they don't overflow the flex container.
+const X_NARRATIVE_MAX_CHARS = 280;
+function truncateForLandscape(text: string, layoutId: string): string {
+  if (layoutId !== "x-landscape") return text;
+  if (text.length <= X_NARRATIVE_MAX_CHARS) return text;
+  return text.slice(0, X_NARRATIVE_MAX_CHARS).trimEnd() + "…";
+}
 
 function scale(layoutId: ExportLayoutId): Scale {
   return SCALES[layoutId] ?? SCALES["x-landscape"];
@@ -182,7 +191,7 @@ function LandscapeCard({ signal, options, theme, layout }: Props & { theme: Expo
       {/* Narrative body */}
       <div style={{ flex: 1, padding: `${Math.round(s.pad * 0.5)}px ${s.pad}px 0`, position: "relative", overflow: "hidden" }}>
         <p style={{ color: theme.subtext, fontSize: s.narrative, lineHeight: 1.55, margin: 0, fontFamily: bodyFont }}>
-          {signal.description}
+          {truncateForLandscape(signal.description, layout.id)}
         </p>
       </div>
 
