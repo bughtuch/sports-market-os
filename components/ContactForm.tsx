@@ -43,11 +43,24 @@ export default function ContactForm() {
     e.preventDefault();
     setState("loading");
 
-    // Simulated submission delay — replace with real API route when Resend is live
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    try {
+      const res = await fetch("/api/contact", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({
+          name:        form.name,
+          email:       form.email,
+          inquiryType: form.inquiryType,
+          subject:     form.subject,
+          message:     form.message,
+        }),
+      });
 
-    // TODO: POST to /api/contact when email integration activates
-    setState("success");
+      if (!res.ok) throw new Error("Request failed");
+      setState("success");
+    } catch {
+      setState("error");
+    }
   }
 
   if (state === "success") {

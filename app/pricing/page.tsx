@@ -301,28 +301,6 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* Contact / waitlist */}
-        <section className="px-6 py-12 border-b border-zinc-900/80" id="contact">
-          <div className="max-w-xl mx-auto text-center">
-            <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-4">
-              Billing system activates soon
-            </p>
-            <h2 className="text-xl font-bold mb-3">
-              Ready to upgrade?
-            </h2>
-            <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-              Billing infrastructure is being finalised. Join the waitlist and
-              you&apos;ll be first to access Partner and API tiers.
-            </p>
-            <Link
-              href="/signup"
-              className="inline-block text-sm font-medium text-black bg-white px-6 py-2.5 rounded-sm hover:bg-zinc-200 transition-colors"
-            >
-              Create free account →
-            </Link>
-          </div>
-        </section>
-
         {/* Enterprise contact CTA */}
         <section className="px-6 py-10 border-t border-zinc-900/60">
           <div className="max-w-xl mx-auto text-center">
