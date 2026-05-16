@@ -15,11 +15,14 @@ export interface RenderResult {
 }
 
 /**
- * Reads the first child element's background-color as a fallback
+ * Reads the node's own background-color (or its first child's as a fallback)
  * so html-to-image never renders against a transparent/black canvas.
  */
 function resolveBackgroundColor(node: HTMLElement): string {
-  // Walk into the first child (the card div) where inline bg is set
+  // Check the node itself first — works when we pass the card element directly
+  const selfBg = getComputedStyle(node).backgroundColor;
+  if (selfBg && selfBg !== "rgba(0, 0, 0, 0)" && selfBg !== "transparent") return selfBg;
+  // Fall back to first child (legacy: when node was a wrapper div)
   const card = node.firstElementChild as HTMLElement | null;
   if (card) {
     const bg = getComputedStyle(card).backgroundColor;
@@ -40,6 +43,11 @@ export async function downloadNodeAsPng(
   pixelRatio = 2
 ): Promise<RenderResult> {
   try {
+    // Two rAF ticks ensure React has fully painted the off-screen card
+    // before html-to-image walks the DOM. fonts.ready ensures web fonts
+    // are loaded so glyphs are not replaced with blank boxes.
+    await new Promise(r => requestAnimationFrame(r));
+    await new Promise(r => requestAnimationFrame(r));
     await document.fonts.ready;
     const { toPng } = await import("html-to-image");
     const backgroundColor = resolveBackgroundColor(node);
@@ -68,6 +76,8 @@ export async function copyNodeAsImage(
   fallbackFilename: string
 ): Promise<RenderResult> {
   try {
+    await new Promise(r => requestAnimationFrame(r));
+    await new Promise(r => requestAnimationFrame(r));
     await document.fonts.ready;
     const { toPng } = await import("html-to-image");
     const backgroundColor = resolveBackgroundColor(node);

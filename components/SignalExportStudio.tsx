@@ -151,8 +151,13 @@ export default function SignalExportStudio({ initialSignal }: Props) {
   const handleDownload = useCallback(async () => {
     if (!captureRef.current || downloading) return;
     setDownloading(true);
+    // Capture the card element itself — not the fixed-position wrapper.
+    // If we pass the wrapper (position:fixed; left:-99999), html-to-image
+    // copies those styles to its clone and renders the content off-canvas.
+    const cardNode = captureRef.current.firstElementChild as HTMLElement | null;
+    if (!cardNode) { setDownloading(false); return; }
     const filename = exportFilename(signal.sport, options.layout);
-    await downloadNodeAsPng(captureRef.current, filename, 2);
+    await downloadNodeAsPng(cardNode, filename, 2);
     trackExport({ layout: options.layout, theme: options.theme, sport: signal.sport, partnerCode: options.partnerCode || undefined });
     trackExportEvent("download");
     setDownloading(false);
@@ -161,8 +166,10 @@ export default function SignalExportStudio({ initialSignal }: Props) {
   const handleCopy = useCallback(async () => {
     if (!captureRef.current || copying) return;
     setCopying(true);
+    const cardNode = captureRef.current.firstElementChild as HTMLElement | null;
+    if (!cardNode) { setCopying(false); return; }
     const filename = exportFilename(signal.sport, options.layout);
-    await copyNodeAsImage(captureRef.current, filename);
+    await copyNodeAsImage(cardNode, filename);
     trackExport({ layout: options.layout, theme: options.theme, sport: signal.sport, partnerCode: options.partnerCode || undefined });
     trackExportEvent("clipboard");
     setCopying(false);
