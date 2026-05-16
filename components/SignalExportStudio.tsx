@@ -32,6 +32,7 @@ interface Props {
 
 // ─── Theme swatch colours (bg) ────────────────────────────────────────────────
 const THEME_BG: Record<ExportThemeId, string> = {
+  "institutional-light": "#FAFAF8",
   "institutional-black": "#000000",
   "bloomberg-white":     "#f4f4f5",
   "creator-dark":        "#0c0a1e",
@@ -93,7 +94,7 @@ export default function SignalExportStudio({ initialSignal }: Props) {
   const [signal, setSignal] = useState<ExportSignal>(initialSignal);
   const [options, setOptions] = useState<ExportOptions>({
     layout:               "x-landscape",
-    theme:                "institutional-black",
+    theme:                "institutional-light",
     includeConfidence:    true,
     includeVolatility:    true,
     includeExchange:      true,

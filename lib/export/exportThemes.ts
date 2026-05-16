@@ -1,6 +1,24 @@
 import type { ExportTheme, ExportThemeId } from "./exportTypes";
 
 export const EXPORT_THEMES: Record<ExportThemeId, ExportTheme> = {
+  "institutional-light": {
+    id: "institutional-light",
+    label: "Institutional Light",
+    bg:         "#FAFAF8",
+    surface:    "#FFFFFF",
+    border:     "#E5E5E5",
+    text:       "#09090B",
+    subtext:    "#27272A",
+    muted:      "#52525B",
+    accent:     "#3F3F46",
+    accentDim:  "#71717A",
+    gridColor:  "rgba(0,0,0,0)",
+    upColor:    "#059669",
+    downColor:  "#DC2626",
+    flatColor:  "#71717A",
+    serifBody:  true,
+    showOutline: true,
+  },
   "institutional-black": {
     id: "institutional-black",
     label: "Institutional Black",
@@ -84,6 +102,7 @@ export const EXPORT_THEMES: Record<ExportThemeId, ExportTheme> = {
 };
 
 export const THEME_ORDER: ExportThemeId[] = [
+  "institutional-light",
   "institutional-black",
   "bloomberg-white",
   "creator-dark",

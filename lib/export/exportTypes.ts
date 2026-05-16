@@ -27,6 +27,7 @@ export interface ExportLayout {
 // ─── Themes ───────────────────────────────────────────────────────────────────
 
 export type ExportThemeId =
+  | "institutional-light"
   | "institutional-black"
   | "bloomberg-white"
   | "creator-dark"
@@ -48,6 +49,10 @@ export interface ExportTheme {
   upColor: string;
   downColor: string;
   flatColor: string;
+  /** When true, narrative body renders in serif for document-grade legibility */
+  serifBody?: boolean;
+  /** When true, a 1px border is drawn around the entire card */
+  showOutline?: boolean;
 }
 
 // ─── Export signal data ───────────────────────────────────────────────────────
