@@ -163,6 +163,101 @@ export interface ResponseMeta {
   count: number;
 }
 
+// ─── Signal Engine types (Sprint 3A) ─────────────────────────────────────────
+
+export type SignalType =
+  | 'volume_surge'
+  | 'open_interest_shift'
+  | 'queue_thinning'
+  | 'spread_compression'
+  | 'spread_widening'
+  | 'whale_concentration'
+  | 'sharp_flow'
+  | 'price_divergence'
+  | 'cross_source_divergence'
+  | 'line_move'
+  | 'catalyst_detected';
+
+export type Sport =
+  | 'horse_racing'
+  | 'tennis'
+  | 'nba'
+  | 'nfl'
+  | 'ufc'
+  | 'football'
+  | 'mlb'
+  | 'nhl'
+  | 'golf'
+  | 'f1';
+
+export type DataSource =
+  | 'polymarket'
+  | 'the_odds_api'
+  | 'betfair'
+  | 'mock';
+
+export interface NormalizedMarketEvent {
+  event_id: string;
+  external_id: string;
+  source: DataSource;
+  sport: Sport;
+  market_type: string;
+  event_title: string;
+  commence_time: string;
+  is_live: boolean;
+  is_resolved: boolean;
+  current_prices: Array<{
+    selection: string;
+    /** Polymarket: 0-1 probability. Odds API: decimal odds. */
+    price: number;
+    volume_24h?: number;
+    open_interest?: number;
+  }>;
+  orderbook?: {
+    bids: Array<{ price: number; size: number }>;
+    asks: Array<{ price: number; size: number }>;
+    /** 0-100, adapter-computed */
+    depth_score?: number;
+  };
+  price_history?: Array<{
+    timestamp: string;
+    selection: string;
+    price: number;
+  }>;
+  /** Original provider payload for debugging */
+  raw: unknown;
+  /** ISO 8601 when this snapshot was captured */
+  snapshot_at: string;
+}
+
+export interface GeneratedSignal {
+  /** UUID */
+  id: string;
+  generated_at: string;
+  sport: Sport;
+  market_type: string;
+  source: DataSource;
+  event_id: string;
+  event_title: string;
+  signal_type: SignalType;
+  predicted_direction: 'up' | 'down' | 'over' | 'under' | 'narrow' | 'widen';
+  predicted_magnitude?: number;
+  /** 0-100 */
+  confidence: number;
+  decay_window_minutes: number;
+  /** null in 3A — filled by AI Narrator in 3B */
+  narrative?: string | null;
+  historical_analog?: {
+    event: string;
+    date: string;
+    outcome: string;
+    time_to_resolution_minutes: number;
+  } | null;
+  /** Snapshot data that triggered the signal */
+  raw_inputs: unknown;
+  is_published: boolean;
+}
+
 // ─── Provider interface ───────────────────────────────────────────────────────
 
 export interface IProvider {
