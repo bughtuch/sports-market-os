@@ -9,6 +9,7 @@ import LiveSignalFeed from "@/components/LiveSignalFeed";
 import DataModeIndicator from "@/components/DataModeIndicator";
 import DailyBriefWidget from "@/components/DailyBriefWidget";
 import MobilePanelsDrawer from "@/components/MobilePanelsDrawer";
+import MarketsPulse from "@/components/MarketsPulse";
 
 export const revalidate = 300; // 5-minute server-side cache
 
@@ -187,12 +188,17 @@ export default async function TerminalPage() {
               <DailyBriefWidget />
             </section>
 
-            {/* ── Zone 3: Signal Feed ──────────────────────────────────── */}
+            {/* ── Zone 3: Markets Pulse ────────────────────────────────── */}
+            <section className="px-6 py-8 border-b border-zinc-900/80">
+              <MarketsPulse />
+            </section>
+
+            {/* ── Zone 4: Signal Feed ──────────────────────────────────── */}
             <section className="px-6 py-8 border-b border-zinc-900/80">
               <LiveSignalFeed />
             </section>
 
-            {/* ── Zone 4: Watchlist ────────────────────────────────────── */}
+            {/* ── Zone 5: Watchlist ────────────────────────────────────── */}
             <section className="border-b border-zinc-900/80">
               <div className="flex items-center gap-3 px-6 pt-8 mb-4">
                 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest shrink-0">Active Watchlist</span>
@@ -201,7 +207,7 @@ export default async function TerminalPage() {
               <Watchlist />
             </section>
 
-            {/* ── Zone 5: Ledger Snapshot ──────────────────────────────── */}
+            {/* ── Zone 6: Ledger Snapshot ──────────────────────────────── */}
             <section className="px-6 py-8 border-b border-zinc-900/80">
               <div className="flex items-center gap-3 mb-6">
                 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest shrink-0">Ledger Snapshot</span>
