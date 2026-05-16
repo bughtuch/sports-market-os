@@ -370,10 +370,12 @@ export default function SignalExportStudio({ initialSignal }: Props) {
       {/* ── Preview + actions panel ─────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col items-center min-w-0">
 
-        {/* Off-screen capture target — full native resolution, no transform */}
+        {/* Off-screen capture target — full native resolution, no transform.
+            Must NOT use zIndex:-1: negative z-index prevents browser paint,
+            causing html-to-image to capture an empty (black) canvas. */}
         <div
           ref={captureRef}
-          style={{ position: "fixed", left: -99999, top: 0, zIndex: -1, pointerEvents: "none" }}
+          style={{ position: "fixed", left: -99999, top: 0, pointerEvents: "none" }}
           aria-hidden
         >
           <ExportPreviewCard signal={signal} options={options} />

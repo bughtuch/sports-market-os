@@ -15,8 +15,24 @@ export interface RenderResult {
 }
 
 /**
+ * Reads the first child element's background-color as a fallback
+ * so html-to-image never renders against a transparent/black canvas.
+ */
+function resolveBackgroundColor(node: HTMLElement): string {
+  // Walk into the first child (the card div) where inline bg is set
+  const card = node.firstElementChild as HTMLElement | null;
+  if (card) {
+    const bg = getComputedStyle(card).backgroundColor;
+    if (bg && bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent") return bg;
+  }
+  return "#ffffff";
+}
+
+/**
  * Downloads a DOM node as a PNG file.
  * pixelRatio: 2 = standard retina, 3 = high-res.
+ *
+ * Awaits document.fonts.ready so web fonts are loaded before capture.
  */
 export async function downloadNodeAsPng(
   node: HTMLElement,
@@ -24,14 +40,21 @@ export async function downloadNodeAsPng(
   pixelRatio = 2
 ): Promise<RenderResult> {
   try {
+    await document.fonts.ready;
     const { toPng } = await import("html-to-image");
-    const dataUrl = await toPng(node, { pixelRatio });
+    const backgroundColor = resolveBackgroundColor(node);
+    const dataUrl = await toPng(node, {
+      pixelRatio,
+      cacheBust: true,
+      backgroundColor,
+    });
     const a = document.createElement("a");
     a.href = dataUrl;
     a.download = filename;
     a.click();
     return { success: true };
   } catch (err) {
+    console.error("[ExportCapture] downloadNodeAsPng failed:", err);
     return { success: false, error: String(err) };
   }
 }
@@ -45,8 +68,14 @@ export async function copyNodeAsImage(
   fallbackFilename: string
 ): Promise<RenderResult> {
   try {
+    await document.fonts.ready;
     const { toPng } = await import("html-to-image");
-    const dataUrl = await toPng(node, { pixelRatio: 2 });
+    const backgroundColor = resolveBackgroundColor(node);
+    const dataUrl = await toPng(node, {
+      pixelRatio: 2,
+      cacheBust: true,
+      backgroundColor,
+    });
     const res = await fetch(dataUrl);
     const blob = await res.blob();
     await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
