@@ -5,8 +5,12 @@ export type SportType =
   | "Tennis"
   | "NBA"
   | "NFL"
+  | "NHL"
+  | "MLB"
   | "UFC"
   | "Football"
+  | "Golf"
+  | "Formula 1"
   | "Prediction Markets";
 
 export type SignalTag = "Free" | "Premium" | "Creator" | "API";

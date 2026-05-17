@@ -44,10 +44,10 @@ const SPORT_MAP: Record<string, SportType> = {
   nfl:          "NFL",
   ufc:          "UFC",
   football:     "Football",
-  mlb:          "Football",
-  nhl:          "Football",
-  golf:         "Football",
-  f1:           "Football",
+  mlb:          "MLB",
+  nhl:          "NHL",
+  golf:         "Golf",
+  f1:           "Formula 1",
 };
 
 const DIR_MAP: Record<string, Direction> = {

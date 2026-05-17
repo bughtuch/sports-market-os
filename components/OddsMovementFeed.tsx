@@ -4,12 +4,16 @@ import { useState, useEffect } from "react";
 import type { OddsSnapshot, SportType, DataMode } from "@/lib/providers/types";
 
 const SPORT_COLORS: Record<SportType, string> = {
-  "Horse Racing": "text-amber-400",
-  Tennis:         "text-emerald-400",
-  NBA:            "text-blue-400",
-  NFL:            "text-red-400",
-  UFC:            "text-orange-400",
-  Football:       "text-zinc-300",
+  "Horse Racing":     "text-amber-400",
+  Tennis:             "text-emerald-400",
+  NBA:                "text-blue-400",
+  NFL:                "text-red-400",
+  NHL:                "text-cyan-400",
+  MLB:                "text-emerald-400",
+  UFC:                "text-orange-400",
+  Football:           "text-zinc-300",
+  Golf:               "text-green-400",
+  "Formula 1":        "text-red-400",
   "Prediction Markets": "text-purple-400",
 };
 
