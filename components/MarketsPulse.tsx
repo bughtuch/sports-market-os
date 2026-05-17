@@ -124,7 +124,7 @@ export default async function MarketsPulse() {
   const narrative = await generatePulseNarrative(pulseData);
 
   return (
-    <div className="border border-zinc-900/80 rounded-[8px] bg-zinc-950 p-6">
+    <div className="border border-zinc-900/80 rounded-[8px] bg-zinc-950 p-4 md:p-6">
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between mb-5">

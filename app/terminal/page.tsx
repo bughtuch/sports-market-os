@@ -155,7 +155,7 @@ export default async function TerminalPage() {
           <div className="sticky top-0 z-10 h-9 shrink-0 border-b border-zinc-800/60 bg-zinc-950 flex items-center justify-between px-4 terminal-filter-bar">
             <div className="flex items-center gap-3">
               <span className="text-white text-[11px] font-semibold">Live Market Intelligence</span>
-              <DataModeIndicator />
+              <span className="hidden sm:block"><DataModeIndicator /></span>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1">
@@ -168,9 +168,9 @@ export default async function TerminalPage() {
 
           <main>
             {/* ── Zone 1: Global Pulse ─────────────────────────────────── */}
-            <section className="px-6 py-14 border-b border-zinc-900/80">
+            <section className="px-4 py-8 md:px-6 md:py-14 border-b border-zinc-900/80">
               <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-4">Active Markets</p>
-              <p className="text-[96px] font-bold tabular-nums text-white num-breathe leading-none mb-4">
+              <p className="text-[52px] md:text-[96px] font-bold tabular-nums text-white num-breathe leading-none mb-4">
                 {signalsIssuedThisWeek > 0 ? signalsIssuedThisWeek : "—"}
               </p>
               <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-6">
@@ -182,7 +182,7 @@ export default async function TerminalPage() {
             </section>
 
             {/* ── Zone 2: Today's Brief ────────────────────────────────── */}
-            <section className="px-6 py-8 border-b border-zinc-900/80">
+            <section className="px-4 py-6 md:px-6 md:py-8 border-b border-zinc-900/80">
               <div className="flex items-center gap-3 mb-6">
                 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest shrink-0">Today&apos;s Intelligence Brief</span>
                 <div className="flex-1 h-px bg-zinc-900" />
@@ -191,18 +191,18 @@ export default async function TerminalPage() {
             </section>
 
             {/* ── Zone 3: Markets Pulse ────────────────────────────────── */}
-            <section className="px-6 py-8 border-b border-zinc-900/80">
+            <section className="px-4 py-6 md:px-6 md:py-8 border-b border-zinc-900/80">
               <MarketsPulse />
             </section>
 
             {/* ── Zone 4: Signal Feed ──────────────────────────────────── */}
-            <section className="px-6 py-8 border-b border-zinc-900/80">
+            <section className="px-4 py-6 md:px-6 md:py-8 border-b border-zinc-900/80">
               <LiveSignalFeed />
             </section>
 
             {/* ── Zone 5: Watchlist ────────────────────────────────────── */}
             <section className="border-b border-zinc-900/80">
-              <div className="flex items-center gap-3 px-6 pt-8 mb-4">
+              <div className="flex items-center gap-3 px-4 pt-6 md:px-6 md:pt-8 mb-4">
                 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest shrink-0">Active Watchlist</span>
                 <div className="flex-1 h-px bg-zinc-900" />
               </div>
@@ -210,7 +210,7 @@ export default async function TerminalPage() {
             </section>
 
             {/* ── Zone 6: Ledger Snapshot ──────────────────────────────── */}
-            <section className="px-6 py-8 border-b border-zinc-900/80">
+            <section className="px-4 py-6 md:px-6 md:py-8 border-b border-zinc-900/80">
               <div className="flex items-center gap-3 mb-6">
                 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest shrink-0">Ledger Snapshot</span>
                 <div className="flex-1 h-px bg-zinc-900" />

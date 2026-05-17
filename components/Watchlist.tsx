@@ -209,7 +209,7 @@ export default function Watchlist() {
             <button
               onClick={() => void handleRemove(item.event_id)}
               disabled={removing === item.event_id}
-              className="shrink-0 text-zinc-700 hover:text-zinc-400 transition-colors text-sm leading-none disabled:opacity-30"
+              className="shrink-0 w-11 h-11 flex items-center justify-center text-zinc-700 hover:text-zinc-400 transition-colors text-sm disabled:opacity-30"
               aria-label="Remove from watchlist"
             >
               ×

@@ -271,11 +271,11 @@ export default function SignalCard(props: SignalCardData) {
         </div>
 
         {/* Action row */}
-        <div className="flex items-center flex-wrap gap-x-3 gap-y-1.5">
+        <div className="flex items-center flex-wrap gap-x-3 gap-y-0">
           {/* evidence */}
           <Link
             href={exportUrl}
-            className="text-[9px] font-mono hover:underline transition-colors"
+            className="inline-flex items-center min-h-[44px] text-[9px] font-mono hover:underline transition-colors"
             style={{ color: "var(--accent)" }}
             onClick={() => track("export_studio_open", { signal_id: id ?? "" })}
           >
@@ -290,7 +290,7 @@ export default function SignalCard(props: SignalCardData) {
                 href={polymarketUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[9px] font-mono hover:underline transition-colors"
+                className="inline-flex items-center min-h-[44px] text-[9px] font-mono hover:underline transition-colors"
                 style={{ color: "var(--accent)" }}
                 onClick={() =>
                   track("polymarket_click", {
@@ -311,7 +311,7 @@ export default function SignalCard(props: SignalCardData) {
           <button
             onClick={() => void handleTrack()}
             disabled={trackLoading}
-            className="text-[9px] font-mono transition-colors disabled:opacity-50"
+            className="inline-flex items-center min-h-[44px] text-[9px] font-mono transition-colors disabled:opacity-50"
             style={tracked ? { color: "var(--accent)" } : undefined}
           >
             <span className={tracked ? "" : "text-zinc-500 hover:text-zinc-300"}>
@@ -323,7 +323,7 @@ export default function SignalCard(props: SignalCardData) {
           <span className="text-zinc-800 text-[9px] select-none">·</span>
           <button
             onClick={() => void handleCopy()}
-            className="text-[9px] font-mono transition-colors"
+            className="inline-flex items-center min-h-[44px] text-[9px] font-mono transition-colors"
             style={copyState === "copied" ? { color: "var(--accent)" } : undefined}
           >
             <span className={copyState === "copied" ? "" : "text-zinc-500 hover:text-zinc-300"}>
