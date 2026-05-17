@@ -85,18 +85,27 @@ export default async function AccuracyPage({
 
   const totalCount = totalRes.count ?? 0;
   const resolutions = resolutionsRes.data ?? [];
-  const resolvedCount = resolutions.length;
-  const correctCount = resolutions.filter((r) => r.outcome === "correct").length;
-  const lifetimeAccuracy = resolvedCount > 0
-    ? Math.round((correctCount / resolvedCount) * 100)
+  // Accuracy denominator: only signals with a definitive outcome (correct | incorrect)
+  const resolvedCounted = resolutions.filter(
+    (r) => r.outcome === "correct" || r.outcome === "incorrect"
+  );
+  const correctCount = resolvedCounted.filter((r) => r.outcome === "correct").length;
+  const lifetimeAccuracy = resolvedCounted.length > 0
+    ? Math.round((correctCount / resolvedCounted.length) * 100)
     : null;
 
   // 30-day accuracy
   const thirtyDaySignals = thirtyDayRes.data ?? [];
   const thirtyDayResolvedIds = new Set(resolutions.map((r) => r.signal_id));
-  const thirtyDayResolved = thirtyDaySignals.filter(
-    (s) => thirtyDayResolvedIds.has(s.id)
-  );
+  // Filter to signals that have a correct|incorrect resolution
+  const thirtyDayResolved = thirtyDaySignals.filter((s) => {
+    if (!thirtyDayResolvedIds.has(s.id)) return false;
+    const res = Array.isArray(s.signal_resolutions)
+      ? s.signal_resolutions[0]
+      : s.signal_resolutions;
+    const outcome = (res as { outcome?: string } | null)?.outcome;
+    return outcome === "correct" || outcome === "incorrect";
+  });
   const thirtyDayCorrect = thirtyDayResolved.filter((s) => {
     const res = Array.isArray(s.signal_resolutions)
       ? s.signal_resolutions[0]
@@ -121,7 +130,8 @@ export default async function AccuracyPage({
       ? s.signal_resolutions[0]
       : s.signal_resolutions;
     const outcome = (res as { outcome?: string } | null)?.outcome;
-    if (outcome) {
+    // Only count definitive outcomes in calibration — exclude unresolved/expired
+    if (outcome === "correct" || outcome === "incorrect") {
       bucketMap[b].resolved++;
       if (outcome === "correct") bucketMap[b].correct++;
     }
@@ -170,7 +180,7 @@ export default async function AccuracyPage({
               {
                 label: "Lifetime Accuracy",
                 value: lifetimeAccuracy != null ? `${lifetimeAccuracy}%` : "—",
-                sub: resolvedCount > 0 ? `${resolvedCount} resolved` : "No resolved signals yet",
+                sub: resolvedCounted.length > 0 ? `${resolvedCounted.length} resolved` : "No resolved signals yet",
                 accent: lifetimeAccuracy != null,
               },
               {

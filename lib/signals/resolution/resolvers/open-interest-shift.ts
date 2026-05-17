@@ -22,7 +22,7 @@ export const openInterestShiftResolver: SignalResolver = {
   },
 
   async resolve(signal: GeneratedSignal): Promise<Omit<ResolutionResult, 'signal_id' | 'resolved_at'> | null> {
-    const current = await getCurrentState(signal.event_id);
+    const current = getCurrentState(signal.event_id);
 
     if (!current) {
       return {

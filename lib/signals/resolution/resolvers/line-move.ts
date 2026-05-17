@@ -28,7 +28,7 @@ export const lineMoveResolver: SignalResolver = {
   },
 
   async resolve(signal: GeneratedSignal): Promise<Omit<ResolutionResult, 'signal_id' | 'resolved_at'> | null> {
-    const current = await getCurrentState(signal.event_id);
+    const current = getCurrentState(signal.event_id);
 
     if (!current) {
       // Odds API events won't be found in Polymarket — outcome is expired

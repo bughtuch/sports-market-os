@@ -26,7 +26,7 @@ export const crossSourceDivergenceResolver: SignalResolver = {
   },
 
   async resolve(signal: GeneratedSignal): Promise<Omit<ResolutionResult, 'signal_id' | 'resolved_at'> | null> {
-    const polyCurrent = await getCurrentState(signal.event_id);
+    const polyCurrent = getCurrentState(signal.event_id);
 
     if (!polyCurrent) {
       return {

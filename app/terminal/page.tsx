@@ -94,9 +94,11 @@ export default async function TerminalPage() {
 
   const highConfCalls = weekSignals.filter((s) => s.confidence >= 85).length;
 
-  // 7-day accuracy: resolutions that belong to signals from this week
+  // 7-day accuracy: resolutions with a definitive outcome belonging to this week's signals
   const weekSignalIds = new Set(weekSignals.map((s) => s.id));
-  const weekResolved = weekResolutions.filter((r) => weekSignalIds.has(r.signal_id));
+  const weekResolved = weekResolutions.filter(
+    (r) => weekSignalIds.has(r.signal_id) && (r.outcome === "correct" || r.outcome === "incorrect")
+  );
   const weekCorrect = weekResolved.filter((r) => r.outcome === "correct").length;
   const weekAccuracy =
     weekResolved.length > 0
