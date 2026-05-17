@@ -109,23 +109,24 @@ export async function fetchSignalsBySport(
 /**
  * Insert a ResolutionResult into the signal_resolutions table.
  * Returns true on success, false on failure.
+ * signal_id and resolved_at must be set by the engine before calling this.
  */
 export async function writeResolution(result: ResolutionResult): Promise<boolean> {
   try {
     const { error } = await supabaseAdmin.from('signal_resolutions').insert({
-      signal_id:        result.signal_id,
-      resolved_at:      result.resolved_at,
-      outcome:          result.outcome,
-      resolver:         result.resolver,
-      actual_direction: result.actual_direction ?? null,
-      actual_magnitude: result.actual_magnitude ?? null,
-      notes:            result.notes ?? null,
+      signal_id:         result.signal_id,
+      resolved_at:       result.resolved_at ?? new Date().toISOString(),
+      resolution_method: result.resolution_method,
+      outcome:           result.outcome,
+      actual_direction:  result.actual_direction ?? null,
+      actual_magnitude:  result.actual_magnitude ?? null,
+      resolution_source: result.resolution_source,
     });
 
     if (error) {
       console.error('[signals/persistence] writeResolution failed:', error.message, {
-        signal_id: result.signal_id,
-        resolver: result.resolver,
+        signal_id:         result.signal_id,
+        resolution_method: result.resolution_method,
       });
       return false;
     }

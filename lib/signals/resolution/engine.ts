@@ -1,15 +1,14 @@
 /**
- * Resolution Engine — Sprint 3L.1.
+ * Resolution Engine — Sprint 3L.1 / 3L.2.
  *
  * Fetches signals whose decay window has elapsed, routes each through its
- * paired resolver, and persists the outcome.
+ * paired resolver, stamps signal_id + resolved_at, and persists the outcome.
  *
- * Individual resolvers are stubs until Sprint 3L.2. Errors thrown by resolvers
- * are caught here so a single failing resolver never blocks the others.
+ * Errors thrown by individual resolvers are caught here so one failing
+ * resolver never blocks the others.
  */
 
-import type { ResolutionResult } from './types';
-import type { SignalResolver } from './types';
+import type { ResolutionResult, SignalResolver } from './types';
 import { volumeSurgeResolver }           from './resolvers/volume-surge';
 import { lineMoveResolver }              from './resolvers/line-move';
 import { crossSourceDivergenceResolver } from './resolvers/cross-source-divergence';
@@ -51,9 +50,9 @@ export async function resolvePendingSignals(): Promise<ResolutionResult[]> {
       continue;
     }
 
-    let result: ResolutionResult | null = null;
+    let partial: Omit<ResolutionResult, 'signal_id' | 'resolved_at'> | null = null;
     try {
-      result = await resolver.resolve(signal);
+      partial = await resolver.resolve(signal);
     } catch (err) {
       console.error(
         `[resolution/engine] Resolver "${resolver.name}" threw for signal ${signal.id}:`,
@@ -62,16 +61,22 @@ export async function resolvePendingSignals(): Promise<ResolutionResult[]> {
       continue;
     }
 
-    if (result === null) {
+    if (partial === null) {
       console.log(
         `[resolution/engine] Resolver "${resolver.name}" returned null for ${signal.id} — outcome not yet determinable`
       );
       continue;
     }
 
-    const ok = await writeResolution(result);
+    const fullResult: ResolutionResult = {
+      ...partial,
+      signal_id:   signal.id,
+      resolved_at: new Date().toISOString(),
+    };
+
+    const ok = await writeResolution(fullResult);
     if (ok) {
-      results.push(result);
+      results.push(fullResult);
     } else {
       console.error(
         `[resolution/engine] writeResolution failed for signal ${signal.id} — result DROPPED`
