@@ -9,6 +9,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import type { GeneratedSignal, Sport } from '../providers/types';
+import type { ResolutionResult } from './resolution/types';
 
 // Service-role client — writes only. Never expose to client side.
 const supabaseAdmin = createClient(
@@ -103,6 +104,82 @@ export async function fetchSignalsBySport(
     return [];
   }
   return (data ?? []) as GeneratedSignal[];
+}
+
+/**
+ * Insert a ResolutionResult into the signal_resolutions table.
+ * Returns true on success, false on failure.
+ */
+export async function writeResolution(result: ResolutionResult): Promise<boolean> {
+  try {
+    const { error } = await supabaseAdmin.from('signal_resolutions').insert({
+      signal_id:        result.signal_id,
+      resolved_at:      result.resolved_at,
+      outcome:          result.outcome,
+      resolver:         result.resolver,
+      actual_direction: result.actual_direction ?? null,
+      actual_magnitude: result.actual_magnitude ?? null,
+      notes:            result.notes ?? null,
+    });
+
+    if (error) {
+      console.error('[signals/persistence] writeResolution failed:', error.message, {
+        signal_id: result.signal_id,
+        resolver: result.resolver,
+      });
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('[signals/persistence] writeResolution exception:', err, {
+      signal_id: result.signal_id,
+    });
+    return false;
+  }
+}
+
+/**
+ * Fetch signals whose decay window has elapsed and that have no resolution record yet.
+ *
+ * Two-query approach (Supabase JS v2 has no LEFT JOIN):
+ *   1. Collect all already-resolved signal IDs from signal_resolutions.
+ *   2. Fetch published signals, filter in JS to those past their decay window
+ *      and not already resolved.
+ */
+export async function fetchDueSignals(limit = 100): Promise<GeneratedSignal[]> {
+  // Step 1 — IDs that already have a resolution
+  const { data: resolved, error: resolvedError } = await supabaseAdmin
+    .from('signal_resolutions')
+    .select('signal_id');
+
+  if (resolvedError) {
+    console.error('[signals/persistence] fetchDueSignals (resolved IDs) error:', resolvedError.message);
+    return [];
+  }
+
+  const resolvedIds = new Set((resolved ?? []).map((r: { signal_id: string }) => r.signal_id));
+
+  // Step 2 — Published signals, newest first; we'll filter decay in JS
+  const { data, error } = await supabaseAdmin
+    .from('signals')
+    .select('*')
+    .eq('is_published', true)
+    .order('generated_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('[signals/persistence] fetchDueSignals (signals) error:', error.message);
+    return [];
+  }
+
+  const now = Date.now();
+
+  return ((data ?? []) as GeneratedSignal[]).filter(signal => {
+    if (resolvedIds.has(signal.id)) return false;
+    const generatedMs  = new Date(signal.generated_at).getTime();
+    const decayMs      = (signal.decay_window_minutes ?? 0) * 60_000;
+    return generatedMs + decayMs < now;
+  });
 }
 
 export async function getSignalCount(): Promise<number> {

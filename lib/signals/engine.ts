@@ -16,6 +16,7 @@
  */
 
 import type { NormalizedMarketEvent, GeneratedSignal } from '../providers/types';
+export type { GeneratedSignal } from '../providers/types';
 import { fetchSportsEventsAll } from '../providers/polymarket';
 import { fetchAllSportsEventsNormalized } from '../providers/oddsApi/normalize';
 import { detectVolumeSurge } from './detectors/volume-surge';
