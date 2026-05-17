@@ -30,10 +30,10 @@ export default function CalibrationChart({ data, hasEnoughData }: Props) {
     return (
       <div className="flex items-center justify-center h-48 border border-zinc-900 rounded-[8px] bg-zinc-950">
         <div className="text-center">
-          <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">
+          <p className="text-[11px] font-mono text-zinc-400 uppercase tracking-[0.1em] mb-2">
             Calibration Curve
           </p>
-          <p className="text-zinc-700 text-xs font-mono">
+          <p className="text-zinc-500 text-[13px] font-mono">
             Activates after 20 resolved signals.
           </p>
         </div>
@@ -54,13 +54,13 @@ export default function CalibrationChart({ data, hasEnoughData }: Props) {
           <CartesianGrid strokeDasharray="3 3" stroke="#1c1c1e" />
           <XAxis
             dataKey="bucket"
-            tick={{ fill: "#52525b", fontSize: 9, fontFamily: "monospace" }}
+            tick={{ fill: "#71717a", fontSize: 10, fontFamily: "monospace" }}
             tickLine={false}
             axisLine={{ stroke: "#27272a" }}
           />
           <YAxis
             domain={[0, 100]}
-            tick={{ fill: "#52525b", fontSize: 9, fontFamily: "monospace" }}
+            tick={{ fill: "#71717a", fontSize: 10, fontFamily: "monospace" }}
             tickLine={false}
             axisLine={false}
             tickFormatter={(v) => `${v}%`}
