@@ -82,36 +82,40 @@ export async function updateSignalNarrative(
 /**
  * Generate narratives for signals that currently have none.
  * limit = 20 for the cron, Infinity for the one-time backfill.
- * Returns count of successfully generated narratives.
+ * Returns { found, generated } for diagnostic visibility.
  */
-export async function backfillNarratives(limit = 20): Promise<number> {
-  const query = supabaseAdmin
+export async function backfillNarratives(
+  limit = 20
+): Promise<{ found: number; generated: number }> {
+  const baseQuery = supabaseAdmin
     .from('signals')
     .select('*')
     .is('narrative', null)
     .order('generated_at', { ascending: false });
 
-  if (limit !== Infinity) query.limit(limit);
-
-  const { data, error } = await query;
+  const { data, error } = await (limit !== Infinity ? baseQuery.limit(limit) : baseQuery);
 
   if (error) {
     console.error('[narrator] Failed to fetch signals for backfill:', error.message);
-    return 0;
+    return { found: 0, generated: 0 };
   }
 
   const signals = (data ?? []) as GeneratedSignal[];
-  let count = 0;
+  const found = signals.length;
+  let generated = 0;
+
+  console.log(`[narrator] Backfill started — ${found} signals with null narrative`);
 
   for (const signal of signals) {
     try {
       const narrative = await generateNarrative(signal);
       const ok = await updateSignalNarrative(signal.id, narrative);
-      if (ok) count++;
+      if (ok) generated++;
     } catch (err) {
       console.error('[narrator] Failed for signal', signal.id, ':', err);
     }
   }
 
-  return count;
+  console.log(`[narrator] Backfill complete — ${generated}/${found} narratives written`);
+  return { found, generated };
 }

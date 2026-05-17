@@ -3,6 +3,7 @@ import { backfillNarratives } from '@/lib/signals/narrator';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization');
@@ -11,10 +12,11 @@ export async function GET(request: Request) {
   }
 
   try {
-    const count = await backfillNarratives(20);
+    const { found, generated } = await backfillNarratives(20);
     return NextResponse.json({
       success: true,
-      generated: count,
+      found,
+      generated,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
