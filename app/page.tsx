@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { createClient } from "@supabase/supabase-js";
 import SportsHubCard, { type SportsHubData } from "@/components/SportsHubCard";
 import PublicNavBar from "@/components/PublicNavBar";
+
+export const revalidate = 300; // 5-minute cache
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -307,7 +310,39 @@ function IntelPanel() {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function HomePage() {
+export default async function HomePage() {
+  // ── Live accuracy stats (cached 5 min via revalidate = 300) ──────────────
+  const db = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  let accuracyPct: number | null = null;
+  let gradedCount = 0;
+  let totalSignals: number | null = null;
+  let highConfToday: number | null = null;
+
+  try {
+    const [resolutionsRes, totalSignalsRes, highConfRes] = await Promise.all([
+      db.from("signal_resolutions")
+        .select("outcome")
+        .in("outcome", ["correct", "incorrect"]),
+      db.from("signals").select("*", { count: "exact", head: true }),
+      db.from("signals")
+        .select("*", { count: "exact", head: true })
+        .gte("generated_at", new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString())
+        .gte("confidence", 85),
+    ]);
+    const resolutions = resolutionsRes.data ?? [];
+    const correct = resolutions.filter((r: { outcome: string }) => r.outcome === "correct").length;
+    gradedCount = resolutions.length;
+    accuracyPct = gradedCount > 0 ? Math.round((correct / gradedCount) * 100) : null;
+    totalSignals = totalSignalsRes.count ?? null;
+    highConfToday = highConfRes.count ?? null;
+  } catch {
+    // Queries failed — hero stats show "—" fallback, page still renders
+  }
+
   return (
     <div className="min-h-screen bg-black text-white">
 
@@ -327,65 +362,82 @@ export default function HomePage() {
 
           <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-20">
 
-            {/* Status pills */}
-            <div className="flex flex-wrap gap-2 mb-8">
-              {[
-                { label: "LIVE TERMINAL",  dot: "bg-emerald-400", text: "text-emerald-400", border: "border-emerald-400/20" },
-                { label: "AI ENGINE",      dot: "bg-cyan-400",    text: "text-cyan-400",    border: "border-cyan-400/20" },
-                { label: "142 MARKETS",    dot: "bg-white",       text: "text-zinc-300",    border: "border-white/10" },
-              ].map((p) => (
-                <span key={p.label} className={`inline-flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-sm border bg-white/[0.02] ${p.text} ${p.border}`}>
-                  <span className={`w-1 h-1 rounded-full shrink-0 pulse-dot ${p.dot}`} />
-                  {p.label}
-                </span>
-              ))}
+            {/* Accuracy ledger live label */}
+            <div className="flex items-center gap-2 mb-10">
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "var(--accent)" }} />
+              <span
+                className="text-[12px] font-mono uppercase tracking-[0.15em]"
+                style={{ color: "var(--accent)" }}
+              >
+                Public Accuracy Ledger · Live
+              </span>
             </div>
 
-            {/* Headline */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.0] tracking-tight text-white mb-6 max-w-4xl">
-              The sports market moves<br />
-              <span className="text-zinc-500">before the story does.</span>
-            </h1>
-
-            <p className="text-zinc-300 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
-              Sports Market OS monitors exchange flow, volatility regimes, liquidity shifts,
-              sharp/public divergence, and creator-ready intelligence across global sports markets —
-              in real time.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex items-center gap-3 flex-wrap mb-10">
-              <Link href="/terminal" className="inline-flex items-center gap-2 bg-white text-black text-sm font-bold px-7 py-3 rounded-sm hover:bg-zinc-100 transition-colors">
-                Open Terminal
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-              <Link href="/markets" className="inline-flex items-center gap-2 border border-cyan-400/30 text-cyan-400 text-sm font-medium px-7 py-3 rounded-sm hover:border-cyan-400/60 hover:bg-cyan-400/5 transition-colors">
-                Explore Markets
-              </Link>
-              <Link href="/signup" className="inline-flex items-center gap-2 border border-white/12 text-zinc-300 text-sm font-medium px-7 py-3 rounded-sm hover:border-white/25 hover:bg-white/5 transition-colors">
-                Start Free
-              </Link>
-            </div>
-
-            {/* Stat row */}
-            <div className="flex flex-wrap gap-10 pb-12 border-b border-white/5 mb-12">
+            {/* Three live stat cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-800 rounded-lg overflow-hidden border border-zinc-800 mb-14">
               {[
-                { value: "142",   label: "Active markets" },
-                { value: "284",   label: "Signals / hour" },
-                { value: "1,847", label: "AI scans / min" },
-                { value: "7",     label: "Sport hubs live" },
-              ].map((s) => (
-                <div key={s.label}>
-                  <p className="text-3xl md:text-4xl font-bold tabular-nums text-white leading-none num-breathe">{s.value}</p>
-                  <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest mt-1.5">{s.label}</p>
+                {
+                  label: "Lifetime Accuracy",
+                  value: accuracyPct != null ? `${accuracyPct}%` : "—",
+                  sub: gradedCount > 0 ? `${gradedCount} graded predictions` : "awaiting first resolution",
+                  accent: accuracyPct != null,
+                },
+                {
+                  label: "Signals Logged",
+                  value: totalSignals != null ? totalSignals.toLocaleString() : "—",
+                  sub: "all permanent, auditable",
+                  accent: false,
+                },
+                {
+                  label: "High-Confidence Today",
+                  value: highConfToday != null ? highConfToday.toLocaleString() : "—",
+                  sub: "last 4 hours · threshold 85%+",
+                  accent: false,
+                },
+              ].map((stat) => (
+                <div key={stat.label} className="bg-zinc-950 p-8">
+                  <p className="text-[12px] font-mono text-zinc-400 uppercase tracking-[0.15em] mb-4">
+                    {stat.label}
+                  </p>
+                  <p
+                    className="text-6xl md:text-7xl font-bold font-mono tabular-nums leading-none tracking-tight mb-3"
+                    style={{ color: stat.accent ? "var(--accent)" : "#F4F5F7" }}
+                  >
+                    {stat.value}
+                  </p>
+                  <p className="text-[13px] font-mono text-zinc-500">{stat.sub}</p>
                 </div>
               ))}
             </div>
 
-            {/* Full-width intelligence panel */}
-            <IntelPanel />
+            {/* Serif headline */}
+            <h1 className="font-serif text-4xl md:text-5xl text-white leading-[1.15] mb-6 max-w-3xl">
+              The institutional intelligence layer for sports prediction markets.
+            </h1>
+
+            {/* Serif sub-headline */}
+            <p className="font-serif text-zinc-400 text-lg md:text-xl leading-[1.55] mb-10 max-w-2xl">
+              Every signal generated by Sports Market OS is logged permanently to a public ledger
+              before it reaches any user. Every prediction is graded mechanically against live
+              Polymarket data. The accuracy number above is not a marketing claim — it is a query.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <Link
+                href="/terminal"
+                className="inline-flex items-center font-mono text-[14px] font-semibold uppercase tracking-[0.1em] py-[14px] px-7 rounded-md hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: "var(--accent)", color: "#09090b" }}
+              >
+                Open Terminal →
+              </Link>
+              <Link
+                href="/accuracy"
+                className="inline-flex items-center font-mono text-[14px] font-semibold uppercase tracking-[0.1em] py-[14px] px-7 rounded-md border border-zinc-500 text-white hover:border-zinc-300 hover:bg-white/5 transition-colors"
+              >
+                Audit the Ledger →
+              </Link>
+            </div>
           </div>
         </section>
 
