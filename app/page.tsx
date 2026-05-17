@@ -8,7 +8,7 @@ export const revalidate = 300; // 5-minute cache
 
 const SPORT_SHORT: Record<string, string> = {
   nba: "NBA", nfl: "NFL", nhl: "NHL", mlb: "MLB",
-  ufc: "UFC", mma: "MMA", tennis: "Tennis", soccer: "Football",
+  ufc: "UFC", mma: "MMA", tennis: "Tennis", football: "Football",
   cricket: "Cricket", golf: "Golf", rugby: "Rugby",
 };
 
@@ -78,7 +78,7 @@ const COVERED_SPORTS = [
     symbol: "◇",
   },
   {
-    key: "soccer",
+    key: "football",
     name: "Football",
     tagline: "European match markets, value identification across top leagues, and sharp money signals.",
     accent: "text-zinc-400",
@@ -586,9 +586,6 @@ export default async function HomePage() {
                       <span className={`text-sm font-bold ${row.color}`}>{row.value}</span>
                     </div>
                   ))}
-                </div>
-                <div className="px-4 py-3 border-t border-white/5 bg-black/40">
-                  <p className="text-zinc-600 text-[9px] font-mono">Intelligence layer: Sports Market OS · Execution: Betfair Exchange</p>
                 </div>
               </div>
             </div>
