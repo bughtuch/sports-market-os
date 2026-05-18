@@ -1,16 +1,12 @@
-import { notFound } from "next/navigation";
-import { getHub } from "@/lib/markets/data";
-import { hubMetadata } from "@/lib/seo/metadata";
-import SportHubContent from "@/components/SportHubContent";
+import SportHubServer from "@/components/SportHubServer";
 
-export async function generateMetadata() {
-  const hub = getHub("nba");
-  if (!hub) return {};
-  return hubMetadata(hub);
-}
+export const revalidate = 300;
+
+export const metadata = {
+  title: "NBA Markets — Sports Market OS",
+  description: "Live NBA market intelligence from Polymarket. Volume surges, spread compression, and sharp flow signals.",
+};
 
 export default function NBAPage() {
-  const hub = getHub("nba");
-  if (!hub) notFound();
-  return <SportHubContent hub={hub} />;
+  return <SportHubServer sportSlug="nba" />;
 }

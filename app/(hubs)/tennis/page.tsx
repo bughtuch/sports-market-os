@@ -1,16 +1,12 @@
-import { notFound } from "next/navigation";
-import { getHub } from "@/lib/markets/data";
-import { hubMetadata } from "@/lib/seo/metadata";
-import SportHubContent from "@/components/SportHubContent";
+import SportHubServer from "@/components/SportHubServer";
 
-export async function generateMetadata() {
-  const hub = getHub("tennis");
-  if (!hub) return {};
-  return hubMetadata(hub);
-}
+export const revalidate = 3600;
+
+export const metadata = {
+  title: "Tennis Markets — Sports Market OS",
+  description: "Polymarket tennis market intelligence. Coverage building — signals activate as liquidity builds.",
+};
 
 export default function TennisPage() {
-  const hub = getHub("tennis");
-  if (!hub) notFound();
-  return <SportHubContent hub={hub} />;
+  return <SportHubServer sportSlug="tennis" />;
 }

@@ -1,16 +1,12 @@
-import { notFound } from "next/navigation";
-import { getHub } from "@/lib/markets/data";
-import { hubMetadata } from "@/lib/seo/metadata";
-import SportHubContent from "@/components/SportHubContent";
+import SportHubServer from "@/components/SportHubServer";
 
-export async function generateMetadata() {
-  const hub = getHub("ufc");
-  if (!hub) return {};
-  return hubMetadata(hub);
-}
+export const revalidate = 3600;
+
+export const metadata = {
+  title: "UFC Markets — Sports Market OS",
+  description: "Polymarket UFC market intelligence. Coverage building — signals activate as liquidity builds.",
+};
 
 export default function UFCPage() {
-  const hub = getHub("ufc");
-  if (!hub) notFound();
-  return <SportHubContent hub={hub} />;
+  return <SportHubServer sportSlug="ufc" />;
 }
