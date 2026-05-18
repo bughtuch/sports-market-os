@@ -23,68 +23,48 @@ const SIGNAL_LABEL: Record<string, string> = {
 // ─── Sports coverage config ────────────────────────────────────────────────────
 
 const COVERED_SPORTS = [
+  // LIVE
   {
-    key: "nba",
-    name: "NBA",
-    tagline: "Spread pressure, sharp movement, and quarter-by-quarter liquidity signals across active NBA markets.",
-    accent: "text-blue-400",
-    accentBg: "bg-blue-400/10",
-    accentBorder: "border-blue-400/20",
-    symbol: "▣",
+    key: "nba", name: "NBA", category: "live" as const, href: "/nba",
+    tagline: "Spread pressure, sharp movement, and quarter-by-quarter liquidity signals across active Polymarket NBA markets.",
+    accent: "text-blue-400", accentBg: "bg-blue-400/10", accentBorder: "border-blue-400/20", symbol: "▣",
   },
   {
-    key: "nfl",
-    name: "NFL",
-    tagline: "Line movement analytics, public vs sharp divergence, and game-time liquidity signals.",
-    accent: "text-zinc-300",
-    accentBg: "bg-zinc-300/10",
-    accentBorder: "border-zinc-300/20",
-    symbol: "▲",
-  },
-  {
-    key: "nhl",
-    name: "NHL",
-    tagline: "Puck line pressure, volume anomalies, and sharp positioning signals on active NHL markets.",
-    accent: "text-cyan-400",
-    accentBg: "bg-cyan-400/10",
-    accentBorder: "border-cyan-400/20",
-    symbol: "◆",
-  },
-  {
-    key: "mlb",
-    name: "MLB",
-    tagline: "Run line signals, pitching market analysis, and daily volume patterns across the season.",
-    accent: "text-emerald-400",
-    accentBg: "bg-emerald-400/10",
-    accentBorder: "border-emerald-400/20",
-    symbol: "◈",
-  },
-  {
-    key: "ufc",
-    name: "UFC",
-    tagline: "Underdog value detection, late-money identification, and fight-week momentum tracking.",
-    accent: "text-orange-400",
-    accentBg: "bg-orange-400/10",
-    accentBorder: "border-orange-400/20",
-    symbol: "◉",
-  },
-  {
-    key: "tennis",
-    name: "Tennis",
-    tagline: "In-play momentum, serve pattern divergence, and live volatility across ATP and WTA markets.",
-    accent: "text-amber-400",
-    accentBg: "bg-amber-400/10",
-    accentBorder: "border-amber-400/20",
-    symbol: "◇",
-  },
-  {
-    key: "football",
-    name: "Football",
+    key: "football", name: "Football", category: "live" as const, href: "/football",
     tagline: "European match markets, value identification across top leagues, and sharp money signals.",
-    accent: "text-zinc-400",
-    accentBg: "bg-zinc-400/10",
-    accentBorder: "border-zinc-400/20",
-    symbol: "○",
+    accent: "text-zinc-300", accentBg: "bg-zinc-300/10", accentBorder: "border-zinc-300/20", symbol: "○",
+  },
+  {
+    key: "nhl", name: "NHL", category: "live" as const, href: "/nhl",
+    tagline: "Puck line pressure, volume anomalies, and sharp positioning signals on active Polymarket NHL markets.",
+    accent: "text-cyan-400", accentBg: "bg-cyan-400/10", accentBorder: "border-cyan-400/20", symbol: "◆",
+  },
+  // PORTFOLIO
+  {
+    key: "tennis", name: "Tennis", category: "portfolio" as const, href: "/tennis",
+    tagline: "Polymarket tennis outrights monitored through Grand Slam cycles. Tennis Trader AI for live Betfair match trading.",
+    accent: "text-amber-400", accentBg: "bg-amber-400/10", accentBorder: "border-amber-400/20", symbol: "◇",
+  },
+  {
+    key: "horse_racing", name: "Horse Racing", category: "portfolio" as const, href: "/horse-racing",
+    tagline: "Horse Racing Trader in build — Betfair Exchange AI terminal for UK and Irish racing markets.",
+    accent: "text-amber-400", accentBg: "bg-amber-400/10", accentBorder: "border-amber-400/20", symbol: "◈",
+  },
+  // BUILDING
+  {
+    key: "nfl", name: "NFL", category: "building" as const, href: "/nfl",
+    tagline: "Line movement analytics, public vs sharp divergence, and game-time liquidity signals.",
+    accent: "text-red-400", accentBg: "bg-red-400/10", accentBorder: "border-red-400/20", symbol: "▲",
+  },
+  {
+    key: "mlb", name: "MLB", category: "building" as const, href: undefined,
+    tagline: "Run line signals, pitching market analysis, and daily volume patterns across the season.",
+    accent: "text-emerald-400", accentBg: "bg-emerald-400/10", accentBorder: "border-emerald-400/20", symbol: "◉",
+  },
+  {
+    key: "ufc", name: "UFC", category: "building" as const, href: "/ufc",
+    tagline: "Underdog value detection, late-money identification, and fight-week momentum tracking.",
+    accent: "text-orange-400", accentBg: "bg-orange-400/10", accentBorder: "border-orange-400/20", symbol: "◉",
   },
 ];
 
@@ -599,7 +579,7 @@ export default async function HomePage() {
               <div>
                 <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest mb-2">Sports Intelligence</p>
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                  Seven sports. One intelligence layer.
+                  Eight sports. One intelligence layer.
                 </h2>
               </div>
               <Link href="/markets" className="text-[10px] font-mono text-zinc-500 hover:text-white transition-colors shrink-0 hidden md:block">
@@ -608,13 +588,14 @@ export default async function HomePage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {COVERED_SPORTS.map((sport) => {
-                const count  = sportEventCounts[sport.key] ?? 0;
-                const isLive = count > 0;
-                return (
-                  <div
-                    key={sport.key}
-                    className="group relative bg-zinc-950 border border-zinc-800/80 rounded-sm p-5 hover:border-zinc-700 transition-all duration-200"
-                  >
+                const count       = sportEventCounts[sport.key] ?? 0;
+                const isLive      = sport.category === "live" && count > 0;
+                const isPortfolio = sport.category === "portfolio";
+
+                const tileClass = "group relative bg-zinc-950 border border-zinc-800/80 rounded-sm p-5 hover:border-zinc-700 transition-all duration-200 block";
+
+                const inner = (
+                  <>
                     <div className={`text-2xl font-mono mb-4 ${sport.accent}`}>{sport.symbol}</div>
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="text-white text-sm font-semibold">{sport.name}</h3>
@@ -622,28 +603,36 @@ export default async function HomePage() {
                         <span className={`text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-sm border ${sport.accent} ${sport.accentBg} ${sport.accentBorder}`}>
                           LIVE
                         </span>
+                      ) : isPortfolio ? (
+                        <span className="text-[9px] font-mono uppercase tracking-[0.15em] px-1.5 py-0.5 rounded-sm border text-zinc-400 bg-white/[0.04] border-zinc-800">
+                          PORTFOLIO
+                        </span>
                       ) : (
                         <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-sm border text-zinc-600 bg-zinc-900/50 border-zinc-800">
-                          PLANNED
+                          BUILDING
                         </span>
                       )}
                     </div>
                     <p className="text-zinc-500 text-xs leading-relaxed mb-4">{sport.tagline}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-zinc-600 text-[10px] font-mono">
-                        {isLive ? `${count} event${count === 1 ? "" : "s"} tracked` : "Coverage planned"}
+                        {isLive
+                          ? `${count} event${count === 1 ? "" : "s"} tracked`
+                          : isPortfolio
+                          ? "Portfolio product"
+                          : "Coverage building"}
                       </span>
-                      <svg
-                        className="w-3 h-3 text-zinc-700 group-hover:text-zinc-500 transition-colors"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
+                      <svg className="w-3 h-3 text-zinc-700 group-hover:text-zinc-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                       </svg>
                     </div>
-                  </div>
+                  </>
+                );
+
+                return sport.href ? (
+                  <Link key={sport.key} href={sport.href} className={tileClass}>{inner}</Link>
+                ) : (
+                  <div key={sport.key} className={tileClass}>{inner}</div>
                 );
               })}
             </div>

@@ -47,20 +47,36 @@ const SIGNAL_TYPE_LABELS: Record<string, string> = {
   catalyst_detected:       "Catalyst",
 };
 
+const SPORT_FILTERS = [
+  { key: "",            label: "All" },
+  { key: "nba",         label: "NBA" },
+  { key: "football",    label: "Football" },
+  { key: "nhl",         label: "NHL" },
+  { key: "tennis",      label: "Tennis" },
+  { key: "horse_racing",label: "Horse Racing" },
+  { key: "nfl",         label: "NFL" },
+  { key: "ufc",         label: "UFC" },
+];
+
+const HUB_LINKS = [
+  { label: "NBA",          href: "/nba",          accent: "text-blue-400",   bg: "bg-blue-400/10",   border: "border-blue-400/20" },
+  { label: "Football",     href: "/football",     accent: "text-zinc-300",   bg: "bg-zinc-300/10",   border: "border-zinc-300/20" },
+  { label: "NHL",          href: "/nhl",          accent: "text-cyan-400",   bg: "bg-cyan-400/10",   border: "border-cyan-400/20" },
+  { label: "Tennis",       href: "/tennis",       accent: "text-amber-400",  bg: "bg-amber-400/10",  border: "border-amber-400/20" },
+  { label: "Horse Racing", href: "/horse-racing", accent: "text-amber-400",  bg: "bg-amber-400/10",  border: "border-amber-400/20" },
+  { label: "NFL",          href: "/nfl",          accent: "text-red-400",    bg: "bg-red-400/10",    border: "border-red-400/20" },
+  { label: "UFC",          href: "/ufc",          accent: "text-orange-400", bg: "bg-orange-400/10", border: "border-orange-400/20" },
+];
+
 function formatDate(iso: string): string {
   const d = new Date(iso);
   const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.getUTCMonth()];
   return `${month} ${d.getUTCDate()}`;
 }
 
-const HUB_LINKS = [
-  { label: "NBA",      href: "/nba",      accent: "text-blue-400",    bg: "bg-blue-400/10",    border: "border-blue-400/20" },
-  { label: "Football", href: "/football", accent: "text-zinc-300",    bg: "bg-zinc-300/10",    border: "border-zinc-300/20" },
-  { label: "NHL",      href: "/nhl",      accent: "text-cyan-400",    bg: "bg-cyan-400/10",    border: "border-cyan-400/20" },
-  { label: "Tennis",   href: "/tennis",   accent: "text-amber-400",   bg: "bg-amber-400/10",   border: "border-amber-400/20" },
-  { label: "NFL",      href: "/nfl",      accent: "text-red-400",     bg: "bg-red-400/10",     border: "border-red-400/20" },
-  { label: "UFC",      href: "/ufc",      accent: "text-orange-400",  bg: "bg-orange-400/10",  border: "border-orange-400/20" },
-];
+function confColor(conf: number): string {
+  return conf >= 85 ? "text-teal-400" : conf >= 70 ? "text-white" : "text-zinc-400";
+}
 
 interface SignalRow {
   event_id: string;
@@ -71,7 +87,11 @@ interface SignalRow {
   generated_at: string;
 }
 
-export default async function MarketsPage() {
+export default async function MarketsPage(props: {
+  searchParams: Promise<{ sport?: string }>;
+}) {
+  const { sport: sportFilter = "" } = await props.searchParams;
+
   const db = adminClient();
   const since7d = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
@@ -83,30 +103,38 @@ export default async function MarketsPage() {
     .order("generated_at", { ascending: false })
     .limit(200);
 
-  // Deduplicate by event_id — keep the latest signal per event
+  // Deduplicate by event_id — keep latest signal per event
   const seen = new Set<string>();
-  const events = ((data ?? []) as SignalRow[]).filter((row) => {
+  const allEvents = ((data ?? []) as SignalRow[]).filter((row) => {
     if (seen.has(row.event_id)) return false;
     seen.add(row.event_id);
     return true;
   });
 
+  const filteredEvents = sportFilter
+    ? allEvents.filter((e) => e.sport === sportFilter)
+    : allEvents;
+
+  const isHorseRacingFilter = sportFilter === "horse_racing";
+
   return (
     <>
-      {/* Header */}
-      <section className="px-6 py-10 border-b border-zinc-900/80">
+      {/* ── Header ─────────────────────────────────────────────────────────── */}
+      <section className="px-4 md:px-6 py-10 border-b border-zinc-900/80">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-2 h-2 rounded-full bg-emerald-400 pulse-dot" />
-            <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
+            <span className="text-[11px] font-mono uppercase tracking-[0.15em] text-zinc-500">
               Sports Market OS · Market Directory
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-white mb-2">Active Markets</h1>
-          <p className="text-zinc-400 text-sm leading-relaxed max-w-2xl mb-6">
+          <h1 className="text-[32px] md:text-[40px] font-semibold text-white mb-3">
+            Active Markets
+          </h1>
+          <p className="font-serif text-white text-[16px] md:text-[17px] leading-[1.65] max-w-[640px] mb-8">
             Polymarket events with signal intelligence in the last 7 days.
-            {events.length > 0
-              ? ` ${events.length} unique event${events.length === 1 ? "" : "s"} monitored.`
+            {allEvents.length > 0
+              ? ` ${allEvents.length} unique event${allEvents.length === 1 ? "" : "s"} monitored.`
               : " No events detected yet — engine running."}
           </p>
 
@@ -116,7 +144,7 @@ export default async function MarketsPage() {
               <Link
                 key={h.href}
                 href={h.href}
-                className={`text-[10px] font-mono px-2.5 py-1 rounded-sm border transition-colors ${h.accent} ${h.bg} ${h.border} hover:opacity-80`}
+                className={`text-[11px] font-mono uppercase tracking-[0.1em] px-3 py-1.5 rounded-sm border transition-colors ${h.accent} ${h.bg} ${h.border} hover:opacity-80 min-h-[36px] inline-flex items-center`}
               >
                 {h.label}
               </Link>
@@ -125,25 +153,67 @@ export default async function MarketsPage() {
         </div>
       </section>
 
-      {/* Event list */}
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        {events.length === 0 ? (
+      {/* ── Event list ─────────────────────────────────────────────────────── */}
+      <div className="max-w-4xl mx-auto px-4 md:px-6 py-8">
+
+        {/* Filter pills */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {SPORT_FILTERS.map((f) => {
+            const isActive = sportFilter === f.key;
+            return (
+              <Link
+                key={f.key}
+                href={f.key ? `?sport=${f.key}` : "/markets"}
+                className={`text-[11px] font-mono uppercase tracking-[0.1em] px-3 py-1.5 rounded-sm border transition-colors min-h-[36px] inline-flex items-center ${
+                  isActive
+                    ? "text-white bg-teal-500/10 border-teal-500/40"
+                    : "text-zinc-400 border-zinc-700 hover:text-white hover:border-zinc-500"
+                }`}
+              >
+                {f.label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Horse Racing special empty state */}
+        {isHorseRacingFilter ? (
+          <div className="border border-zinc-800/60 rounded-sm p-8">
+            <p className="font-serif text-white text-[16px] leading-[1.65] mb-4">
+              No Polymarket horse racing markets currently listed.
+            </p>
+            <p className="font-serif text-zinc-400 text-[15px] leading-relaxed mb-6">
+              Polymarket does not cover horse racing. For UK and Irish horse racing exchange trading,
+              see Horse Racing Trader — a Bug Hutch portfolio product in build for Betfair Exchange.
+            </p>
+            <Link
+              href="/horse-racing"
+              className="text-[12px] font-mono text-amber-400 hover:text-amber-300 transition-colors"
+            >
+              See Horse Racing Trader →
+            </Link>
+          </div>
+        ) : filteredEvents.length === 0 ? (
           <div className="border border-zinc-800/60 rounded-sm p-8 text-center">
-            <p className="text-zinc-500 text-sm mb-2">No market activity in the last 7 days.</p>
-            <p className="text-zinc-700 text-xs">
-              The signal engine is running. Markets will appear here as activity is detected on Polymarket.
+            <p className="font-serif text-white text-[15px] mb-2">No market activity in the last 7 days.</p>
+            <p className="text-zinc-600 text-[12px] font-mono">
+              {sportFilter
+                ? `No ${SPORT_DISPLAY[sportFilter] ?? sportFilter} signals this week. Try All Sports.`
+                : "The signal engine is running. Markets will appear here as activity is detected on Polymarket."}
             </p>
           </div>
         ) : (
-          <div className="space-y-px">
+          <div className="divide-y divide-zinc-900">
             {/* Table header */}
-            <div className="grid grid-cols-[80px_1fr_140px_60px_60px] gap-3 px-4 mb-2">
+            <div className="grid grid-cols-[80px_1fr_auto_52px_52px] gap-4 pb-3">
               {["Sport", "Event", "Signal Type", "Conf", "Date"].map((h) => (
-                <span key={h} className="text-[8px] font-mono text-zinc-700 uppercase tracking-widest truncate">{h}</span>
+                <span key={h} className="text-[11px] font-mono uppercase tracking-[0.1em] text-zinc-500">
+                  {h}
+                </span>
               ))}
             </div>
 
-            {events.map((event) => {
+            {filteredEvents.map((event) => {
               const sportLabel = SPORT_DISPLAY[event.sport] ?? event.sport;
               const sportColor = SPORT_COLORS[event.sport] ?? "text-zinc-400";
               const typeLabel  = SIGNAL_TYPE_LABELS[event.signal_type] ?? event.signal_type;
@@ -153,37 +223,41 @@ export default async function MarketsPage() {
               return (
                 <div
                   key={event.event_id}
-                  className="grid grid-cols-[80px_1fr_140px_60px_60px] gap-3 items-center bg-zinc-950 border border-zinc-800/40 rounded-sm px-4 py-3 hover:border-zinc-700 transition-colors"
+                  className="grid grid-cols-[80px_1fr_auto_52px_52px] gap-4 items-center py-4"
                 >
                   {/* Sport */}
                   <div>
                     {hubLink ? (
-                      <Link href={hubLink} className={`text-[9px] font-mono uppercase tracking-wider hover:underline ${sportColor}`}>
+                      <Link href={hubLink} className={`text-[11px] font-mono uppercase tracking-[0.1em] hover:underline ${sportColor}`}>
                         {sportLabel}
                       </Link>
                     ) : (
-                      <span className={`text-[9px] font-mono uppercase tracking-wider ${sportColor}`}>
+                      <span className={`text-[11px] font-mono uppercase tracking-[0.1em] ${sportColor}`}>
                         {sportLabel}
                       </span>
                     )}
-                    <p className="text-zinc-700 text-[8px] font-mono mt-0.5">POLYMARKET</p>
+                    <p className="text-[11px] font-mono uppercase tracking-[0.15em] text-teal-400 mt-0.5">
+                      POLYMARKET
+                    </p>
                   </div>
 
                   {/* Event title */}
-                  <p className="text-zinc-200 text-xs truncate">{event.event_title}</p>
+                  <p className="text-white text-[15px] font-medium truncate">{event.event_title}</p>
 
                   {/* Signal type */}
-                  <p className="text-zinc-500 text-[9px] font-mono truncate">{typeLabel}</p>
+                  <p className="text-zinc-500 text-[12px] font-mono hidden md:block">{typeLabel}</p>
 
                   {/* Confidence */}
-                  <p className="text-zinc-300 text-[10px] font-mono tabular-nums font-semibold">{event.confidence}%</p>
+                  <p className={`text-[14px] font-mono font-bold tabular-nums ${confColor(event.confidence)}`}>
+                    {event.confidence}%
+                  </p>
 
-                  {/* Date + link */}
+                  {/* Date + terminal link */}
                   <div className="flex items-center gap-2">
-                    <span className="text-zinc-700 text-[9px] font-mono">{ts}</span>
+                    <span className="text-zinc-600 text-[12px] font-mono">{ts}</span>
                     <Link
                       href="/terminal"
-                      className="text-[9px] font-mono text-zinc-600 hover:text-white transition-colors"
+                      className="text-zinc-600 hover:text-white transition-colors text-[12px] font-mono"
                       title="View in Terminal"
                     >
                       →
@@ -195,7 +269,7 @@ export default async function MarketsPage() {
           </div>
         )}
 
-        <p className="mt-6 text-zinc-800 text-[9px] font-mono">
+        <p className="mt-8 text-zinc-700 text-[11px] font-mono">
           Market intelligence only — Sports Market OS does not place bets or execute trades.
         </p>
       </div>

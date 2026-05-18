@@ -4,12 +4,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const SPORTS_SUBMENU = [
-  { label: "NBA",      href: "/nba" },
-  { label: "Football", href: "/football" },
-  { label: "NHL",      href: "/nhl" },
-  { label: "Tennis",   href: "/tennis" },
-  { label: "NFL",      href: "/nfl" },
-  { label: "UFC",      href: "/ufc" },
+  // LIVE
+  { label: "NBA",          href: "/nba",          dot: "bg-teal-400" },
+  { label: "Football",     href: "/football",     dot: "bg-teal-400" },
+  { label: "NHL",          href: "/nhl",          dot: "bg-teal-400" },
+  // PORTFOLIO
+  { label: "Tennis",       href: "/tennis",       dot: "bg-amber-400" },
+  { label: "Horse Racing", href: "/horse-racing", dot: "bg-amber-400" },
+  // BUILDING
+  { label: "NFL",          href: "/nfl",          dot: "bg-zinc-700" },
+  { label: "UFC",          href: "/ufc",          dot: "bg-zinc-700" },
 ];
 
 const mainNav = [
@@ -79,12 +83,13 @@ export default function Sidebar() {
                       <Link
                         key={sub.href}
                         href={sub.href}
-                        className={`block px-4 py-2 text-xs transition-colors duration-100 ${
+                        className={`flex items-center gap-2 px-4 py-2 text-xs transition-colors duration-100 ${
                           pathname === sub.href
                             ? "text-white bg-zinc-800"
                             : "text-zinc-400 hover:text-white hover:bg-zinc-900/60"
                         }`}
                       >
+                        <span className={`w-1 h-1 rounded-full shrink-0 ${"dot" in sub ? sub.dot : "bg-zinc-700"}`} />
                         {sub.label}
                       </Link>
                     ))}
