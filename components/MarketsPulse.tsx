@@ -44,15 +44,26 @@ const SIGNAL_TYPE_LABELS: Record<string, string> = {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default async function MarketsPulse() {
+interface MarketsPulseProps {
+  /** Optional DB sport key to filter to a single sport (e.g. "tennis"). Omit for all sports. */
+  sport?: string;
+}
+
+export default async function MarketsPulse({ sport }: MarketsPulseProps = {}) {
   const db = adminClient();
   const since4h = new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString();
 
-  const { data } = await db
+  let query = db
     .from("signals")
     .select("sport, confidence, signal_type")
     .gte("generated_at", since4h)
     .eq("is_published", true);
+
+  if (sport) {
+    query = query.eq("sport", sport);
+  }
+
+  const { data } = await query;
 
   const rows = data ?? [];
 
