@@ -2,30 +2,21 @@
  * GET /api/odds/games?sport=tennis
  *
  * Returns upcoming match data from The Odds API for the requested sport.
- * Mapped to internal sport DB keys (tennis, nba, nfl, football, nhl, ufc).
+ * Maps our DB sport keys (tennis, nba, nfl…) to Odds API tournament-specific
+ * keys, trying them in priority order and merging results.
  *
- * Cached at the Next.js level via revalidate — do NOT call this from client
- * components in a tight loop; the Odds API free tier is 500 req/month.
+ * Response: { games: GameListing[], sport_keys_used: string[], total: number }
+ * On error: { games: [], error: string }
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import {
-  getOddsApiKey,
-  getQuotaState,
-} from "@/lib/providers/odds/theOddsApiProvider";
+  fetchMatchesForSport,
+  type NormalizedOddsMatch,
+} from "@/lib/providers/oddsApi/fetchMatches";
 
 export const runtime = "nodejs";
-export const revalidate = 3600; // 1 hour cache
-
-// Map from our DB sport keys → Odds API sport keys (in priority order)
-const SPORT_TO_ODDS_KEYS: Record<string, string[]> = {
-  tennis:   ["tennis_atp_french_open", "tennis_atp_wimbledon", "tennis_atp", "tennis_wta"],
-  nba:      ["basketball_nba"],
-  nfl:      ["americanfootball_nfl"],
-  football: ["soccer_epl", "soccer_uefa_champs_league"],
-  nhl:      ["icehockey_nhl"],
-  ufc:      ["mma_mixed_martial_arts"],
-};
+export const dynamic = "force-dynamic"; // Odds data must never be statically cached
 
 export interface GameListing {
   id: string;
@@ -33,92 +24,76 @@ export interface GameListing {
   away_team: string;
   commence_time: string;
   sport_key: string;
-  bookmaker: string;
+  sport: string;
+  bookmaker: string;      // "best of N books"
   home_odds: number | null;
   away_odds: number | null;
+  bookmaker_count: number;
 }
 
-interface OddsApiEvent {
-  id: string;
-  sport_key: string;
-  commence_time: string;
-  home_team: string;
-  away_team: string;
-  bookmakers: Array<{
-    key: string;
-    title: string;
-    markets: Array<{
-      key: string;
-      outcomes: Array<{ name: string; price: number }>;
-    }>;
-  }>;
+function matchToGameListing(m: NormalizedOddsMatch): GameListing {
+  // Best price per selection across all books
+  const homeOdds = m.outcomes
+    .filter((o) => o.selection === m.home_team)
+    .reduce((best, o) => (o.price > (best ?? 0) ? o.price : best), null as number | null);
+  const awayOdds = m.outcomes
+    .filter((o) => o.selection === m.away_team)
+    .reduce((best, o) => (o.price > (best ?? 0) ? o.price : best), null as number | null);
+
+  // Which bookmakers covered this match
+  const bookmakerTitles = [...new Set(m.outcomes.map((o) => o.bookmaker_title))];
+
+  return {
+    id: m.id,
+    home_team: m.home_team,
+    away_team: m.away_team,
+    commence_time: m.commence_time,
+    sport_key: m.sport_key,
+    sport: m.sport,
+    bookmaker: bookmakerTitles.slice(0, 2).join(", ") + (bookmakerTitles.length > 2 ? ` +${bookmakerTitles.length - 2}` : ""),
+    home_odds: homeOdds !== null ? Math.round(homeOdds * 100) / 100 : null,
+    away_odds: awayOdds !== null ? Math.round(awayOdds * 100) / 100 : null,
+    bookmaker_count: m.bookmaker_count,
+  };
 }
 
 export async function GET(req: NextRequest) {
   const sport = req.nextUrl.searchParams.get("sport") ?? "tennis";
-  const apiKey = getOddsApiKey();
 
-  if (!apiKey) {
-    return NextResponse.json({ games: [], quota: null, error: "no_api_key" });
-  }
+  console.log(`[api/odds/games] Request for sport=${sport}`);
 
-  const oddsKeys = SPORT_TO_ODDS_KEYS[sport];
-  if (!oddsKeys) {
-    return NextResponse.json({ games: [], quota: null, error: "unsupported_sport" });
-  }
+  try {
+    const matches = await fetchMatchesForSport(sport);
 
-  // Try each key until we get data
-  for (const oddsKey of oddsKeys) {
-    try {
-      const url = new URL(`https://api.the-odds-api.com/v4/sports/${oddsKey}/odds/`);
-      url.searchParams.set("apiKey", apiKey);
-      url.searchParams.set("regions", "uk");
-      url.searchParams.set("markets", "h2h");
-      url.searchParams.set("oddsFormat", "decimal");
-      url.searchParams.set("dateFormat", "iso");
+    console.log(`[api/odds/games] Returning ${matches.length} matches for sport=${sport}`);
 
-      const res = await fetch(url.toString(), {
-        signal: AbortSignal.timeout(8000),
-        next: { revalidate: 3600 },
-      });
+    const games = matches.map(matchToGameListing);
 
-      if (res.status === 422 || res.status === 404) continue; // out of season
-      if (!res.ok) break;
+    const sportKeysUsed = [...new Set(matches.map((m) => m.sport_key))];
 
-      const events = (await res.json()) as OddsApiEvent[];
-      if (!Array.isArray(events) || events.length === 0) continue;
-
-      // Take first 8 upcoming events
-      const upcoming = events
-        .filter((e) => new Date(e.commence_time) > new Date())
-        .slice(0, 8);
-
-      const games: GameListing[] = upcoming.map((e) => {
-        const bookmaker = e.bookmakers[0];
-        const h2h = bookmaker?.markets?.find((m) => m.key === "h2h");
-        const homeOutcome = h2h?.outcomes?.find((o) => o.name === e.home_team);
-        const awayOutcome = h2h?.outcomes?.find((o) => o.name === e.away_team);
-        return {
-          id: e.id,
-          home_team: e.home_team,
-          away_team: e.away_team,
-          commence_time: e.commence_time,
-          sport_key: e.sport_key,
-          bookmaker: bookmaker?.title ?? "—",
-          home_odds: homeOutcome?.price ?? null,
-          away_odds: awayOutcome?.price ?? null,
-        };
-      });
-
+    if (games.length === 0) {
       return NextResponse.json({
-        games,
-        quota: getQuotaState(),
-        sport_key_used: oddsKey,
+        games: [],
+        sport_keys_used: sportKeysUsed,
+        total: 0,
+        message: `No active markets for ${sport} on The Odds API right now.`,
       });
-    } catch {
-      continue;
     }
-  }
 
-  return NextResponse.json({ games: [], quota: getQuotaState(), error: "no_data" });
+    return NextResponse.json({
+      games,
+      sport_keys_used: sportKeysUsed,
+      total: games.length,
+    });
+  } catch (error) {
+    console.error("[api/odds/games] Error:", error);
+    return NextResponse.json(
+      {
+        games: [],
+        error: "Odds API unavailable",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 200 } // 200 so the page renders with empty state, not an error boundary
+    );
+  }
 }
