@@ -64,29 +64,40 @@ export const openInterestShiftResolver: SignalResolver = {
       };
     }
 
-    const absPctChange = Math.abs((currentPrice - priceAtSignal) / priceAtSignal) * 100;
+    const pctChange    = ((currentPrice - priceAtSignal) / priceAtSignal) * 100;
+    const absPctChange = Math.abs(pctChange);
+    const predicted    = signal.predicted_direction;
 
+    // Must move in the PREDICTED direction — abs-only check was wrong (any 5% move
+    // qualified as "correct" regardless of direction, inflating accuracy to ~100%).
     let outcome: 'correct' | 'incorrect' | 'unresolved';
-    if (absPctChange >= 5) {
-      outcome = 'correct';   // significant move materialized
-    } else if (absPctChange < 2) {
-      outcome = 'incorrect'; // positioning didn't lead to price action
+    if (predicted === 'up') {
+      if (pctChange >= 5)       outcome = 'correct';
+      else if (pctChange <= -5) outcome = 'incorrect';
+      else                      outcome = 'unresolved';
+    } else if (predicted === 'down') {
+      if (pctChange <= -5)      outcome = 'correct';
+      else if (pctChange >= 5)  outcome = 'incorrect';
+      else                      outcome = 'unresolved';
     } else {
-      outcome = 'unresolved';
+      // Non-directional predictions (widen/narrow/over/under)
+      if (absPctChange >= 5)     outcome = 'correct';
+      else if (absPctChange < 2) outcome = 'incorrect';
+      else                       outcome = 'unresolved';
     }
 
     return {
       outcome,
-      resolution_method: 'abs_price_move_check',
-      actual_direction:  currentPrice > priceAtSignal ? 'up' : 'down',
+      resolution_method: 'directional_price_move_check',
+      actual_direction:  pctChange > 0 ? 'up' : pctChange < 0 ? 'down' : 'flat',
       actual_magnitude:  Number(absPctChange.toFixed(2)),
       resolution_source: {
         price_at_signal:      priceAtSignal,
         price_at_resolution:  currentPrice,
-        abs_pct_change:       Number(absPctChange.toFixed(3)),
+        pct_change:           Number(pctChange.toFixed(3)),
+        predicted_direction:  predicted,
         oi_at_signal_usd:     inputs?.open_interest_usd ?? null,
         moved_threshold_pct:  5,
-        stayed_threshold_pct: 2,
       },
     };
   },

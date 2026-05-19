@@ -12,6 +12,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
+import PublicNavBar from "@/components/PublicNavBar";
 import SignalExportStudio from "@/components/SignalExportStudio";
 import type { ExportSignal } from "@/lib/export/exportTypes";
 import { exportTimestamp } from "@/lib/export/exportWatermarks";
@@ -97,23 +98,27 @@ export default async function ExportStudioPage({ searchParams }: PageProps) {
   };
 
   return (
-    <div className="p-6 min-h-full">
-      {/* Header */}
-      <div className="mb-6 flex items-start justify-between">
-        <div>
-          <h1 className="text-white text-sm font-semibold mb-1">Export Studio</h1>
-          <p className="text-zinc-400 text-xs leading-relaxed max-w-md">
-            Design shareable market intelligence images. Download as PNG or copy to clipboard.
-            No social API posting — images only.
-          </p>
-        </div>
-        <div className="flex items-center gap-1.5 shrink-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          <span className="text-emerald-500 text-[9px] font-mono uppercase tracking-wider">Client Render</span>
-        </div>
-      </div>
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <PublicNavBar />
 
-      <SignalExportStudio initialSignal={signal} />
+      <div className="flex-1 p-6">
+        {/* Header */}
+        <div className="mb-6 flex items-start justify-between">
+          <div>
+            <h1 className="text-white text-sm font-semibold mb-1">Export Studio</h1>
+            <p className="text-zinc-400 text-xs leading-relaxed max-w-md">
+              Design shareable market intelligence images. Download as PNG or copy to clipboard.
+              No social API posting — images only.
+            </p>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="text-emerald-500 text-[9px] font-mono uppercase tracking-wider">Client Render</span>
+          </div>
+        </div>
+
+        <SignalExportStudio initialSignal={signal} />
+      </div>
     </div>
   );
 }

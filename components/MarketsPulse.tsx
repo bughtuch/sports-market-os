@@ -52,6 +52,7 @@ interface MarketsPulseProps {
 export default async function MarketsPulse({ sport }: MarketsPulseProps = {}) {
   const db = adminClient();
   const since4h = new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString();
+  const sportLabel = sport ? (ALL_SPORTS.find((s) => s.key === sport)?.label ?? sport) : null;
 
   let query = db
     .from("signals")
@@ -132,7 +133,11 @@ export default async function MarketsPulse({ sport }: MarketsPulseProps = {}) {
     })),
   };
 
-  const narrative = await generatePulseNarrative(pulseData);
+  // When filtered to one sport with no signals, generate a sport-specific message
+  // rather than letting the narrator produce "across covered sports" language.
+  const narrative = (sportLabel && totalSignals === 0)
+    ? `No ${sportLabel} signals fired in the last 4 hours. The engine monitors continuously and emits signals as liquidity meets detection thresholds.`
+    : await generatePulseNarrative(pulseData);
 
   return (
     <div className="border border-zinc-900/80 rounded-[8px] bg-zinc-950 p-4 md:p-6">
@@ -163,45 +168,47 @@ export default async function MarketsPulse({ sport }: MarketsPulseProps = {}) {
         {narrative}
       </p>
 
-      {/* ── Zone 3: Sport activity bars (supporting evidence) ─────────────── */}
-      <div className="border-t border-zinc-900 pt-5 mb-5">
-        <div className="space-y-1.5">
-          {ALL_SPORTS.map(({ key, label }) => {
-            const agg = sportAgg[key];
-            const count = agg?.count ?? 0;
-            const avgConf = count > 0 ? agg!.confSum / count : 0;
-            const widthPct = Math.round((count / maxCount) * 100);
-            const barOpacity = count > 0 ? Math.max(0.25, avgConf / 100) : 0;
+      {/* ── Zone 3: Sport activity bars — hidden when filtered to a single sport ── */}
+      {!sport && (
+        <div className="border-t border-zinc-900 pt-5 mb-5">
+          <div className="space-y-1.5">
+            {ALL_SPORTS.map(({ key, label }) => {
+              const agg = sportAgg[key];
+              const count = agg?.count ?? 0;
+              const avgConf = count > 0 ? agg!.confSum / count : 0;
+              const widthPct = Math.round((count / maxCount) * 100);
+              const barOpacity = count > 0 ? Math.max(0.25, avgConf / 100) : 0;
 
-            return (
-              <div key={key} className="flex items-center gap-3 h-7 group">
-                <span className="w-24 text-right text-[11px] font-mono text-zinc-700 group-hover:text-zinc-500 transition-colors shrink-0">
-                  {label}
-                </span>
-                <div className="flex-1 h-[6px] bg-zinc-900 rounded-full overflow-hidden">
-                  {count > 0 && (
-                    <div
-                      className="h-full rounded-full transition-all duration-300 group-hover:opacity-100"
-                      style={{
-                        width: `${widthPct}%`,
-                        backgroundColor: "var(--accent)",
-                        opacity: barOpacity,
-                      }}
-                    />
-                  )}
+              return (
+                <div key={key} className="flex items-center gap-3 h-7 group">
+                  <span className="w-24 text-right text-[11px] font-mono text-zinc-700 group-hover:text-zinc-500 transition-colors shrink-0">
+                    {label}
+                  </span>
+                  <div className="flex-1 h-[6px] bg-zinc-900 rounded-full overflow-hidden">
+                    {count > 0 && (
+                      <div
+                        className="h-full rounded-full transition-all duration-300 group-hover:opacity-100"
+                        style={{
+                          width: `${widthPct}%`,
+                          backgroundColor: "var(--accent)",
+                          opacity: barOpacity,
+                        }}
+                      />
+                    )}
+                  </div>
+                  <span
+                    className={`w-6 text-right text-[12px] font-mono tabular-nums shrink-0 ${
+                      count > 0 ? "text-zinc-400" : "text-zinc-800"
+                    }`}
+                  >
+                    {count}
+                  </span>
                 </div>
-                <span
-                  className={`w-6 text-right text-[12px] font-mono tabular-nums shrink-0 ${
-                    count > 0 ? "text-zinc-400" : "text-zinc-800"
-                  }`}
-                >
-                  {count}
-                </span>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── Zone 4: Type distribution sentence ────────────────────────────── */}
       <p className="font-serif text-sm text-zinc-500 leading-relaxed mb-5">

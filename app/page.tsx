@@ -143,9 +143,14 @@ export default async function HomePage() {
     ]);
 
     const resolutions = resolutionsRes.data ?? [];
-    const correct = resolutions.filter((r: { outcome: string }) => r.outcome === "correct").length;
-    gradedCount   = resolutions.length;
-    accuracyPct   = gradedCount > 0 ? Math.round((correct / gradedCount) * 100) : null;
+    const correct   = resolutions.filter((r: { outcome: string }) => r.outcome === "correct").length;
+    const incorrect = resolutions.filter((r: { outcome: string }) => r.outcome === "incorrect").length;
+    gradedCount = resolutions.length;
+    // Require at least one incorrect outcome before displaying — 100% with zero incorrect
+    // is a resolver calibration artefact, not a meaningful accuracy claim.
+    accuracyPct = (gradedCount >= 10 && incorrect > 0)
+      ? Math.round((correct / gradedCount) * 100)
+      : null;
     totalSignals  = totalSignalsRes.count ?? null;
     highConfToday = highConfRes.count ?? null;
     tickerSignals = (tickerRes.data ?? []) as TickerSignal[];
@@ -199,7 +204,11 @@ export default async function HomePage() {
                 {
                   label: "Lifetime Accuracy",
                   value: accuracyPct != null ? `${accuracyPct}%` : "—",
-                  sub: gradedCount > 0 ? `${gradedCount} graded predictions` : "awaiting first resolution",
+                  sub: accuracyPct != null
+                    ? `${gradedCount} graded predictions`
+                    : gradedCount > 0
+                    ? "calibrating — resolver update applied"
+                    : "awaiting first resolution",
                   accent: accuracyPct != null,
                 },
                 {
