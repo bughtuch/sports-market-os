@@ -18,10 +18,8 @@
 import type { NormalizedMarketEvent, GeneratedSignal } from '../providers/types';
 export type { GeneratedSignal } from '../providers/types';
 import { fetchSportsEventsAll } from '../providers/polymarket';
-import { fetchAllSportsEventsNormalized } from '../providers/oddsApi/normalize';
 import { detectVolumeSurge } from './detectors/volume-surge';
 import { detectLineMove } from './detectors/line-move';
-import { detectCrossSourceDivergence } from './detectors/cross-source-divergence';
 import { detectSpreadCompression } from './detectors/spread-compression';
 import { detectOpenInterestShift } from './detectors/open-interest-shift';
 import { writeSignal } from './persistence';
@@ -32,23 +30,15 @@ export const THRESHOLD_CONFIDENCE = 70;
 // ─── Main entry point ─────────────────────────────────────────────────────────
 
 export async function generateSignals(): Promise<GeneratedSignal[]> {
-  // ── 1. Fetch events from both sources in parallel ──────────────────────────
-  const [polyEvents, oddsEvents] = await Promise.all([
-    fetchSportsEventsAll().catch((err: unknown) => {
-      console.error('[engine] Polymarket fetch failed:', err);
-      return [] as NormalizedMarketEvent[];
-    }),
-    fetchAllSportsEventsNormalized().catch((err: unknown) => {
-      console.error('[engine] Odds API fetch failed:', err);
-      return [] as NormalizedMarketEvent[];
-    }),
-  ]);
+  // ── 1. Fetch events from Polymarket ───────────────────────────────────────
+  const polyEvents = await fetchSportsEventsAll().catch((err: unknown) => {
+    console.error('[engine] Polymarket fetch failed:', err);
+    return [] as NormalizedMarketEvent[];
+  });
 
-  const allEvents: NormalizedMarketEvent[] = [...polyEvents, ...oddsEvents];
+  const allEvents: NormalizedMarketEvent[] = polyEvents;
 
-  console.log(
-    `[engine] Events fetched — polymarket: ${polyEvents.length}, odds_api: ${oddsEvents.length}, total: ${allEvents.length}`
-  );
+  console.log(`[engine] Events fetched — polymarket: ${polyEvents.length}`);
 
   if (allEvents.length === 0) {
     console.warn('[engine] Zero events fetched — no signals possible');
@@ -59,13 +49,11 @@ export async function generateSignals(): Promise<GeneratedSignal[]> {
   const [
     volumeSurgeSignals,
     lineMoveSignals,
-    crossSourceSignals,
     spreadCompressionSignals,
     openInterestSignals,
   ] = await Promise.all([
     detectVolumeSurge(allEvents).catch(() => [] as GeneratedSignal[]),
     detectLineMove(allEvents).catch(() => [] as GeneratedSignal[]),
-    detectCrossSourceDivergence(allEvents).catch(() => [] as GeneratedSignal[]),
     detectSpreadCompression(allEvents).catch(() => [] as GeneratedSignal[]),
     detectOpenInterestShift(allEvents).catch(() => [] as GeneratedSignal[]),
   ]);
@@ -73,7 +61,6 @@ export async function generateSignals(): Promise<GeneratedSignal[]> {
   const rawSignals: GeneratedSignal[] = [
     ...volumeSurgeSignals,
     ...lineMoveSignals,
-    ...crossSourceSignals,
     ...spreadCompressionSignals,
     ...openInterestSignals,
   ];
@@ -81,7 +68,6 @@ export async function generateSignals(): Promise<GeneratedSignal[]> {
   console.log(`[engine] Detector output — ${rawSignals.length} raw signals:`, {
     volume_surge: volumeSurgeSignals.length,
     line_move: lineMoveSignals.length,
-    cross_source_divergence: crossSourceSignals.length,
     spread_compression: spreadCompressionSignals.length,
     open_interest_shift: openInterestSignals.length,
   });

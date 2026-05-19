@@ -38,8 +38,8 @@ function buildPolymarketUrl(slug?: string): string {
 }
 
 function buildExportUrl(props: SignalCardData): string {
-  const { sport, title, confidence, exchange, type, id } = props;
-  return `/export-studio?sport=${encodeURIComponent(sport)}&title=${encodeURIComponent(title)}&confidence=${confidence}&exchange=${encodeURIComponent(exchange ?? "")}&type=${encodeURIComponent(type)}${id ? `&id=${encodeURIComponent(id)}` : ""}`;
+  const { sport, title, confidence, exchange, type, id, narrative, description } = props;
+  return `/export-studio?sport=${encodeURIComponent(sport)}&title=${encodeURIComponent(title)}&confidence=${confidence}&exchange=${encodeURIComponent(exchange ?? "")}&type=${encodeURIComponent(type)}${id ? `&id=${encodeURIComponent(id)}` : ""}${(narrative ?? description) ? `&description=${encodeURIComponent(narrative ?? description ?? "")}` : ""}`;
 }
 
 // ── Sign-in prompt modal ───────────────────────────────────────────────────────

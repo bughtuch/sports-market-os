@@ -87,6 +87,40 @@ export default function HorseRacingPage() {
         </p>
       </div>
 
+      {/* ── Cross-sport nav ──────────────────────────────────────────────────── */}
+      <div className="mt-16">
+        <div className="h-px bg-zinc-900 mb-8" />
+        <p className="text-[11px] font-mono uppercase tracking-[0.15em] text-zinc-500 mb-5">
+          More from Sports Market OS
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { href: "/tennis",   label: "Tennis",                tag: "Live",   accent: "text-amber-400" },
+            { href: "/terminal", label: "Intelligence Terminal", tag: "Live",   accent: "text-cyan-400" },
+            { href: "/accuracy", label: "Accuracy Ledger",       tag: "Public", accent: "text-emerald-400" },
+            { href: "/markets",  label: "All Markets",           tag: "Live",   accent: "text-white" },
+          ].map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="flex items-center justify-between p-4 border border-zinc-800/60 rounded-sm hover:border-zinc-600 transition-colors group"
+            >
+              <div>
+                <span className="text-white text-[14px] font-semibold group-hover:text-zinc-200 transition-colors">
+                  {link.label}
+                </span>
+                <span className={`ml-2 text-[10px] font-mono uppercase tracking-[0.1em] ${link.accent}`}>
+                  {link.tag}
+                </span>
+              </div>
+              <svg className="w-4 h-4 text-zinc-700 group-hover:text-zinc-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          ))}
+        </div>
+      </div>
+
     </div>
   );
 }

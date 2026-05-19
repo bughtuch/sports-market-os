@@ -86,7 +86,7 @@ export default async function ExportStudioPage({ searchParams }: PageProps) {
   const signal: ExportSignal = {
     sport,
     title:       str("title",       "Market Signal"),
-    description: narrative || str("description", "AI-detected market structure event across major exchanges."),
+    description: narrative || str("description", "Narrative generating — refresh in a moment."),
     movement:    str("movement",    "—"),
     direction,
     confidence,

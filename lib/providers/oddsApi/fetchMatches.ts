@@ -1,4 +1,12 @@
 /**
+ * ⚠️  DISABLED — V1 PURE POLYMARKET RELEASE
+ *
+ * This file is part of the Odds API integration disabled in Sprint V1.
+ * Not imported or called from any active code path.
+ * Do not re-enable without a full sprint plan.
+ */
+
+/**
  * fetchMatches — dedicated Odds API multi-bookmaker match fetcher.
  *
  * Returns NormalizedOddsMatch[] with full bookmaker depth.

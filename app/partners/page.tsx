@@ -16,23 +16,13 @@ export const metadata: Metadata = {
 
 const PARTNER_TRACKS = [
   {
-    href: "/partners/prophetx",
-    label: "ProphetX",
-    tag: "Exchange",
-    tagColor: "text-amber-400 border-amber-400/30",
-    dotColor: "bg-amber-400",
-    description:
-      "ProphetX order book intelligence — NFL, NBA, and prediction market microstructure data integration.",
-    cta: "View ProphetX Demo →",
-  },
-  {
     href: "/partners/exchanges",
     label: "Exchange Partners",
     tag: "Infrastructure",
     tagColor: "text-blue-400 border-blue-400/30",
     dotColor: "bg-blue-400",
     description:
-      "Betfair, Smarkets, Polymarket — read-only exchange adapter programme for liquidity and order book intelligence.",
+      "Polymarket, Smarkets — read-only prediction market exchange adapter programme for intelligence infrastructure.",
     cta: "Exchange Partnership →",
   },
   {

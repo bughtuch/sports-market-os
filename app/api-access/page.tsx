@@ -405,14 +405,10 @@ X-SMO-RateLimit-Reset: 2026-05-16T00:00:00Z`}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
-                { name: "Betfair",    status: "active",  plan: "api" as const },
+                { name: "Polymarket", status: "active",  plan: "api" as const },
                 { name: "Betdaq",     status: "active",  plan: "api" as const },
                 { name: "Smarkets",   status: "active",  plan: "api" as const },
-                { name: "Polymarket", status: "active",  plan: "api" as const },
                 { name: "ProphetX",   status: "planned", plan: "api" as const },
-                { name: "Pinnacle",   status: "planned", plan: "api" as const },
-                { name: "FanDuel",    status: "planned", plan: "api" as const },
-                { name: "DraftKings", status: "planned", plan: "api" as const },
               ].map((p) => (
                 <div
                   key={p.name}

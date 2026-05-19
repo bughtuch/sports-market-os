@@ -1,4 +1,11 @@
 /**
+ * ⚠️  DISABLED — V1 PURE POLYMARKET RELEASE
+ *
+ * Cross-source divergence requires Odds API data. Removed from engine in Sprint V1.
+ * Not imported or called from any active code path.
+ */
+
+/**
  * Cross-Source Divergence resolver — Sprint 3L.2.
  *
  * Predicted: Polymarket and Odds API probabilities converge (predicted_direction = 'narrow').

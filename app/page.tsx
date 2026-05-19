@@ -318,7 +318,6 @@ export default async function HomePage() {
                     "Price movement against the prevailing consensus",
                     "Open interest accumulating on one side",
                     "Spread compression under directional pressure",
-                    "Cross-platform divergence between Polymarket and Odds API",
                   ],
                 },
                 {
@@ -327,7 +326,7 @@ export default async function HomePage() {
                   border: "border-cyan-400/20",
                   bg: "bg-cyan-400/5",
                   items: [
-                    "Five distinct signal patterns across Polymarket data",
+                    "Four distinct signal patterns across Polymarket data",
                     "Volume/price divergence before narrative forms",
                     "Cross-source disagreement between prediction platforms",
                     "Open interest shifts indicating directional conviction",
@@ -383,9 +382,9 @@ export default async function HomePage() {
                   color:  "text-cyan-400",
                   border: "border-cyan-400/15",
                   dot:    "bg-cyan-400",
-                  value:  "5",
+                  value:  "4",
                   unit:   "detectors",
-                  desc:   "Volume surge, line move, spread compression, open interest shift, and cross-source divergence — five independent pattern detectors running continuously across Polymarket data.",
+                  desc:   "Volume surge, line move, spread compression, and open interest shift — four independent pattern detectors running continuously across Polymarket data.",
                 },
                 {
                   label:  "AI Narrator",
