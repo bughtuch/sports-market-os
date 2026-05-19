@@ -95,6 +95,8 @@ async function fetchOneSportKey(
     return [];
   }
 
+  console.log(`[fetchMatches] ${sportKey}: HTTP ${res.status} ${res.statusText}`);
+
   if (res.status === 422 || res.status === 404) {
     // Out of season — cache empty for 60 min to avoid repeat calls
     console.log(`[fetchMatches] ${sportKey}: ${res.status} (out of season or not found)`);
@@ -170,8 +172,10 @@ export async function fetchMatchesBySportKeys(
   sportKeys: string[]
 ): Promise<NormalizedOddsMatch[]> {
   const apiKey = getOddsApiKey();
+  // Diagnostic: confirm key presence + prefix (safe — never logs full key)
+  console.log(`[fetchMatches] API key present: ${!!apiKey}, length: ${apiKey?.length ?? 0}, prefix: ${apiKey?.slice(0, 4) ?? "null"}`);
   if (!apiKey) {
-    console.warn("[fetchMatches] No Odds API key configured");
+    console.warn("[fetchMatches] No Odds API key configured — checked THE_ODDS_API_KEY and ODDS_API_KEY");
     return [];
   }
 
