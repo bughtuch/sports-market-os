@@ -1,8 +1,18 @@
 /**
- * Spread Compression resolver — Sprint 3L.2.
+ * Spread Compression resolver — Sprint 3L.2 / V1.2 fix.
  *
  * Predicted: spread widens after compression (predicted_direction = 'widen').
  * Resolution: compare current spread ratio to the ratio captured at signal time.
+ *
+ * V1.2 fix: previous resolver used change <= 0.8 as the incorrect threshold,
+ * meaning a compression that never widened (change = 1.0) returned 'unresolved'
+ * instead of 'incorrect'. Fixed to change <= 1.0 — if the spread did not widen
+ * at all, the prediction failed.
+ *
+ * Thresholds:
+ *   correct:   change >= 1.5  (spread widened 50%+)
+ *   incorrect: change <= 1.0  (spread flat or tightened — prediction failed)
+ *   unresolved: 1.0 < change < 1.5
  *
  * raw_inputs fields (from detector):
  *   spread_ratio — spread / midpoint at signal time (dimensionless, e.g. 0.012)
@@ -83,10 +93,10 @@ export const spreadCompressionResolver: SignalResolver = {
     let outcome: 'correct' | 'incorrect' | 'unresolved';
     if (change >= 1.5) {
       outcome = 'correct';    // spread widened 50%+
-    } else if (change <= 0.8) {
-      outcome = 'incorrect';  // spread tightened further
+    } else if (change <= 1.0) {
+      outcome = 'incorrect';  // spread flat or tightened — prediction failed
     } else {
-      outcome = 'unresolved';
+      outcome = 'unresolved'; // 1.0 < change < 1.5 — partial widen, wait
     }
 
     return {
@@ -98,7 +108,7 @@ export const spreadCompressionResolver: SignalResolver = {
         spread_ratio_at_resolution: Number(currentRatio.toFixed(6)),
         change_multiplier:          Number(change.toFixed(3)),
         widened_threshold:          1.5,
-        tightened_threshold:        0.8,
+        tightened_threshold:        1.0,
       },
     };
   },

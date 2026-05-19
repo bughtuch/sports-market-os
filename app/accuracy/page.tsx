@@ -71,35 +71,33 @@ export default async function AccuracyPage({
   const offset = (page - 1) * limit;
 
   // ── Fetch in parallel ────────────────────────────────────────────────────
-  const [totalRes, resolutionsRes, signalsPageRes, thirtyDayRes] = await Promise.all([
+  const since30d = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const [totalRes, correctRes, incorrectRes, signalsPageRes, thirtyDayRes] = await Promise.all([
     db.from("signals").select("*", { count: "exact", head: true }),
-    db.from("signal_resolutions").select("outcome, signal_id"),
+    db.from("signal_resolutions").select("*", { count: "exact", head: true }).eq("outcome", "correct"),
+    db.from("signal_resolutions").select("*", { count: "exact", head: true }).eq("outcome", "incorrect"),
     db.from("signals").select(`
       id, generated_at, sport, event_title, signal_type,
       predicted_direction, confidence,
       signal_resolutions ( outcome, resolved_at )
     `).order("generated_at", { ascending: false }).range(offset, offset + limit - 1),
     db.from("signals").select("id, confidence, signal_resolutions(outcome)")
-      .gte("generated_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
+      .gte("generated_at", since30d),
   ]);
 
   const totalCount = totalRes.count ?? 0;
-  const resolutions = resolutionsRes.data ?? [];
-  // Accuracy denominator: only signals with a definitive outcome (correct | incorrect)
-  const resolvedCounted = resolutions.filter(
-    (r) => r.outcome === "correct" || r.outcome === "incorrect"
-  );
-  const correctCount = resolvedCounted.filter((r) => r.outcome === "correct").length;
-  const lifetimeAccuracy = resolvedCounted.length > 0
-    ? Math.round((correctCount / resolvedCounted.length) * 100)
+  const correctCount  = correctRes.count   ?? 0;
+  const incorrectCount = incorrectRes.count ?? 0;
+  const resolvedCount = correctCount + incorrectCount;
+  // Require at least one incorrect outcome before displaying — 100% with zero incorrect
+  // is a resolver calibration artefact, not a meaningful accuracy claim.
+  const lifetimeAccuracy = (resolvedCount >= 10 && incorrectCount > 0)
+    ? Math.min(99, Math.round((correctCount / resolvedCount) * 100))
     : null;
 
-  // 30-day accuracy
+  // 30-day accuracy — use embedded signal_resolutions from thirtyDayRes
   const thirtyDaySignals = thirtyDayRes.data ?? [];
-  const thirtyDayResolvedIds = new Set(resolutions.map((r) => r.signal_id));
-  // Filter to signals that have a correct|incorrect resolution
   const thirtyDayResolved = thirtyDaySignals.filter((s) => {
-    if (!thirtyDayResolvedIds.has(s.id)) return false;
     const res = Array.isArray(s.signal_resolutions)
       ? s.signal_resolutions[0]
       : s.signal_resolutions;
@@ -112,9 +110,10 @@ export default async function AccuracyPage({
       : s.signal_resolutions;
     return (res as { outcome?: string } | null)?.outcome === "correct";
   }).length;
+  const thirtyDayIncorrect = thirtyDayResolved.length - thirtyDayCorrect;
   const thirtyDayAccuracy =
-    thirtyDayResolved.length > 0
-      ? Math.round((thirtyDayCorrect / thirtyDayResolved.length) * 100)
+    (thirtyDayResolved.length > 0 && thirtyDayIncorrect > 0)
+      ? Math.min(99, Math.round((thirtyDayCorrect / thirtyDayResolved.length) * 100))
       : null;
 
   // Calibration data
@@ -182,7 +181,7 @@ export default async function AccuracyPage({
               {
                 label: "Lifetime Accuracy",
                 value: lifetimeAccuracy != null ? `${lifetimeAccuracy}%` : "—",
-                sub: resolvedCounted.length > 0 ? `${resolvedCounted.length} resolved` : "No resolved signals yet",
+                sub: resolvedCount > 0 ? `${resolvedCount} resolved` : "No resolved signals yet",
                 accent: lifetimeAccuracy != null,
               },
               {

@@ -121,10 +121,13 @@ export default async function HomePage() {
   const sportEventCounts: Record<string, number> = {};
 
   try {
-    const [resolutionsRes, totalSignalsRes, highConfRes, tickerRes, sportEventsRes] = await Promise.all([
+    const [correctRes, incorrectRes, totalSignalsRes, highConfRes, tickerRes, sportEventsRes] = await Promise.all([
       db.from("signal_resolutions")
-        .select("outcome")
-        .in("outcome", ["correct", "incorrect"]),
+        .select("*", { count: "exact", head: true })
+        .eq("outcome", "correct"),
+      db.from("signal_resolutions")
+        .select("*", { count: "exact", head: true })
+        .eq("outcome", "incorrect"),
       db.from("signals").select("*", { count: "exact", head: true }),
       db.from("signals")
         .select("*", { count: "exact", head: true })
@@ -142,14 +145,13 @@ export default async function HomePage() {
         .limit(5000),
     ]);
 
-    const resolutions = resolutionsRes.data ?? [];
-    const correct   = resolutions.filter((r: { outcome: string }) => r.outcome === "correct").length;
-    const incorrect = resolutions.filter((r: { outcome: string }) => r.outcome === "incorrect").length;
-    gradedCount = resolutions.length;
+    const correct   = correctRes.count   ?? 0;
+    const incorrect = incorrectRes.count ?? 0;
+    gradedCount = correct + incorrect;
     // Require at least one incorrect outcome before displaying — 100% with zero incorrect
     // is a resolver calibration artefact, not a meaningful accuracy claim.
     accuracyPct = (gradedCount >= 10 && incorrect > 0)
-      ? Math.round((correct / gradedCount) * 100)
+      ? Math.min(99, Math.round((correct / gradedCount) * 100))
       : null;
     totalSignals  = totalSignalsRes.count ?? null;
     highConfToday = highConfRes.count ?? null;
